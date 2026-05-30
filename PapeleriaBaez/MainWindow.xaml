@@ -1,0 +1,45 @@
+﻿<Window x:Class="PapeleriaBaez.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PapeleriaBaez"
+        mc:Ignorable="d"
+        Title="Papelería Báez" Height="700" Width="1200">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <!-- Menú Lateral -->
+        <StackPanel Grid.Column="0" Background="#2C3E50">
+
+            <TextBlock Text="Papelería Báez"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="15"/>
+
+            <Button Content="🏠 Dashboard" Margin="10"/>
+            <Button Content="📦 Productos" Margin="10"/>
+            <Button Content="📂 Categorías" Margin="10"/>
+            <Button Content="🛒 Ventas" Margin="10"/>
+            <Button Content="📋 Inventario" Margin="10"/>
+            <Button Content="📊 Reportes" Margin="10"/>
+            <Button Content="⚙️ Configuración" Margin="10"/>
+            
+        </StackPanel>
+        
+        <!-- Área Principal -->
+        <Grid Grid.Column="1">
+
+            <TextBlock Text="Bienvenido a Papelería Báez"
+                       FontSize="28"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            
+        </Grid>
+
+    </Grid>
+</Window>
