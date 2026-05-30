@@ -124,3 +124,4 @@ C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\bin\Debu
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\bin\Debug\net8.0-windows\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\PapeleriaBaez.csproj.AssemblyReference.cache
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Papeleri.74BB3999.Up2Date
+C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\PapeleriaBaez.sourcelink.json
