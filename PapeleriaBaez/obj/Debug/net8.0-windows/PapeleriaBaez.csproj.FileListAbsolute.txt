@@ -125,3 +125,5 @@ C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\bin\Debu
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\PapeleriaBaez.csproj.AssemblyReference.cache
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Papeleri.74BB3999.Up2Date
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\PapeleriaBaez.sourcelink.json
+C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\ProductosView.baml
+C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\ProductosView.g.cs

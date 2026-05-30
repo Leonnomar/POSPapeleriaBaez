@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="PapeleriaBaez.Views.ProductosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Productos"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Código:"
+                       VerticalAlignment="Center"/>
+
+            <TextBox Grid.Column="1"
+                     Margin="5"/>
+
+            <TextBlock Grid.Column="2"
+                       Text="Nombre:"
+                       VerticalAlignment="Center"/>
+
+            <TextBox Grid.Column="3"
+                     Margin="5"/>
+
+            <TextBlock Grid.Row="1"
+                       Text="Costo:"
+                       VerticalAlignment="Center"/>
+
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Margin="5"/>
+
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Text="Precio:"
+                       VerticalAlignment="Center"/>
+
+            <TextBox Grid.Row="1"
+                     Grid.Column="3"
+                     Margin="5"/>
+
+            <TextBlock Grid.Row="2"
+                       Text="Stock:"
+                       VerticalAlignment="Center"/>
+
+            <TextBox Grid.Row="2"
+                     Grid.Column="1"
+                     Margin="5"/>
+
+            <TextBlock Grid.Row="2"
+                       Grid.Column="2"
+                       Text="Stock Mínimo:"
+                       VerticalAlignment="Center"/>
+
+            <TextBox Grid.Row="2"
+                     Grid.Column="3"
+                     Margin="5"/>
+
+            <TextBlock Grid.Row="3"
+                       Text="Categoría:"
+                       VerticalAlignment="Center"/>
+
+            <ComboBox x:Name="cmbCategorias"
+                      Grid.Row="3"
+                      Grid.Column="1"
+                      Margin="5"
+                      DisplayMemberPath="Nombre"/>
+            
+        </Grid>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Vertical">
+
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,20,0,20">
+
+                <Button Content="Guardar"
+                        Width="100"
+                        Margin="5"/>
+
+                <Button Content="Nuevo"
+                        Width="100"
+                        Margin="5"/>
+
+                <Button Content="Eliminar"
+                        Width="100"
+                        Margin="5"/>
+                
+            </StackPanel>
+
+            <DataGrid Height="300"/>
+            
+        </StackPanel>
+
+    </Grid>
+    
+</UserControl>
