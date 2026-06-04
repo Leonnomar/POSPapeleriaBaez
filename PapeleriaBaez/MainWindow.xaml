@@ -21,13 +21,41 @@
                        Foreground="White"
                        Margin="15"/>
 
-            <Button Content="🏠 Dashboard" Margin="10"/>
-            <Button Content="📦 Productos" Margin="10"/>
-            <Button Content="📂 Categorías" Margin="10"/>
-            <Button Content="🛒 Ventas" Margin="10"/>
-            <Button Content="📋 Inventario" Margin="10"/>
-            <Button Content="📊 Reportes" Margin="10"/>
-            <Button Content="⚙️ Configuración" Margin="10"/>
+            <Button Content="🏠 Dashboard" 
+                    Margin="10"
+                    Click="BtnDashboard_Click"/>
+            
+            <Button Content="🛒 Ventas"
+                    Margin="10"
+                    Click="BtnVentas_Click"/>
+            
+            <Button Content="📦 Productos"
+                    Margin="10"
+                    Click="BtnProductos_Click"/>
+            
+            <Button Content="📂 Categorías"
+                    Margin="10"
+                    Click="BtnCategorias_Click"/>
+                 
+            <Button Content="📋 Inventario"
+                    Margin="10"
+                    Click="BtnInventario_Click"/>
+
+            <Button Content="🎒 Canjes"
+                    Margin="10"
+                    Click="BtnCanjes_Click"/>
+
+            <Button Content="💰 Deudas"
+                    Margin="10"
+                    Click="BtnDeudas_Click"/>
+
+            <Button Content="📊 Reportes"
+                    Margin="10"
+                    Click="BtnReportes_Click"/>
+            
+            <Button Content="⚙️ Configuración" 
+                    Margin="10"
+                    Click="BtnConfiguracion_Click"/>
             
         </StackPanel>
         
