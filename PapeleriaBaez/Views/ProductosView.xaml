@@ -33,21 +33,26 @@
             <TextBlock Text="Código:"
                        VerticalAlignment="Center"/>
 
-            <TextBox Grid.Column="1"
-                     Margin="5"/>
+            <TextBox x:Name="txtCodigo"
+                     Grid.Column="1"
+                     Margin="5"
+                     IsReadOnly="True"/>
 
             <TextBlock Grid.Column="2"
                        Text="Nombre:"
                        VerticalAlignment="Center"/>
 
-            <TextBox Grid.Column="3"
+            <TextBox x:Name="txtNombre"
+                     Grid.Column="3"
                      Margin="5"/>
 
             <TextBlock Grid.Row="1"
                        Text="Costo:"
                        VerticalAlignment="Center"/>
 
-            <TextBox Grid.Row="1"
+            <TextBox x:Name="txtCosto"
+                     PreviewTextInput="Decimal_PreviewTextInput"
+                     Grid.Row="1"
                      Grid.Column="1"
                      Margin="5"/>
 
@@ -56,7 +61,9 @@
                        Text="Precio:"
                        VerticalAlignment="Center"/>
 
-            <TextBox Grid.Row="1"
+            <TextBox x:Name="txtPrecio"
+                     PreviewTextInput="Decimal_PreviewTextInput"
+                     Grid.Row="1"
                      Grid.Column="3"
                      Margin="5"/>
 
@@ -64,7 +71,9 @@
                        Text="Stock:"
                        VerticalAlignment="Center"/>
 
-            <TextBox Grid.Row="2"
+            <TextBox x:Name="txtStock"
+                     PreviewTextInput="Entero_PreviewTextInput"
+                     Grid.Row="2"
                      Grid.Column="1"
                      Margin="5"/>
 
@@ -73,7 +82,9 @@
                        Text="Stock Mínimo:"
                        VerticalAlignment="Center"/>
 
-            <TextBox Grid.Row="2"
+            <TextBox x:Name="txtStockMinimo"
+                     PreviewTextInput="Entero_PreviewTextInput"
+                     Grid.Row="2"
                      Grid.Column="3"
                      Margin="5"/>
 
@@ -85,7 +96,8 @@
                       Grid.Row="3"
                       Grid.Column="1"
                       Margin="5"
-                      DisplayMemberPath="Nombre"/>
+                      DisplayMemberPath="Nombre"
+                      SelectionChanged="cmbCategorias_SelectionChanged"/>
             
         </Grid>
 
@@ -97,20 +109,69 @@
 
                 <Button Content="Guardar"
                         Width="100"
-                        Margin="5"/>
+                        Margin="5"
+                        Click="BtnGuardar_Click"/>
 
-                <Button Content="Nuevo"
+                <Button Content="Actualizar"
                         Width="100"
-                        Margin="5"/>
+                        Margin="5"
+                        Click="BtnActualizar_Click"/>
+
+                <Button Content="Limpiar"
+                        Width="100"
+                        Margin="5"
+                        Click="BtnLimpiar_Click"/>
 
                 <Button Content="Eliminar"
                         Width="100"
-                        Margin="5"/>
+                        Margin="5"
+                        Click="BtnEliminar_Click"/>
                 
             </StackPanel>
 
-            <DataGrid Height="300"/>
-            
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,10,0,10">
+
+                <TextBlock Text="Buscar:"
+                           VerticalAlignment="Center"
+                           Margin="0,0,10,0"/>
+
+                <TextBox x:Name="txtBuscar"
+                         Width="250"
+                         TextChanged="txtBuscar_TextChanged"/>
+                
+            </StackPanel>
+
+            <DataGrid x:Name="dgProductos"
+                      Height="300"
+                      AutoGenerateColumns="False"
+                      SelectionChanged="dgProductos_SelectionChanged">
+
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Header="Código"
+                                        Binding="{Binding Codigo}" />
+
+                    <DataGridTextColumn Header="Nombre"
+                                        Binding="{Binding Nombre}" />
+
+                    <DataGridTextColumn Header="Costo"
+                                        Binding="{Binding Costo}" />
+
+                    <DataGridTextColumn Header="Precio"
+                                        Binding="{Binding Precio}" />
+
+                    <DataGridTextColumn Header="Stock"
+                                        Binding="{Binding Stock}" />
+                    
+                    <DataGridTextColumn Header="Stock Mínimo"
+                                        Binding="{Binding StockMinimo}" />
+                    
+                    <DataGridTextColumn Header="Categoría"
+                                        Binding="{Binding Categoria}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
         </StackPanel>
 
     </Grid>
