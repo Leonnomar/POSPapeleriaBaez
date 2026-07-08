@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -88,6 +89,21 @@ namespace PapeleriaBaez.Views
                 return;
             }
 
+            var existente = detalleCompra
+                .FirstOrDefault(x => x.ProductoId == producto.Id);
+
+            if (existente != null)
+            {
+                existente.Cantidad += cantidad;
+                existente.Costo += costo;
+
+                dgDetalle.ItemsSource = null;
+                dgDetalle.ItemsSource = detalleCompra;
+
+                ActualizarTotal();
+                return;
+            }
+
             detalleCompra.Add(new CompraItem
             {
                 ProductoId = producto.Id,
@@ -96,6 +112,22 @@ namespace PapeleriaBaez.Views
                 Cantidad = cantidad,
                 Costo = costo
             });
+
+            dgDetalle.ItemsSource = null;
+            dgDetalle.ItemsSource = detalleCompra;
+
+            ActualizarTotal();
+        }
+
+        private void BtnEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgDetalle.SelectedItem is not CompraItem item)
+            {
+                MessageBox.Show("Seleccione un artículo.");
+                return;
+            }
+
+            detalleCompra.Remove(item);
 
             dgDetalle.ItemsSource = null;
             dgDetalle.ItemsSource = detalleCompra;
@@ -126,6 +158,8 @@ namespace PapeleriaBaez.Views
                 var compra = new Compra
                 {
                     Fecha = DateTime.Now,
+                    LugarCompra = txtLugar.Text.Trim(),
+                    Observaciones = txtObservaciones.Text.Trim(),
                     Total = detalleCompra.Sum(x => x.Importe)
                 };
 
@@ -178,6 +212,16 @@ namespace PapeleriaBaez.Views
                 ActualizarTotal();
 
                 CargarProductos();
+
+                txtLugar.Clear();
+
+                txtObservaciones.Clear();
+
+                txtBuscar.Clear();
+
+                txtCantidad.Clear();
+
+                txtCosto.Clear();
             }
             catch (Exception ex)
             {
