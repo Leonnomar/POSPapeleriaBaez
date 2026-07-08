@@ -44,6 +44,11 @@ namespace PapeleriaBaez
             MainFrame.Content = new CategoriasView();
         }
 
+        private void BtnCompras_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new ComprasView();
+        }
+
         private void BtnInventario_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Modulo en construcción");

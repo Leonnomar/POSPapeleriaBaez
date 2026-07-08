@@ -36,7 +36,11 @@
             <Button Content="📂 Categorías"
                     Margin="10"
                     Click="BtnCategorias_Click"/>
-                 
+
+            <Button Content="📥 Compras"
+                    Margin="10"
+                    Click="BtnCompras_Click"/>
+
             <Button Content="📋 Inventario"
                     Margin="10"
                     Click="BtnInventario_Click"/>
@@ -62,7 +66,7 @@
         <!-- Área Principal -->
         <Grid Grid.Column="1">
 
-            <Frame x:Name="MainFrame"/>
+            <Frame x:Name="MainFrame" Margin="0,-5,0,5"/>
 
         </Grid>
 
