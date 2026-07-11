@@ -52,7 +52,7 @@ namespace PapeleriaBaez.Views
                 })
                 .ToList();
 
-            dgProductos.ItemsSource = listaProductos;
+            dgVenta.ItemsSource = listaProductos;
         }
 
         private void txtBuscar_TextChanged(object sender, TextChangedEventArgs e)
@@ -61,7 +61,7 @@ namespace PapeleriaBaez.Views
                 .ToLower()
                 .Trim();
 
-            dgProductos.ItemsSource =
+            dgVenta.ItemsSource =
                 listaProductos
                 .Where(p =>
                     p.Nombre.ToLower().Contains(texto) ||
@@ -71,7 +71,7 @@ namespace PapeleriaBaez.Views
 
         private void BtnAgregar_Click(object sender, RoutedEventArgs e)
         {
-            if (dgProductos.SelectedItem is not ProductoGrid producto)
+            if (dgVenta.SelectedItem is not ProductoGrid producto)
                 return;
 
             var existente = carrito
@@ -94,8 +94,8 @@ namespace PapeleriaBaez.Views
                 });
             }
 
-            dgCarrito.ItemsSource = null;
-            dgCarrito.ItemsSource = carrito;
+            dgVenta.ItemsSource = null;
+            dgVenta.ItemsSource = carrito;
 
             ActualizarTotal();
         }

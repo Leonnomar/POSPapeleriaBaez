@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Microsoft.EntityFrameworkCore;
 using PapeleriaBaez.Data;
 using PapeleriaBaez.Models;
+using PapeleriaBaez.Services;
 
 namespace PapeleriaBaez.Views
 {
@@ -116,6 +117,9 @@ namespace PapeleriaBaez.Views
             dgDetalle.ItemsSource = null;
             dgDetalle.ItemsSource = detalleCompra;
 
+            txtCantidad.Clear();
+            txtCosto.Clear();
+
             ActualizarTotal();
         }
 
@@ -132,6 +136,9 @@ namespace PapeleriaBaez.Views
             dgDetalle.ItemsSource = null;
             dgDetalle.ItemsSource = detalleCompra;
 
+            txtCantidad.Clear();
+            txtCosto.Clear();
+
             ActualizarTotal();
         }
 
@@ -145,93 +152,41 @@ namespace PapeleriaBaez.Views
 
         private void BtnGuardarCompra_Click(object sender, RoutedEventArgs e)
         {
-            try
+            using var db = new AppDbContext();
+
+            var service = new CompraService(db);
+
+            bool guardado = service.GuardarCompra(
+                detalleCompra,
+                txtLugar.Text,
+                txtObservaciones.Text);
+
+            if (!guardado)
             {
-                if (detalleCompra.Count == 0)
-                {
-                    MessageBox.Show("No hay productos en la compra.");
-                    return;
-                }
-
-                using var db = new AppDbContext();
-
-                var compra = new Compra
-                {
-                    Fecha = DateTime.Now,
-                    LugarCompra = txtLugar.Text.Trim(),
-                    Observaciones = txtObservaciones.Text.Trim(),
-                    Total = detalleCompra.Sum(x => x.Importe)
-                };
-
-                db.Compras.Add(compra);
-                db.SaveChanges();
-
-                foreach (var item in detalleCompra)
-                {
-                    var producto = db.Productos
-                        .FirstOrDefault(p => p.Id == item.ProductoId);
-
-                    if (producto == null)
-                        continue;
-
-                    // COSTO PROMEDIO
-                    decimal stockAnterior = producto.Stock;
-                    decimal costoAnterior = producto.Costo;
-
-                    decimal stockNuevo =
-                        stockAnterior + item.Cantidad;
-
-                    decimal costoPromedio =
-                        ((stockAnterior * costoAnterior) +
-                         (item.Cantidad * item.Costo))
-                         / stockNuevo;
-
-                    // ACTUALIZAR PRODUCTO
-                    producto.Stock += item.Cantidad;
-                    producto.Costo = Math.Round(costoPromedio, 2);
-
-                    // GUARDAR DETALLE
-                    db.DetalleCompras.Add(new DetalleCompra
-                    {
-                        CompraId = compra.Id,
-                        ProductoId = producto.Id,
-                        Cantidad = item.Cantidad,
-                        Costo = item.Costo,
-                        Importe = item.Importe
-                    });
-                }
-
-                db.SaveChanges();
-
-                MessageBox.Show("Compra guardada correctamente.");
-
-                detalleCompra.Clear();
-
-                dgDetalle.ItemsSource = null;
-
-                ActualizarTotal();
-
-                CargarProductos();
-
-                txtLugar.Clear();
-
-                txtObservaciones.Clear();
-
-                txtBuscar.Clear();
-
-                txtCantidad.Clear();
-
-                txtCosto.Clear();
+                MessageBox.Show("No hay productos en la compra.");
+                return;
             }
-            catch (Exception ex)
-            {
-                var error = ex.ToString();
 
-                if (ex.InnerException != null)
-                    error += "\n\nINNER:\n" + ex.InnerException;
+            MessageBox.Show("Compra guardada correctamente.");
 
-                MessageBox.Show(error);
-            }
+            detalleCompra.Clear();
+
+            dgDetalle.ItemsSource = null;
+
+            ActualizarTotal();
+
+            CargarProductos();
+
+            txtLugar.Clear();
+
+            txtObservaciones.Clear();
+
+            txtBuscar.Clear();
+
+            txtCantidad.Clear();
+
+            txtCosto.Clear();
+            
         }
     }
 }

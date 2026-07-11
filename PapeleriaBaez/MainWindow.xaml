@@ -21,11 +21,11 @@
                        Foreground="White"
                        Margin="15"/>
 
-            <Button Content="🏠 Dashboard" 
+            <Button Content="🏠 Inicio" 
                     Margin="10"
                     Click="BtnDashboard_Click"/>
             
-            <Button Content="🛒 Ventas"
+            <Button Content="🛒 Punto de Venta"
                     Margin="10"
                     Click="BtnVentas_Click"/>
             

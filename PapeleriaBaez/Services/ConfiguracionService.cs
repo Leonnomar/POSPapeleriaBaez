@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PapeleriaBaez.Data;
 
 namespace PapeleriaBaez.Services
 {
-    internal class ConfiguracionService
+    public class ConfiguracionService
     {
+        private readonly AppDbContext _db;
+
+        public ConfiguracionService(AppDbContext db)
+        {
+            _db = db;
+        }
     }
 }

@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PapeleriaBaez.Data;
 
 namespace PapeleriaBaez.Services
 {
-    internal class TicketService
+    public class TicketService
     {
+        private readonly AppDbContext _db;
+
+        public TicketService(AppDbContext db)
+        {
+            _db = db;
+        }
     }
 }
