@@ -24,9 +24,9 @@ namespace PapeleriaBaez.Views
     /// </summary>
     public partial class VentasView : UserControl
     {
-        private List<ProductoGrid> listaProductos = new();
+        private List<Producto> productos = new();
 
-        private List<CarritoItem> carrito = new();
+        private List<VentaItem> carrito = new();
 
         public VentasView()
         {
@@ -39,74 +39,83 @@ namespace PapeleriaBaez.Views
         {
             using var db = new AppDbContext();
 
-            listaProductos = db.Productos
-                .Include(p => p.Categoria)
-                .Select(p => new ProductoGrid
-                {
-                    Id = p.Id,
-                    Codigo = p.Codigo,
-                    Nombre = p.Nombre,
-                    Precio = p.PrecioVenta,
-                    Stock = p.Stock,
-                    Categoria = p.Categoria!.Nombre
-                })
-                .ToList();
-
-            dgVenta.ItemsSource = listaProductos;
+            productos = db.Productos
+                          .Include(p => p.Categoria)
+                          .ToList();
         }
 
-        private void txtBuscar_TextChanged(object sender, TextChangedEventArgs e)
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {
-            string texto = txtBuscar.Text
-                .ToLower()
-                .Trim();
-
-            dgVenta.ItemsSource =
-                listaProductos
-                .Where(p =>
-                    p.Nombre.ToLower().Contains(texto) ||
-                    p.Codigo.ToLower().Contains(texto))
-                .ToList();
-        }
-
-        private void BtnAgregar_Click(object sender, RoutedEventArgs e)
-        {
-            if (dgVenta.SelectedItem is not ProductoGrid producto)
+            if (e.Key != Key.Enter)
                 return;
 
-            var existente = carrito
-                .FirstOrDefault(c =>
-                    c.ProductoId == producto.Id);
+            BuscarProducto();
+        }
+
+        private void BuscarProducto()
+        {
+            string texto = txtBuscar.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(texto))
+                return;
+
+            var producto = productos.FirstOrDefault(p =>
+                p.Codigo.ToLower() == texto ||
+                p.Nombre.ToLower().Contains(texto));
+
+            if (producto == null)
+            {
+                MessageBox.Show("Producto no encontrado.");
+                txtBuscar.SelectAll();
+                txtBuscar.Focus();
+                return;
+            }
+
+            AgregarProducto(producto);
+        }
+
+        private void AgregarProducto(Producto producto)
+        {
+            var existente = carrito.FirstOrDefault(x => x.ProductoId == producto.Id);
 
             if (existente != null)
             {
                 existente.Cantidad++;
+
+                dgVenta.ItemsSource = null;
+                dgVenta.ItemsSource = carrito;
+
+                txtBuscar.Clear();
+                txtBuscar.Focus();
+
+                return;
             }
-            else
+
+            carrito.Add(new VentaItem
             {
-                carrito.Add(new CarritoItem
-                {
-                    ProductoId = producto.Id,
-                    Codigo = producto.Codigo,
-                    Nombre = producto.Nombre,
-                    Precio = producto.Precio,
-                    Cantidad = 1
-                });
-            }
+                ProductoId = producto.Id,
+                Codigo = producto.Codigo,
+                Nombre = producto.Nombre,
+                Precio = producto.PrecioVenta,
+                Cantidad = 1
+            });
 
             dgVenta.ItemsSource = null;
             dgVenta.ItemsSource = carrito;
 
-            ActualizarTotal();
+            ActualizarTotales();
+
+            txtBuscar.Clear();
+            txtBuscar.Focus();
         }
 
-        private void ActualizarTotal()
+        private void ActualizarTotales()
         {
-            decimal total =
-                carrito.Sum(c => c.Importe);
+            decimal subtotal = carrito.Sum(x => x.Importe);
 
-            lblTotal.Text =
-                total.ToString("C");
+            lblSubtotal.Text = $"Subtotal: {subtotal:C}";
+            lblDescuento.Text = $"Descuento: $0.00";
+            lblTotal.Text = $"TOTAL: {subtotal:C}";
         }
     }
 }
