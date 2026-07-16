@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace PapeleriaBaez.Views
     {
         private List<Producto> productos = new();
 
-        private List<VentaItem> carrito = new();
+        private ObservableCollection<VentaItem> carrito = new();
 
         public VentasView()
         {
@@ -44,32 +45,14 @@ namespace PapeleriaBaez.Views
                           .ToList();
         }
 
-        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Down &&
-                panelResultados.Visibility == Visibility.Visible)
-            {
-                lstResultados.Focus();
-                lstResultados.SelectedIndex = 0;
-                return;
-            }
-
-            if (e.Key != Key.Enter)
-                return;
-
-            BuscarProducto();
-        }
-
         private void BuscarProducto()
         {
-            string texto = txtBuscar.Text.Trim().ToLower();
+            string texto = txtBuscar.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(texto))
                 return;
 
-            var producto = productos.FirstOrDefault(p =>
-                p.Codigo.ToLower() == texto ||
-                p.Nombre.ToLower().Contains(texto));
+            var producto = BuscarProductoPorTexto(texto);
 
             if (producto == null)
             {
@@ -82,6 +65,32 @@ namespace PapeleriaBaez.Views
             AgregarProducto(producto);
         }
 
+        private Producto? BuscarProductoPorTexto(string texto)
+        {
+            return productos.FirstOrDefault(p =>
+                p.Codigo.Equals(texto, StringComparison.OrdinalIgnoreCase) ||
+                p.Nombre.Contains(texto, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private void MostrarResultados(List<Producto> resultados)
+        {
+            lstResultados.ItemsSource = resultados;
+
+            panelResultados.Visibility =
+                resultados.Any()
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
+        private void LimpiarBusqueda()
+        {
+            txtBuscar.Clear();
+            txtBuscar.Focus();
+
+            lstResultados.ItemsSource = null;
+            panelResultados.Visibility = Visibility.Collapsed;
+        }
+
         private void AgregarProducto(Producto producto)
         {
             var existente = carrito.FirstOrDefault(x => x.ProductoId == producto.Id);
@@ -90,16 +99,8 @@ namespace PapeleriaBaez.Views
             {
                 existente.Cantidad++;
 
-                dgVenta.ItemsSource = null;
-                dgVenta.ItemsSource = carrito;
-
-                ActualizarTotales();
-
-                txtBuscar.Clear();
-                txtBuscar.Focus();
-
-                lstResultados.ItemsSource = null;
-                panelResultados.Visibility = Visibility.Collapsed;
+                RefrescarCarrito();
+                LimpiarBusqueda();
 
                 return;
             }
@@ -113,18 +114,17 @@ namespace PapeleriaBaez.Views
                 Cantidad = 1
             });
 
+            RefrescarCarrito();
+            LimpiarBusqueda();
+
+        }
+
+        private void RefrescarCarrito()
+        {
             dgVenta.ItemsSource = null;
-            dgVenta.ItemsSource = carrito;
+            dgVenta.ItemsSource = carrito.ToList();
 
             ActualizarTotales();
-
-            txtBuscar.Clear();
-            txtBuscar.Focus();
-
-            lstResultados.ItemsSource = null;
-
-            panelResultados.Visibility = Visibility.Collapsed;
-
         }
 
         private void ActualizarTotales()
@@ -138,7 +138,7 @@ namespace PapeleriaBaez.Views
 
         private void txtBuscar_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string texto = txtBuscar.Text.Trim().ToLower();
+            string texto = txtBuscar.Text.Trim();
 
             if (texto.Length < 2)
             {
@@ -158,12 +158,23 @@ namespace PapeleriaBaez.Views
                 .Take(15)
                 .ToList();
 
-            lstResultados.ItemsSource = resultados;
+            MostrarResultados(resultados);
+        }
 
-            panelResultados.Visibility =
-                resultados.Any()
-                ? Visibility.Visible
-                : Visibility.Collapsed;
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down &&
+                panelResultados.Visibility == Visibility.Visible)
+            {
+                lstResultados.Focus();
+                lstResultados.SelectedIndex = 0;
+                return;
+            }
+
+            if (e.Key != Key.Enter)
+                return;
+
+            BuscarProducto();
         }
 
         private void lstResultados_KeyDown(object sender, KeyEventArgs e)
