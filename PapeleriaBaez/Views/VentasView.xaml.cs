@@ -46,6 +46,14 @@ namespace PapeleriaBaez.Views
 
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Down &&
+                panelResultados.Visibility == Visibility.Visible)
+            {
+                lstResultados.Focus();
+                lstResultados.SelectedIndex = 0;
+                return;
+            }
+
             if (e.Key != Key.Enter)
                 return;
 
@@ -85,8 +93,13 @@ namespace PapeleriaBaez.Views
                 dgVenta.ItemsSource = null;
                 dgVenta.ItemsSource = carrito;
 
+                ActualizarTotales();
+
                 txtBuscar.Clear();
                 txtBuscar.Focus();
+
+                lstResultados.ItemsSource = null;
+                panelResultados.Visibility = Visibility.Collapsed;
 
                 return;
             }
@@ -107,6 +120,11 @@ namespace PapeleriaBaez.Views
 
             txtBuscar.Clear();
             txtBuscar.Focus();
+
+            lstResultados.ItemsSource = null;
+
+            panelResultados.Visibility = Visibility.Collapsed;
+
         }
 
         private void ActualizarTotales()
@@ -116,6 +134,74 @@ namespace PapeleriaBaez.Views
             lblSubtotal.Text = $"Subtotal: {subtotal:C}";
             lblDescuento.Text = $"Descuento: $0.00";
             lblTotal.Text = $"TOTAL: {subtotal:C}";
+        }
+
+        private void txtBuscar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string texto = txtBuscar.Text.Trim().ToLower();
+
+            if (texto.Length < 2)
+            {
+                lstResultados.ItemsSource = null;
+
+                panelResultados.Visibility = Visibility.Collapsed;
+
+                return;
+            }
+
+            var resultados = productos
+                .Where(p =>
+                    p.Nombre.Contains(texto, StringComparison.OrdinalIgnoreCase) ||
+                    p.Codigo.Contains(texto, StringComparison.OrdinalIgnoreCase) ||
+                    p.Categoria!.Nombre.Contains(texto, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(p => p.Nombre)
+                .Take(15)
+                .ToList();
+
+            lstResultados.ItemsSource = resultados;
+
+            panelResultados.Visibility =
+                resultados.Any()
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
+        private void lstResultados_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down &&
+                panelResultados.Visibility == Visibility.Visible)
+            {
+                lstResultados.Focus();
+                lstResultados.SelectedIndex = 0;
+                return;
+            }
+
+            if (e.Key == Key.Escape)
+            {
+                panelResultados.Visibility = Visibility.Collapsed;
+                txtBuscar.Focus();
+                return;
+            }
+
+            if (e.Key != Key.Enter)
+                return;
+
+            if (lstResultados.SelectedItem is not Producto producto)
+                return;
+
+            AgregarProducto(producto);
+
+            panelResultados.Visibility = Visibility.Collapsed;
+        }
+
+        private void lstResultados_MouseDoubleClick(object sender , MouseButtonEventArgs e)
+        {
+            if (lstResultados.SelectedItem is not Producto producto)
+                return;
+
+            AgregarProducto(producto);
+
+            panelResultados.Visibility = Visibility.Collapsed;
         }
     }
 }
