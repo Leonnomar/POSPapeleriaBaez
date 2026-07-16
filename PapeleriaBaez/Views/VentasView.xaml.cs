@@ -214,5 +214,17 @@ namespace PapeleriaBaez.Views
 
             panelResultados.Visibility = Visibility.Collapsed;
         }
+
+        private void btnCobrar_Click(object sender, RoutedEventArgs e)
+        {
+            decimal total = carrito.Sum(x => x.Importe);
+
+            var ventana = new CobroWindow(total);
+
+            if (ventana.ShowDialog() == true)
+            {
+                //GuardarVenta();
+            }
+        }
     }
 }

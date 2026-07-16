@@ -199,7 +199,8 @@
             <Button Content="💰 Cobrar"
                     Width="140"
                     Height="45"
-                    Margin="10"/>
+                    Margin="10"
+                    Click="btnCobrar_Click"/>
 
             <Button Content="❌ Cancelar"
                     Width="140"
