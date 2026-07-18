@@ -215,15 +215,95 @@ namespace PapeleriaBaez.Views
             panelResultados.Visibility = Visibility.Collapsed;
         }
 
+        private void GuardarVenta()
+        {
+            if (carrito.Count == 0)
+            {
+                MessageBox.Show("No hay productos para vender.");
+                return;
+            }
+
+            using var db = new AppDbContext();
+
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var venta = new Venta
+                {
+                    Fecha = DateTime.Now,
+                    Total = carrito.Sum(x => x.Importe)
+                };
+
+                db.Ventas.Add(venta);
+                db.SaveChanges();
+
+                foreach (var item in carrito)
+                {
+                    var producto = db.Productos
+                        .FirstOrDefault(p => p.Id == item.ProductoId);
+
+                    if (producto == null)
+                        continue;
+
+                    if (producto.Stock < item.Cantidad)
+                    {
+                        throw new Exception(
+                            $"No hay suficiente stock de {producto.Nombre}");
+                    }
+
+                    producto.Stock -= item.Cantidad;
+
+                    db.DetalleVentas.Add(new DetalleVenta
+                    {
+                        VentaId = venta.Id,
+                        ProductoId = producto.Id,
+                        Cantidad = item.Cantidad,
+                        Precio = item.Precio,
+                        Importe = item.Importe
+                    });
+                }
+
+                db.SaveChanges();
+
+                transaccion.Commit();
+
+                MessageBox.Show("Venta realizada correctamente.");
+
+                carrito.Clear();
+
+                RefrescarCarrito();
+
+                CargarProductos();
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                string error = ex.ToString();
+
+                if (ex.InnerException != null)
+                    error += "\n\nINNER: \n" + ex.InnerException;
+
+                MessageBox.Show(error);
+            }
+        }
+
         private void btnCobrar_Click(object sender, RoutedEventArgs e)
         {
+            if (carrito.Count == 0)
+            {
+                MessageBox.Show("No hay productos.");
+                return;
+            }
+
             decimal total = carrito.Sum(x => x.Importe);
 
             var ventana = new CobroWindow(total);
 
             if (ventana.ShowDialog() == true)
             {
-                //GuardarVenta();
+                GuardarVenta();
             }
         }
     }

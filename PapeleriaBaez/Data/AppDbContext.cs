@@ -42,6 +42,16 @@ namespace PapeleriaBaez.Data
                 .HasOne(d => d.Compra)
                 .WithMany(c => c.Detalles)
                 .HasForeignKey(d => d.CompraId);
+
+            modelBuilder.Entity<DetalleVenta>()
+                .HasOne(d => d.Venta)
+                .WithMany(v => v.Detalles)
+                .HasForeignKey(d => d.VentaId);
+
+            modelBuilder.Entity<DetalleVenta>()
+                .HasOne(d => d.Producto)
+                .WithMany()
+                .HasForeignKey(d => d.ProductoId);
         }
     }
 }

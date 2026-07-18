@@ -11,8 +11,8 @@ using PapeleriaBaez.Data;
 namespace PapeleriaBaez.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260604192605_CrearVentas")]
-    partial class CrearVentas
+    [Migration("20260718191955_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,61 @@ namespace PapeleriaBaez.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
+                });
+
+            modelBuilder.Entity("PapeleriaBaez.Models.Compra", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LugarCompra")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Observaciones")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Compras");
+                });
+
+            modelBuilder.Entity("PapeleriaBaez.Models.DetalleCompra", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CompraId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Costo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Importe")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompraId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("DetalleCompras");
                 });
 
             modelBuilder.Entity("PapeleriaBaez.Models.DetalleVenta", b =>
@@ -110,9 +165,31 @@ namespace PapeleriaBaez.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("Total")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Ventas");
+                });
+
+            modelBuilder.Entity("PapeleriaBaez.Models.DetalleCompra", b =>
+                {
+                    b.HasOne("PapeleriaBaez.Models.Compra", "Compra")
+                        .WithMany("Detalles")
+                        .HasForeignKey("CompraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PapeleriaBaez.Models.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Compra");
+
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("PapeleriaBaez.Models.DetalleVenta", b =>
@@ -148,6 +225,11 @@ namespace PapeleriaBaez.Migrations
             modelBuilder.Entity("PapeleriaBaez.Models.Categoria", b =>
                 {
                     b.Navigation("Productos");
+                });
+
+            modelBuilder.Entity("PapeleriaBaez.Models.Compra", b =>
+                {
+                    b.Navigation("Detalles");
                 });
 
             modelBuilder.Entity("PapeleriaBaez.Models.Venta", b =>
