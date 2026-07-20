@@ -121,6 +121,32 @@ namespace PapeleriaBaez.Views
 
         }
 
+        private void ActualizarCantidad(VentaItem item, int nuevaCantidad)
+        {
+            var producto = productos.FirstOrDefault(p => p.Id == item.ProductoId);
+
+            if (producto == null)
+                return;
+
+            if (nuevaCantidad <= 0)
+            {
+                carrito.Remove(item);
+                RefrescarCarrito();
+                return;
+            }
+
+            if (nuevaCantidad > producto.Stock)
+            {
+                MessageBox.Show($"Solo hay {producto.Stock} piezas disponibles.");
+                RefrescarCarrito();
+                return;
+            }
+
+            item.Cantidad = nuevaCantidad;
+
+            RefrescarCarrito();
+        }
+
         private void RefrescarCarrito()
         {
             dgVenta.ItemsSource = null;
@@ -217,6 +243,43 @@ namespace PapeleriaBaez.Views
             panelResultados.Visibility = Visibility.Collapsed;
         }
 
+        private void TxtCantidad_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+
+            if (sender is not TextBox txt)
+                return;
+
+            if (txt.Tag is not VentaItem item)
+                return;
+
+            if (!int.TryParse(txt.Text, out int cantidad))
+            {
+                RefrescarCarrito();
+                return;
+            }
+
+            ActualizarCantidad(item, cantidad);
+        }
+
+        private void TxtCantidad_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is not TextBox txt)
+                return;
+
+            if (txt.Tag is not VentaItem item)
+                return;
+
+            if (!int.TryParse(txt.Text, out int cantidad))
+            {
+                RefrescarCarrito();
+                return;
+            }
+
+            ActualizarCantidad(item, cantidad);
+        }
+
         private void GuardarVenta()
         {
             if (carrito.Count == 0)
@@ -293,46 +356,18 @@ namespace PapeleriaBaez.Views
 
         private void BtnAumentar_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is not Button btn)
+            if (sender is not Button btn || btn.Tag is not VentaItem item)
                 return;
 
-            if (btn.Tag is not VentaItem item)
-                return;
-
-            var producto = productos.FirstOrDefault(p => p.Id == item.ProductoId);
-
-            if (producto == null)
-                return;
-
-            if (item.Cantidad >= producto.Stock)
-            {
-                MessageBox.Show("No hay suficiente existencia.");
-                return;
-            }
-
-            item.Cantidad++;
-
-            RefrescarCarrito();
+            ActualizarCantidad(item, item.Cantidad + 1);
         }
 
         private void BtnDisminuir_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is not Button btn)
+            if (sender is not Button btn || btn.Tag is not VentaItem item)
                 return;
 
-            if (btn.Tag is not VentaItem item)
-                return;
-
-            if (item.Cantidad > 1)
-            {
-                item.Cantidad--;
-            }
-            else
-            {
-                carrito.Remove(item);
-            }
-
-            RefrescarCarrito();
+            ActualizarCantidad(item, item.Cantidad - 1);
         }
 
         private void btnCobrar_Click(object sender, RoutedEventArgs e)

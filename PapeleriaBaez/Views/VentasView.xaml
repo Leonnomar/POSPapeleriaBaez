@@ -172,11 +172,15 @@
                                         Tag="{Binding}"
                                         Click="BtnDisminuir_Click"/>
 
-                                <TextBlock Text="{Binding Cantidad}"
-                                           Width="35"
-                                           VerticalAlignment="Center"
-                                           TextAlignment="Center"
-                                           FontWeight="Bold"/>
+                                <TextBox Text="{Binding Cantidad}"
+                                         Tag="{Binding}"
+                                         Width="40"
+                                         Height="25"
+                                         HorizontalContentAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         TextAlignment="Center"
+                                         LostFocus="TxtCantidad_LostFocus"
+                                         KeyDown="TxtCantidad_KeyDown"/>
 
                                 <Button Content="+"
                                         Width="25"
