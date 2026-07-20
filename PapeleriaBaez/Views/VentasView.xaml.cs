@@ -306,15 +306,21 @@ namespace PapeleriaBaez.Views
                 foreach (var item in carrito)
                 {
                     var producto = db.Productos
-                        .FirstOrDefault(p => p.Id == item.ProductoId);
+                        .First(p => p.Id == item.ProductoId);
 
                     if (producto == null)
                         continue;
 
                     if (producto.Stock < item.Cantidad)
                     {
-                        throw new Exception(
-                            $"No hay suficiente stock de {producto.Nombre}");
+                        MessageBox.Show(
+                            $"No hay suficiente stock de {producto.Nombre}. \n" +
+                            $"Disponible: {producto.Stock}",
+                            "Stock insuficiente",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+
+                        return;
                     }
 
                     producto.Stock -= item.Cantidad;
