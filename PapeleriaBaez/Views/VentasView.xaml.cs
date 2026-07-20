@@ -317,9 +317,15 @@ namespace PapeleriaBaez.Views
                 return;
             }
 
-            carrito.Remove(productoSeleccionado);
-
-            productoSeleccionado = null;
+            if (productoSeleccionado.Cantidad > 1)
+            {
+                productoSeleccionado.Cantidad--;
+            }
+            else
+            {
+                carrito.Remove(productoSeleccionado);
+                productoSeleccionado = null;
+            }
 
             RefrescarCarrito();
         }
