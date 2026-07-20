@@ -142,7 +142,9 @@
         <DataGrid x:Name="dgVenta"
                   Grid.Row="3"
                   AutoGenerateColumns="False"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  SelectionMode="Single"
+                  SelectionChanged="dgVenta_SelectionChanged">
 
             <DataGrid.Columns>
 
@@ -207,10 +209,12 @@
                     Height="45"
                     Margin="10"/>
 
-            <Button Content="🗑 Eliminar"
+            <Button x:Name="btnEliminar"
+                    Content="🗑 Eliminar"
                     Width="140"
                     Height="45"
-                    Margin="10"/>
+                    Margin="10"
+                    Click="btnEliminar_Click"/>
 
         </StackPanel>
         

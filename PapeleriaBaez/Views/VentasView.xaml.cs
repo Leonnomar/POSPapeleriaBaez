@@ -29,6 +29,8 @@ namespace PapeleriaBaez.Views
 
         private ObservableCollection<VentaItem> carrito = new();
 
+        private VentaItem? productoSeleccionado;
+
         public VentasView()
         {
             InitializeComponent();
@@ -305,6 +307,26 @@ namespace PapeleriaBaez.Views
             {
                 GuardarVenta();
             }
+        }
+
+        private void btnEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            if (productoSeleccionado == null)
+            {
+                MessageBox.Show("Seleccione un producto.");
+                return;
+            }
+
+            carrito.Remove(productoSeleccionado);
+
+            productoSeleccionado = null;
+
+            RefrescarCarrito();
+        }
+
+        private void dgVenta_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            productoSeleccionado = dgVenta.SelectedItem as VentaItem;
         }
     }
 }
