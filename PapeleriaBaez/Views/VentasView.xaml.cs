@@ -291,6 +291,50 @@ namespace PapeleriaBaez.Views
             }
         }
 
+        private void BtnAumentar_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button btn)
+                return;
+
+            if (btn.Tag is not VentaItem item)
+                return;
+
+            var producto = productos.FirstOrDefault(p => p.Id == item.ProductoId);
+
+            if (producto == null)
+                return;
+
+            if (item.Cantidad >= producto.Stock)
+            {
+                MessageBox.Show("No hay suficiente existencia.");
+                return;
+            }
+
+            item.Cantidad++;
+
+            RefrescarCarrito();
+        }
+
+        private void BtnDisminuir_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button btn)
+                return;
+
+            if (btn.Tag is not VentaItem item)
+                return;
+
+            if (item.Cantidad > 1)
+            {
+                item.Cantidad--;
+            }
+            else
+            {
+                carrito.Remove(item);
+            }
+
+            RefrescarCarrito();
+        }
+
         private void btnCobrar_Click(object sender, RoutedEventArgs e)
         {
             if (carrito.Count == 0)
@@ -307,27 +351,6 @@ namespace PapeleriaBaez.Views
             {
                 GuardarVenta();
             }
-        }
-
-        private void btnEliminar_Click(object sender, RoutedEventArgs e)
-        {
-            if (productoSeleccionado == null)
-            {
-                MessageBox.Show("Seleccione un producto.");
-                return;
-            }
-
-            if (productoSeleccionado.Cantidad > 1)
-            {
-                productoSeleccionado.Cantidad--;
-            }
-            else
-            {
-                carrito.Remove(productoSeleccionado);
-                productoSeleccionado = null;
-            }
-
-            RefrescarCarrito();
         }
 
         private void dgVenta_SelectionChanged(object sender, SelectionChangedEventArgs e)

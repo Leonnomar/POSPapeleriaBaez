@@ -156,9 +156,42 @@
                                     Binding="{Binding Nombre}"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="Cantidad"
-                                    Binding="{Binding Cantidad}"
-                                    Width="90"/>
+                <DataGridTemplateColumn Header="Cantidad" Width="130">
+
+                    <DataGridTemplateColumn.CellTemplate>
+
+                        <DataTemplate>
+
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center">
+
+                                <Button Content="-"
+                                        Width="25"
+                                        Height="25"
+                                        Margin="2"
+                                        Tag="{Binding}"
+                                        Click="BtnDisminuir_Click"/>
+
+                                <TextBlock Text="{Binding Cantidad}"
+                                           Width="35"
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Center"
+                                           FontWeight="Bold"/>
+
+                                <Button Content="+"
+                                        Width="25"
+                                        Height="25"
+                                        Margin="2"
+                                        Tag="{Binding}"
+                                        Click="BtnAumentar_Click"/>
+                                
+                            </StackPanel>
+                            
+                        </DataTemplate>
+                        
+                    </DataGridTemplateColumn.CellTemplate>
+                    
+                </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Precio"
                                     Binding="{Binding Precio}"
@@ -208,13 +241,6 @@
                     Width="140"
                     Height="45"
                     Margin="10"/>
-
-            <Button x:Name="btnEliminar"
-                    Content="🗑 Eliminar"
-                    Width="140"
-                    Height="45"
-                    Margin="10"
-                    Click="btnEliminar_Click"/>
 
         </StackPanel>
         
