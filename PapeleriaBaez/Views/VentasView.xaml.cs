@@ -150,7 +150,7 @@ namespace PapeleriaBaez.Views
         private void RefrescarCarrito()
         {
             dgVenta.ItemsSource = null;
-            dgVenta.ItemsSource = carrito.ToList();
+            dgVenta.ItemsSource = carrito;
 
             ActualizarTotales();
         }
@@ -425,6 +425,37 @@ namespace PapeleriaBaez.Views
             {
                 GuardarVenta();
             }
+        }
+
+        private void btnCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            if (carrito.Count == 0)
+            {
+                MessageBox.Show(
+                    "No hay ninguna venta en proceso.",
+                    "Cancelar Venta",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
+
+            var resultado = MessageBox.Show(
+                "¿Está seguro de cancelar la venta?\n\nSe eliminarán todos los productos del carrito.",
+                "Cancelar venta",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (resultado != MessageBoxResult.Yes)
+                return;
+
+            carrito.Clear();
+
+            productoSeleccionado = null;
+
+            RefrescarCarrito();
+
+            LimpiarBusqueda();
         }
 
         private void dgVenta_SelectionChanged(object sender, SelectionChangedEventArgs e)

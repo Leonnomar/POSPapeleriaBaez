@@ -244,7 +244,8 @@
             <Button Content="❌ Cancelar"
                     Width="140"
                     Height="45"
-                    Margin="10"/>
+                    Margin="10"
+                    Click="btnCancelar_Click"/>
 
         </StackPanel>
         
