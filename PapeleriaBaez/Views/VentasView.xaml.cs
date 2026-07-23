@@ -282,6 +282,8 @@ namespace PapeleriaBaez.Views
 
         private void GuardarVenta()
         {
+            List<string> alertasStock = new();
+
             if (carrito.Count == 0)
             {
                 MessageBox.Show("No hay productos para vender.");
@@ -313,6 +315,8 @@ namespace PapeleriaBaez.Views
 
                     if (producto.Stock < item.Cantidad)
                     {
+                        transaccion.Rollback();
+
                         MessageBox.Show(
                             $"No hay suficiente stock de {producto.Nombre}. \n" +
                             $"Disponible: {producto.Stock}",
@@ -333,17 +337,46 @@ namespace PapeleriaBaez.Views
                         Precio = item.Precio,
                         Importe = item.Importe
                     });
+
+                    if (producto.Stock <= producto.StockMinimo)
+                    {
+                        alertasStock.Add(
+                            $"• {producto.Nombre}\n" +
+                            $"   Stock actual: {producto.Stock}\n" +
+                            $"   Stock mínimo: {producto.StockMinimo}");
+                    }
                 }
 
                 db.SaveChanges();
 
                 transaccion.Commit();
 
-                MessageBox.Show("Venta realizada correctamente.");
+                if (alertasStock.Any())
+                {
+                    MessageBox.Show(
+                        "Venta realizada correctamente. \n\n" +
+                        "⚠ Inventario bajo:\n\n" +
+                        string.Join("\n\n", alertasStock),
+                        "Venta realizada",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Venta realizada correctamente.",
+                        "Venta",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
 
                 carrito.Clear();
 
                 RefrescarCarrito();
+
+                LimpiarBusqueda();
+
+                productoSeleccionado = null;
 
                 CargarProductos();
             }
