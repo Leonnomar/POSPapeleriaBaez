@@ -519,5 +519,41 @@ namespace PapeleriaBaez.Views
         {
             productoSeleccionado = dgVenta.SelectedItem as VentaItem;
         }
+
+        private void VentasView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(this);
+            txtBuscar.Focus();
+        }
+
+        private void VentasView_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.F2:
+                    btnCobrar_Click(btnCobrar, new RoutedEventArgs());
+                    e.Handled = true;
+                    break;
+
+                case Key.Escape:
+                    btnCancelar_Click(btnCancelar, new RoutedEventArgs());
+                    e.Handled = true;
+                    break;
+
+                case Key.Delete:
+                    btnEliminar_Click(btnEliminar, new RoutedEventArgs());
+                    e.Handled = true;
+                    break;
+
+                case Key.B:
+                    if (Keyboard.Modifiers == ModifierKeys.Control)
+                    {
+                        txtBuscar.Focus();
+                        txtBuscar.SelectAll();
+                        e.Handled = true;
+                    }
+                    break;
+            }
+        }
     }
 }
