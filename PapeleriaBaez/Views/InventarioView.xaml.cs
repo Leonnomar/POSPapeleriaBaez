@@ -94,5 +94,41 @@ namespace PapeleriaBaez.Views
                 $"Valor Inventario: {valorInventario:C}";
         }
 
+        private void MostrarInventario(List<InventarioGrid> lista)
+        {
+            dgInventario.ItemsSource = lista;
+            ActualizarResumen();
+        }
+
+        private void BtnTodos_Click(object sender, RoutedEventArgs e)
+        {
+            MostrarInventario(listaInventario);
+        }
+        
+        private void BtnDisponibles_Click(object sender, RoutedEventArgs e)
+        {
+            MostrarInventario(
+                listaInventario
+                    .Where(p => p.Stock > p.StockMinimo)
+                    .ToList());
+        }
+
+        private void BtnStockBajo_Click(object sender, RoutedEventArgs e)
+        {
+            MostrarInventario(
+                listaInventario
+                    .Where(p =>
+                        p.Stock > 0 &&
+                        p.Stock <= p.StockMinimo)
+                    .ToList());
+        }
+
+        private void BtnAgotados_Click(object sender, RoutedEventArgs e)
+        {
+            MostrarInventario(
+                listaInventario
+                    .Where(p => p.Stock <= 0)
+                    .ToList());
+        }
     }
 }
