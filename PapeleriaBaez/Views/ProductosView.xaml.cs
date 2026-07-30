@@ -250,11 +250,16 @@ namespace PapeleriaBaez.Views
             if (dgProductos.SelectedItem is not ProductoGrid producto)
                 return;
 
+            productoSeleccionadoId = producto.Id;
+
             using var db = new AppDbContext();
 
             var productoReal = db.Productos
                                  .FirstOrDefault(
                                     p => p.Id == producto.Id);
+
+            if (productoReal == null)
+                return;
 
             txtCodigo.Text = productoReal.Codigo;
             txtNombre.Text = productoReal.Nombre;
