@@ -486,6 +486,35 @@ namespace PapeleriaBaez.Views
             LimpiarBusqueda();
         }
 
+        private void btnEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            if (productoSeleccionado == null)
+            {
+                MessageBox.Show(
+                    "Seleccione un producto del carrito.",
+                    "Eliminar producto",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
+
+            var resultado = MessageBox.Show(
+                $"¿Desea eliminar '{productoSeleccionado.Nombre} de la venta?",
+                "Confirmar",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (resultado != MessageBoxResult.Yes)
+                return;
+
+            carrito.Remove(productoSeleccionado);
+
+            productoSeleccionado = null;
+
+            RefrescarCarrito();
+        }
+
         private void dgVenta_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             productoSeleccionado = dgVenta.SelectedItem as VentaItem;

@@ -247,6 +247,12 @@
                     Margin="10"
                     Click="btnCancelar_Click"/>
 
+            <Button Content="🗑Eliminar"
+                    Width="140"
+                    Height="45"
+                    Margin="10"
+                    Click="btnEliminar_Click"/>
+
         </StackPanel>
         
     </Grid>
