@@ -95,6 +95,18 @@ namespace PapeleriaBaez.Views
 
         private void AgregarProducto(Producto producto)
         {
+            if (producto.Stock <= 0)
+            {
+                MessageBox.Show(
+                    $"El producto '{producto.Nombre}' está agotado.",
+                    "Sin existencias",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                LimpiarBusqueda();
+                return;
+            }
+
             var existente = carrito.FirstOrDefault(x => x.ProductoId == producto.Id);
 
             if (existente != null)
@@ -397,6 +409,22 @@ namespace PapeleriaBaez.Views
         {
             if (sender is not Button btn || btn.Tag is not VentaItem item)
                 return;
+
+            var producto = productos.FirstOrDefault(p => p.Id == item.ProductoId);
+
+            if (producto == null)
+                return;
+
+            if (item.Cantidad >= producto.Stock)
+            {
+                MessageBox.Show(
+                    $"Solo hay {producto.Stock} piezas disponibles.",
+                    "Stock insuficiente",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
 
             ActualizarCantidad(item, item.Cantidad + 1);
         }
