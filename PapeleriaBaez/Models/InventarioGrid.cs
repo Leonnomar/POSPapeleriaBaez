@@ -32,12 +32,12 @@ namespace PapeleriaBaez.Models
             get
             {
                 if (Stock <= 0)
-                    return "🔴 Agotado";
+                    return "Agotado";
 
                 if (Stock <= StockMinimo)
-                    return "🟡 Stock Bajo";
+                    return "Stock Bajo";
 
-                return "🟢 Disponible";
+                return "Disponible";
             }
         }
     }

@@ -86,9 +86,73 @@
                 <DataGridTextColumn Header="Mínimo"
                                     Binding="{Binding StockMinimo}"/>
 
-                <DataGridTextColumn Header="Estado"
-                                    Binding="{Binding Estado}"/>
+                <DataGridTemplateColumn Header="Estado" Width="120">
 
+                    <DataGridTemplateColumn.CellTemplate>
+
+                        <DataTemplate>
+
+                            <Border x:Name="bdEstado"
+                                    Padding="5"
+                                    CornerRadius="4"
+                                    HorizontalAlignment="Center">
+
+                                <TextBlock x:Name="txtEstado"
+                                           Text="{Binding Estado}"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"/>
+
+                            </Border>
+
+                            <DataTemplate.Triggers>
+
+                                <DataTrigger Binding="{Binding Estado}"
+                                             Value="Disponible">
+
+                                    <Setter TargetName="bdEstado"
+                                            Property="Background"
+                                            Value="#C8E6C9"/>
+
+                                    <Setter TargetName="txtEstado"
+                                            Property="Foreground"
+                                            Value="#1B5E20"/>
+                                    
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding Estado}"
+                                             Value="Stock Bajo">
+
+                                    <Setter TargetName="bdEstado"
+                                            Property="Background"
+                                            Value="#FFF9C4"/>
+
+                                    <Setter TargetName="txtEstado"
+                                            Property="Foreground"
+                                            Value="#F57F17"/>
+                                    
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding Estado}"
+                                             Value="Agotado">
+
+                                    <Setter TargetName="bdEstado"
+                                            Property="Background"
+                                            Value="#FFCDD2"/>
+
+                                    <Setter TargetName="txtEstado"
+                                            Property="Foreground"
+                                            Value="#B71C1C"/>
+                                    
+                                </DataTrigger>
+                                
+                            </DataTemplate.Triggers>
+                            
+                        </DataTemplate>
+                        
+                    </DataGridTemplateColumn.CellTemplate>
+                    
+                </DataGridTemplateColumn>
+                
                 <DataGridTextColumn Header="Valor"
                                     Binding="{Binding ValorInventario,
                                               StringFormat={}{0:C}}"/>
