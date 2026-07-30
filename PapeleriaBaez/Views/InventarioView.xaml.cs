@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using PapeleriaBaez.Data;
+using PapeleriaBaez.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +20,79 @@ namespace PapeleriaBaez.Views
     /// <summary>
     /// Lógica de interacción para InventarioView.xaml
     /// </summary>
-    public partial class InventarioView : Window
-    {
+    public partial class InventarioView : UserControl
+    {        
         public InventarioView()
         {
             InitializeComponent();
+
+            CargarInventario();
         }
+
+        private List<InventarioGrid> listaInventario = new();
+
+        private void CargarInventario()
+        {
+            using var db = new AppDbContext();
+
+            listaInventario = db.Productos
+                .Include(p => p.Categoria)
+                .OrderBy(p => p.Nombre)
+                .Select(p => new InventarioGrid
+                {
+                    Id = p.Id,
+                    Codigo = p.Codigo,
+                    Nombre = p.Nombre,
+                    Categoria = p.Categoria!.Nombre,
+                    Costo = p.Costo,
+                    Precio = p.PrecioVenta,
+                    Stock = p.Stock,
+                    StockMinimo = p.StockMinimo
+                })
+                .ToList();
+
+            dgInventario.ItemsSource = listaInventario;
+
+            ActualizarResumen();
+        }
+
+        private void txtBuscar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string texto = txtBuscar.Text
+                .Trim()
+                .ToLower();
+
+            dgInventario.ItemsSource = listaInventario
+                .Where(p =>
+                    p.Codigo.ToLower().Contains(texto) ||
+                    p.Nombre.ToLower().Contains(texto) ||
+                    p.Categoria.ToLower().Contains(texto))
+                .ToList();
+
+            ActualizarResumen();
+        }
+
+        private void ActualizarResumen()
+        {
+            var lista = dgInventario.ItemsSource.Cast<InventarioGrid>().ToList();
+
+            int productos = lista.Count;
+
+            int agotados = lista.Count(x => x.Stock <= 0);
+
+            int stockBajo = lista.Count(x =>
+                x.Stock > 0 &&
+                x.Stock <= x.StockMinimo);
+
+            decimal valorInventario =
+                lista.Sum(x => x.ValorInventario);
+
+            lblResumen.Text =
+                $"Productos: {productos}        " +
+                $"Stock Bajo: {stockBajo}       " +
+                $"Agotados: {agotados}          " +
+                $"Valor Inventario: {valorInventario:C}";
+        }
+
     }
 }

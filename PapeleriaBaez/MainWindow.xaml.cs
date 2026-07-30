@@ -51,7 +51,7 @@ namespace PapeleriaBaez
 
         private void BtnInventario_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Modulo en construcción");
+            MainFrame.Content = new InventarioView();
         }
 
         private void BtnCanjes_Click(object sender, RoutedEventArgs e)
