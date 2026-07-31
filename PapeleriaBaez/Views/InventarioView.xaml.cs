@@ -130,5 +130,13 @@ namespace PapeleriaBaez.Views
                     .Where(p => p.Stock <= 0)
                     .ToList());
         }
+
+        private void dgInventario_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (dgInventario.SelectedItem is not InventarioGrid producto)
+                return;
+
+            MessageBox.Show($"Abrir producto: {producto.Nombre}");
+        }
     }
 }
