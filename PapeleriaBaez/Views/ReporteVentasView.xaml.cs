@@ -24,6 +24,8 @@ namespace PapeleriaBaez.Views
     public partial class ReporteVentasView : UserControl
     {
         private List<ReporteVentaGrid> listaVentas = new();
+
+        private List<ReporteDetalleVentaGrid> listaDetalle = new();
         public ReporteVentasView()
         {
             InitializeComponent();
@@ -78,6 +80,26 @@ namespace PapeleriaBaez.Views
 
         }
 
+        private void CargarDetalleVenta(int ventaId)
+        {
+            using var db = new AppDbContext();
+
+            listaDetalle = db.DetalleVentas
+                .Include(d => d.Producto)
+                .Where(d => d.VentaId == ventaId)
+                .Select(d => new ReporteDetalleVentaGrid
+                {
+                    Codigo = d.Producto.Codigo,
+                    Producto = d.Producto.Nombre,
+                    Cantidad = d.Cantidad,
+                    Precio = d.Precio,
+                    Importe = d.Importe
+                })
+                .ToList();
+
+            dgDetalle.ItemsSource = listaDetalle;
+        }
+
         private void BtnBuscar_Click(object sender, RoutedEventArgs e)
         {
             CargarVentas();
@@ -85,7 +107,10 @@ namespace PapeleriaBaez.Views
 
         private void dgVentas_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (dgVentas.SelectedItem is not ReporteVentaGrid venta)
+                return;
 
+            CargarDetalleVenta(venta.Id);
         }
     }
 }
