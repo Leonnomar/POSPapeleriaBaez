@@ -22,6 +22,10 @@ namespace PapeleriaBaez.Data
 
         public DbSet<DetalleCompra> DetalleCompras => Set<DetalleCompra>();
 
+        public DbSet<PaqueteCanje> PaquetesCanje => Set<PaqueteCanje>();
+
+        public DbSet<UniformeCanje> UniformesCanje => Set<UniformeCanje>();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string ruta = @"C:\PapeleriaBaez\PapeleriaBaez.db";

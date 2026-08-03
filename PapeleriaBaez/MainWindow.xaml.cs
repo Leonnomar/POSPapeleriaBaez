@@ -56,7 +56,7 @@ namespace PapeleriaBaez
 
         private void BtnCanjes_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Modulo en construcción");
+            MainFrame.Content = new CanjesView();
         }
 
         private void BtnDeudas_Click(object sender, RoutedEventArgs e)
