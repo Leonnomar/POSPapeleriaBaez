@@ -46,22 +46,8 @@ namespace PapeleriaBaez.Views
                 "Short/Falda"
             };
 
-            cmbColorUniforme.ItemsSource = new[]
-            {
-                "Azul",
-                "Tinto",
-                "Kaki",
-                "Rosa",
-                "Celeste",
-                "Blanco"
-            };
-
-            cmbTallaUniforme.ItemsSource = new[]
-            {
-                "4", "6", "8", "10", "12", "14", "16",
-                "18/CH", "M", "G",
-                "20", "22", "24", "26", "30", "32", "34", "36"
-            };
+            cmbColorUniforme.ItemsSource = null;
+            cmbTallaUniforme.ItemsSource = null;
         }
 
         private void CargarComboEntregaPaquetes()
@@ -289,6 +275,131 @@ namespace PapeleriaBaez.Views
                 //CargarResumenCanjes();
                 //CargarValesPendientes();
             }
+        }
+
+        private void cmbTipoUniforme_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbTipoUniforme.SelectedItem is not string tipo)
+            {
+                cmbColorUniforme.ItemsSource = null;
+                cmbTallaUniforme.ItemsSource = null;
+                return;
+            }
+
+            CargarColoresPorTipo(tipo);
+            CargarTallasPorTipo(tipo);
+        }
+
+        private void CargarTallasPorTipo(string tipo)
+        {
+            string[] tallas;
+
+            switch (tipo)
+            {
+                case "Falda":
+                    tallas = new[]
+                    {
+                        "6", "8", "10", "12", "14",
+                        "16", "18/CH", "M", "G"
+                    };
+                    break;
+
+                case "Camisa Blanca":
+                case "Playera Blanca":
+                    tallas = new[]
+                    {
+                        "4", "6", "8", "10", "12",
+                        "14", "16", "18/CH", "M", "G"
+                    };
+                    break;
+
+                case "Jumper":
+                    tallas = new[]
+                    {
+                        "10", "12", "14", "16"
+                    };
+                    break;
+
+                case "Pantalón":
+                    tallas = new[]
+                    {
+                        "4", "6", "8", "10", "12", "14",
+                        "16", "18", "20", "22", "24", "26",
+                        "30", "32", "34", "36", "38"
+                    };
+                    break;
+
+                case "Short/Falda":
+                    tallas = new[]
+                    {
+                        "4", "6", "8"
+                    };
+                    break;
+
+                default:
+                    tallas = Array.Empty<string>();
+                    break;
+            }
+
+            cmbTallaUniforme.ItemsSource = tallas;
+            cmbTallaUniforme.SelectedIndex = -1;
+        }
+
+        private void CargarColoresPorTipo(string tipo)
+        {
+            string[] colores;
+
+            switch (tipo)
+            {
+                case "Falda":
+                    colores = new[]
+                    {
+                        "Azul",
+                        "Tinto"
+                    };
+                    break;
+
+                case "Camisa Blanca":
+                case "Playera Blanca":
+                    colores = new[]
+                    {
+                        "Blanco"
+                    };
+                    break;
+
+                case "Jumper":
+                    colores = new[]
+                    {
+                        "Rosa",
+                        "Celeste",
+                        "Tinto"
+                    };
+                    break;
+
+                case "Pantalón":
+                    colores = new[]
+                    {
+                        "Azul",
+                        "Tinto",
+                        "Kaki"
+                    };
+                    break;
+
+                case "Short/Falda":
+                    colores = new[]
+                    {
+                        "Azul"
+                    };
+                    break;
+
+                default:
+                    colores = Array.Empty<string>();
+                    break;
+            }
+
+            cmbColorUniforme.ItemsSource = colores;
+            cmbColorUniforme.SelectedIndex =
+                colores.Length == 1 ? 0 : -1;
         }
 
         private void cmbEntregaPaquete_SelectionChanged(object sender, SelectionChangedEventArgs e)

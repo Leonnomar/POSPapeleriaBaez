@@ -112,15 +112,18 @@
                                             VerticalAlignment="Center"/>
 
                                     <ComboBox x:Name="cmbTipoUniforme"
-                                            Width="140"
-                                            Margin="10,0"/>
+                                            Width="175"
+                                            Margin="10,0"
+                                              IsEditable="False"
+                                              SelectionChanged="cmbTipoUniforme_SelectionChanged"/>
 
                                     <TextBlock Text="Color:"
                                             VerticalAlignment="Center"/>
 
                                     <ComboBox x:Name="cmbColorUniforme"
                                             Width="120"
-                                            Margin="10,0"/>
+                                            Margin="10,0"
+                                              IsEditable="False"/>
 
                                     <TextBlock Text="Talla:"
                                             VerticalAlignment="Center"/>
