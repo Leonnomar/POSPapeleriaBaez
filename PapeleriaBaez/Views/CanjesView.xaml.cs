@@ -201,5 +201,17 @@ namespace PapeleriaBaez.Views
 
             MessageBox.Show("Entrada de uniformes registrada correctamente.");
         }
+
+        private void BtnRegistrarEntregaPaquete_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Registro de entrega de útiles pendiente.");
+        }
+
+        private void BtnCapturarConjuntos_Click(object sender, RoutedEventArgs e)
+        {
+            int conjuntos = rbDosConjuntos.IsChecked == true ? 2 : 1;
+
+            MessageBox.Show($"Se capturarán {conjuntos} conjunto(s).");
+        }
     }
 }

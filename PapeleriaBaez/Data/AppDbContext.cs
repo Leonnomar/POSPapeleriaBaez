@@ -26,6 +26,12 @@ namespace PapeleriaBaez.Data
 
         public DbSet<UniformeCanje> UniformesCanje => Set<UniformeCanje>();
 
+        public DbSet<CanjeUniforme> CanjeUniformes =>
+            Set<CanjeUniforme>();
+
+        public DbSet<DetalleCanjeUniforme> DetalleCanjeUniformes =>
+            Set<DetalleCanjeUniforme>();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string ruta = @"C:\PapeleriaBaez\PapeleriaBaez.db";
@@ -56,6 +62,16 @@ namespace PapeleriaBaez.Data
                 .HasOne(d => d.Producto)
                 .WithMany()
                 .HasForeignKey(d => d.ProductoId);
+
+            modelBuilder.Entity<DetalleCanjeUniforme>()
+                .HasOne(d => d.CanjeUniforme)
+                .WithMany(c => c.Detalles)
+                .HasForeignKey(d => d.CanjeUniformeId);
+
+            modelBuilder.Entity<DetalleCanjeUniforme>()
+                .HasOne(d => d.UniformeCanje)
+                .WithMany()
+                .HasForeignKey(d => d.UniformeCanjeId);
         }
     }
 }

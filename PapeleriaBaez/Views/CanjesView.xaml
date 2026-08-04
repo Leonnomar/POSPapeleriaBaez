@@ -13,167 +13,374 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="🎒 Canjes"
+        <TextBlock Text="🎒 Canjes Escolares"
                    FontSize="28"
                    FontWeight="Bold"
                    Margin="0,0,0,15"/>
 
         <TabControl Grid.Row="1">
 
-            <TabItem Header="🎒 Útiles">
+            <!-- ALTAS -->
+            <TabItem Header="📥Altas">
                 <Grid Margin="15">
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    <TabControl>
 
-                    <TextBlock Text="Entrada de paquetes"
-                               FontSize="20"
-                               FontWeight="Bold"/>
+                        <TabItem Header="🎒 Útiles">
+                            <Grid Margin="15">
 
-                    <StackPanel Grid.Row="1"
-                                Orientation="Horizontal"
-                                Margin="0,15">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-                        <TextBlock Text="Paquete:"
-                                   VerticalAlignment="Center"/>
+                                <TextBlock Text="Entrada de paquetes"
+                                        FontSize="20"
+                                        FontWeight="Bold"/>
 
-                        <ComboBox x:Name="cmbPaquete"
-                                  Width="150"
-                                  Margin="10,0"/>
+                                <StackPanel Grid.Row="1"
+                                        Orientation="Horizontal"
+                                        Margin="0,15">
 
-                        <TextBlock Text="Cantidad recibida:"
-                                   VerticalAlignment="Center"
-                                   Margin="20,0,0,0"/>
+                                    <TextBlock Text="Paquete:"
+                                            VerticalAlignment="Center"/>
 
-                        <TextBox x:Name="txtCantidadPaquete"
-                                 Width="100"
-                                 Height="30"
-                                 Margin="10,0"/>
+                                    <ComboBox x:Name="cmbPaquete"
+                                            Width="150"
+                                            Margin="10,0"/>
 
-                        <Button Content="Registrar entrada"
-                                Width="140"
-                                Margin="15,0"
-                                Click="BtnEntradaPaquete_Click"/>
-                        
-                    </StackPanel>
+                                    <TextBlock Text="Cantidad recibida:"
+                                            VerticalAlignment="Center"
+                                            Margin="20,0,0,0"/>
 
-                    <DataGrid x:Name="dgPaquetes"
-                              Grid.Row="2"
-                              AutoGenerateColumns="False"
-                              CanUserAddRows="False">
+                                    <TextBox x:Name="txtCantidadPaquete"
+                                            Width="100"
+                                            Height="30"
+                                            Margin="10,0"/>
 
-                        <DataGrid.Columns>
+                                    <Button Content="Registrar entrada"
+                                        Width="140"
+                                        Margin="15,0"
+                                        Click="BtnEntradaPaquete_Click"/>
 
-                            <DataGridTextColumn Header="Paquete"
-                                                Binding="{Binding NumeroPaquete}"
-                                                Width="*"/>
+                                </StackPanel>
 
-                            <DataGridTextColumn Header="Existencia"
-                                                Binding="{Binding Existencia}"
-                                                Width="*"/>
+                                <DataGrid x:Name="dgPaquetes"
+                                        Grid.Row="2"
+                                        AutoGenerateColumns="False"
+                                        CanUserAddRows="False">
 
-                            <DataGridTextColumn Header="Entregados"
-                                                Binding="{Binding Entregados}"
-                                                Width="*"/>
-                            
-                        </DataGrid.Columns>
-                        
-                    </DataGrid>
-                    
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn Header="Paquete"
+                                                        Binding="{Binding NumeroPaquete}"
+                                                        Width="*"/>
+
+                                        <DataGridTextColumn Header="Existencia"
+                                                        Binding="{Binding Existencia}"
+                                                        Width="*"/>
+
+                                        <DataGridTextColumn Header="Entregados"
+                                                        Binding="{Binding Entregados}"
+                                                        Width="*"/>
+
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="👕 Uniformes">
+                            <Grid Margin="15">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Entrada de Uniformes"
+                                        FontSize="20"
+                                        FontWeight="Bold"/>
+
+                                <WrapPanel Grid.Row="1"
+                                        Margin="0,15">
+
+                                    <TextBlock Text="Tipo:"
+                                            VerticalAlignment="Center"/>
+
+                                    <ComboBox x:Name="cmbTipoUniforme"
+                                            Width="140"
+                                            Margin="10,0"/>
+
+                                    <TextBlock Text="Color:"
+                                            VerticalAlignment="Center"/>
+
+                                    <ComboBox x:Name="cmbColorUniforme"
+                                            Width="120"
+                                            Margin="10,0"/>
+
+                                    <TextBlock Text="Talla:"
+                                            VerticalAlignment="Center"/>
+
+                                    <ComboBox x:Name="cmbTallaUniforme"
+                                            Width="100"
+                                            Margin="10,0"/>
+
+                                    <TextBlock Text="Cantidad:"
+                                            VerticalAlignment="Center"/>
+
+                                    <TextBox x:Name="txtCantidadUniforme"
+                                            Width="80"
+                                            Height="30"
+                                            Margin="10,0"/>
+
+                                    <Button Content="Registrar Entrada"
+                                        Width="140"
+                                        Margin="10,0"
+                                        Click="BtnEntradaUniforme_Click"/>
+
+                                </WrapPanel>
+
+                                <DataGrid x:Name="dgUniformes"
+                                        Grid.Row="2"
+                                        AutoGenerateColumns="False"
+                                        CanUserAddRows="False">
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn Header="Tipo"
+                                                        Binding="{Binding Tipo}"
+                                                        Width="*"/>
+
+                                        <DataGridTextColumn Header="Color"
+                                                        Binding="{Binding Color}"
+                                                        Width="*"/>
+
+                                        <DataGridTextColumn Header="Talla"
+                                                        Binding="{Binding Talla}"
+                                                        Width="*"/>
+
+                                        <DataGridTextColumn Header="Existencia"
+                                                        Binding="{Binding Existencia}"
+                                                        Width="*"/>
+
+                                        <DataGridTextColumn Header="Entregados"
+                                                        Binding="{Binding Entregados}"
+                                                        Width="*"/>
+
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+
+                            </Grid>
+                        </TabItem>
+
+                    </TabControl>
+
                 </Grid>
             </TabItem>
 
-            <TabItem Header="👕 Uniformes">
+            <!-- REGISTRAR -->
+            <TabItem Header="✅ Registrar Canje">
+                <Grid Margin="15">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <GroupBox Header="🎒 Canje de útiles"
+                            Margin="0,0,10,0">
+
+                        <StackPanel Margin="15">
+
+                            <TextBlock Text="Paquete"/>
+
+                            <ComboBox x:Name="cmbEntregaPaquete"
+                                    Height="30"
+                                    Margin="0,5,0,15"/>
+
+                            <TextBlock Text="Cantidad"/>
+
+                            <TextBox x:Name="txtEntregaPaquete"
+                                    Height="30"
+                                    Text="1"
+                                    Margin="0,5,0,15"/>
+
+                            <TextBlock x:Name="lblExistenciaPaquete"
+                                    Text="Disponibles: 0"
+                                    FontWeight="Bold"
+                                    Margin="0,0,0,15"/>
+
+                            <Button Content="Registrar entrega de útiles"
+                                Height="40"
+                                Click="BtnRegistrarEntregaPaquete_Click"/>
+
+                        </StackPanel>
+
+                    </GroupBox>
+
+                    <GroupBox Grid.Column="1"
+                            Header="👕 Canje de uniformes"
+                            Margin="10,0,0,0">
+
+                        <StackPanel Margin="15">
+
+                            <TextBlock Text="Cantidad de conjuntos"
+                                    FontWeight="Bold"/>
+
+                            <StackPanel Orientation="Horizontal"
+                                    Margin="0,10,0,15">
+
+                                <RadioButton x:Name="rbUnConjunto"
+                                            Content="1 conjunto"
+                                            IsChecked="True"
+                                            Margin="0,0,20,0"/>
+
+                                <RadioButton x:Name="rbDosConjuntos"
+                                            Content="2 conjuntos"/>
+
+                            </StackPanel>
+
+                            <Button Content="Captura conjuntos"
+                                Height="40"
+                                Click="BtnCapturarConjuntos_Click"/>
+
+                        </StackPanel>
+
+                    </GroupBox>
+
+                </Grid>
+            </TabItem>
+
+            <!-- VALES -->
+            <TabItem Header="📋 Vales pendientes">
                 <Grid Margin="15">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Entrada de Uniformes"
-                               FontSize="20"
-                               FontWeight="Bold"/>
+                    <TextBlock Text="Prendas pendientes de entregar"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Margin="0,0,0,15"/>
 
-                    <WrapPanel Grid.Row="1"
-                               Margin="0,15">
-
-                        <TextBlock Text="Tipo:"
-                                   VerticalAlignment="Center"/>
-
-                        <ComboBox x:Name="cmbTipoUniforme"
-                                  Width="140"
-                                  Margin="10,0"/>
-
-                        <TextBlock Text="Color:"
-                                   VerticalAlignment="Center"/>
-
-                        <ComboBox x:Name="cmbColorUniforme"
-                                  Width="120"
-                                  Margin="10,0"/>
-
-                        <TextBlock Text="Talla:"
-                                   VerticalAlignment="Center"/>
-
-                        <ComboBox x:Name="cmbTallaUniforme"
-                                  Width="100"
-                                  Margin="10,0"/>
-
-                        <TextBlock Text="Cantidad:"
-                                   VerticalAlignment="Center"/>
-
-                        <TextBox x:Name="txtCantidadUniforme"
-                                 Width="80"
-                                 Height="30"
-                                 Margin="10,0"/>
-
-                        <Button Content="Registrar Entrada"
-                                Width="140"
-                                Margin="10,0"
-                                Click="BtnEntradaUniforme_Click"/>
-                        
-                    </WrapPanel>
-
-                    <DataGrid x:Name="dgUniformes"
-                              Grid.Row="2"
-                              AutoGenerateColumns="False"
-                              CanUserAddRows="False">
+                    <DataGrid x:Name="dgVales"
+                            Grid.Row="1"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False">
 
                         <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Fecha"
+                                            Binding="{Binding Fecha}"
+                                            Width="160"/>
+
+                            <DataGridTextColumn Header="Conjunto"
+                                            Binding="{Binding NumeroCoonjunto}"
+                                            Width="90"/>
 
                             <DataGridTextColumn Header="Tipo"
-                                                Binding="{Binding Tipo}"
-                                                Width="*"/>
+                                            Binding="{Binding Tipo}"
+                                            Width="*"/>
 
                             <DataGridTextColumn Header="Color"
-                                                Binding="{Binding Color}"
-                                                Width="*"/>
+                                            Binding="{Binding Color}"
+                                            Width="120"/>
 
                             <DataGridTextColumn Header="Talla"
-                                                Binding="{Binding Talla}"
-                                                Width="*"/>
+                                            Binding="{Binding Talla}"
+                                            Width="90"/>
 
-                            <DataGridTextColumn Header="Existencia"
-                                                Binding="{Binding Existencia}"
-                                                Width="*"/>
-
-                            <DataGridTextColumn Header="Entregados"
-                                                Binding="{Binding Entregados}"
-                                                Width="*"/>
-                            
                         </DataGrid.Columns>
-                        
+
                     </DataGrid>
-                    
+
                 </Grid>
             </TabItem>
-            
+
+            <!-- RESUMEN -->
+            <TabItem Header="📊 Resumen">
+                <Grid Margin="15">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Resumen de la temporada"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Margin="0,0,0,15"/>
+
+                    <WrapPanel Grid.Row="1">
+
+                        <Border BorderBrush="#CCCCCC"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="20"
+                            Margin="5"
+                            Width="210">
+
+                            <StackPanel>
+                                <TextBlock Text="Paquetes entregados"
+                                        FontWeight="Bold"/>
+                                <TextBlock x:Name="lblPaquetesEntregados"
+                                        Text="0"
+                                        FontSize="28"
+                                        FontWeight="Bold"/>
+                            </StackPanel>
+
+                        </Border>
+
+                        <Border BorderBrush="#CCCCCC"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="20"
+                            Margin="5"
+                            Width="210">
+
+                            <StackPanel>
+                                <TextBlock Text="Conjuntos entregados"
+                                        FontWeight="Bold"/>
+                                <TextBlock x:Name="lblConjuntosEntregados"
+                                        Text="0"
+                                        FontSize="28"
+                                        FontWeight="Bold"/>
+                            </StackPanel>
+
+                        </Border>
+
+                        <Border BorderBrush="#CCCCCC"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="20"
+                            Margin="5"
+                            Width="210">
+
+                            <StackPanel>
+                                <TextBlock Text="Vales pendientes"
+                                        FontWeight="Bold"/>
+                                <TextBlock x:Name="lblValesPendientes"
+                                        Text="0"
+                                        FontSize="28"
+                                        FontWeight="Bold"/>
+                            </StackPanel>
+
+                        </Border>
+
+                    </WrapPanel>
+
+                </Grid>
+            </TabItem>
+
         </TabControl>
-        
+
     </Grid>
     
 </UserControl>
