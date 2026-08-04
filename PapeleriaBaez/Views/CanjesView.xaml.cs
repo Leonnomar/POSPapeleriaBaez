@@ -27,6 +27,7 @@ namespace PapeleriaBaez.Views
             InitializeComponent();
 
             CargarCombos();
+            CargarComboEntregaPaquetes();
             CargarPaquetes();
             CargarUniformes();
         }
@@ -61,6 +62,17 @@ namespace PapeleriaBaez.Views
                 "18/CH", "M", "G",
                 "20", "22", "24", "26", "30", "32", "34", "36"
             };
+        }
+
+        private void CargarComboEntregaPaquetes()
+        {
+            using var db = new AppDbContext();
+
+            cmbEntregaPaquete.ItemsSource = db.PaquetesCanje
+                .OrderBy(p => p.NumeroPaquete)
+                .ToList();
+
+            cmbEntregaPaquete.DisplayMemberPath = "NumeroPaquete";
         }
 
         private void CargarPaquetes()
@@ -204,7 +216,62 @@ namespace PapeleriaBaez.Views
 
         private void BtnRegistrarEntregaPaquete_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Registro de entrega de útiles pendiente.");
+            if (cmbEntregaPaquete.SelectedItem is not PaqueteCanje seleccionado)
+            {
+                MessageBox.Show("Seleccione un paquete.");
+                return;
+            }
+
+            if (!int.TryParse(txtEntregaPaquete.Text, out int cantidad))
+            {
+                MessageBox.Show("Cantidad inválida.");
+                return;
+            }
+
+            using var db = new AppDbContext();
+
+            var paquete = db.PaquetesCanje
+                .First(p => p.Id == seleccionado.Id);
+
+            if (paquete == null)
+            {
+                MessageBox.Show("No se encontró el paquete");
+                return;
+            }
+
+            if (paquete.Existencia < cantidad)
+            {
+                MessageBox.Show(
+                    $"No hay suficiente paquetes disponibles.\n\n" +
+                    $"Disponibles: {paquete.Existencia}\n" +
+                    $"Solicitados: {cantidad}",
+                    "Existencia insuficiente",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            paquete.Existencia -= cantidad;
+            paquete.Entregados += cantidad;
+
+            db.SaveChanges();
+
+            MessageBox.Show(
+                "Canje de útiles registrado correctamente.",
+                "Canjes",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            txtEntregaPaquete.Text = "1";
+            cmbEntregaPaquete.SelectedIndex = -1;
+
+            CargarPaquetes();
+            CargarComboEntregaPaquetes();
+
+            lblExistenciaPaquete.Text = "Disponibles: 0";
+
+            ValidarEntregaPaquete();
         }
 
         private void BtnCapturarConjuntos_Click(object sender, RoutedEventArgs e)
@@ -212,6 +279,47 @@ namespace PapeleriaBaez.Views
             int conjuntos = rbDosConjuntos.IsChecked == true ? 2 : 1;
 
             MessageBox.Show($"Se capturarán {conjuntos} conjunto(s).");
+        }
+
+        private void cmbEntregaPaquete_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbEntregaPaquete.SelectedItem is PaqueteCanje paquete)
+            {
+                lblExistenciaPaquete.Text =
+                    $"Disponibles: {paquete.Existencia}";
+            }
+            else
+            {
+                lblExistenciaPaquete.Text = "Disponibles: 0";
+            }
+
+            ValidarEntregaPaquete();
+        }
+
+        private void txtEntregaPaquete_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ValidarEntregaPaquete();
+        }
+
+        private void ValidarEntregaPaquete()
+        {
+            if (btnRegistrarEntregaPaquete == null)
+                return;
+
+            bool paqueteSeleccionado =
+                cmbEntregaPaquete.SelectedItem is PaqueteCanje;
+
+            bool cantidadValida =
+                int.TryParse(txtEntregaPaquete.Text, out int cantidad) &&
+                cantidad > 0;
+
+            btnRegistrarEntregaPaquete.IsEnabled = paqueteSeleccionado && cantidadValida;
+
+        }
+
+        private void SoloEnteros_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !e.Text.All(char.IsDigit);
         }
     }
 }
