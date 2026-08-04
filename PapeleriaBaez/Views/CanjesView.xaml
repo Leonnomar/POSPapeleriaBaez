@@ -127,7 +127,8 @@
 
                                     <ComboBox x:Name="cmbTallaUniforme"
                                             Width="100"
-                                            Margin="10,0"/>
+                                            Margin="10,0"
+                                              IsEditable="False"/>
 
                                     <TextBlock Text="Cantidad:"
                                             VerticalAlignment="Center"/>

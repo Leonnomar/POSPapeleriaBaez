@@ -1,0 +1,135 @@
+﻿<Window x:Class="PapeleriaBaez.Views.CapturarConjuntosWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PapeleriaBaez.Views"
+        mc:Ignorable="d"
+        Title="Capturar Conjuntos" 
+        Height="600" 
+        Width="760"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="👕 Canje de Uniformes"
+                   FontSize="26"
+                   FontWeight="Bold"
+                   Margin="0,0,0,15"/>
+        
+        <!-- CONJUNTO 1 -->
+        <GroupBox Grid.Row="1"
+                  Header="Conjunto 1"
+                  FontWeight="Bold"
+                  Margin="0,0,0,10">
+
+            <Grid Margin="15">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Primera prenda:"
+                           VerticalAlignment="Center"/>
+
+                <ComboBox x:Name="cmbConjunto1Prenda1"
+                          Grid.Column="1"
+                          Height="32"
+                          Margin="10,5"
+                          DisplayMemberPath="Descripcion"/>
+
+                <TextBlock Grid.Row="1"
+                           Text="Segunda prenda:"
+                           VerticalAlignment="Center"/>
+
+                <ComboBox x:Name="cmbConjunto1Prenda2"
+                          Grid.Row="1"
+                          Grid.Column="1"
+                          Height="32"
+                          Margin="10,5"
+                          DisplayMemberPath="Descripcion"/>
+                
+            </Grid>
+            
+        </GroupBox>
+        
+        <!-- CONJUNTO 2 -->
+        <GroupBox x:Name="grpConjunto2"
+                  Grid.Row="2"
+                  Header="Conjunto 2"
+                  FontWeight="Bold"
+                  Margin="0,0,0,10">
+
+            <Grid Margin="15">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Primera prenda:"
+                           VerticalAlignment="Center"/>
+
+                <ComboBox x:Name="cmbConjunto2Prenda1"
+                          Grid.Column="1"
+                          Height="32"
+                          Margin="10,5"
+                          DisplayMemberPath="Descripcion"/>
+
+                <TextBlock Grid.Row="1"
+                           Text="Segunda prenda:"
+                           VerticalAlignment="Center"/>
+
+                <ComboBox x:Name="cmbConjunto2Prenda2"
+                          Grid.Row="1"
+                          Grid.Column="1"
+                          Height="32"
+                          Margin="10,5"
+                          DisplayMemberPath="Descripcion"/>
+                
+            </Grid>
+            
+        </GroupBox>
+        
+        <!-- BOTONES -->
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,15,0,0">
+
+            <Button Content="Cancelar"
+                    Width="120"
+                    Height="40"
+                    Margin="5"
+                    IsCancel="True"/>
+
+            <Button Content="Registrar canje"
+                    Width="160"
+                    Height="40"
+                    Margin="5"
+                    Click="BtnRegistrarCanje_Click"/>
+            
+        </StackPanel>
+        
+    </Grid>
+    
+</Window>

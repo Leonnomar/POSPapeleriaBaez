@@ -163,7 +163,7 @@ namespace PapeleriaBaez.Views
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(talla))
+            if (string.IsNullOrWhiteSpace(talla))
             {
                 MessageBox.Show("Seleccione la talla.");
                 return;
@@ -278,7 +278,17 @@ namespace PapeleriaBaez.Views
         {
             int conjuntos = rbDosConjuntos.IsChecked == true ? 2 : 1;
 
-            MessageBox.Show($"Se capturarán {conjuntos} conjunto(s).");
+            var ventana = new CapturarConjuntosWindows(conjuntos)
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            if (ventana.ShowDialog() == true)
+            {
+                CargarUniformes();
+                //CargarResumenCanjes();
+                //CargarValesPendientes();
+            }
         }
 
         private void cmbEntregaPaquete_SelectionChanged(object sender, SelectionChangedEventArgs e)
