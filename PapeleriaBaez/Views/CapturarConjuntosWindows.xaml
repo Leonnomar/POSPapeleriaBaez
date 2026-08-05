@@ -6,130 +6,292 @@
         xmlns:local="clr-namespace:PapeleriaBaez.Views"
         mc:Ignorable="d"
         Title="Capturar Conjuntos" 
-        Height="600" 
-        Width="760"
+        Height="700" 
+        Width="900"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
-    
-    <Grid Margin="20">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-        <TextBlock Text="👕 Canje de Uniformes"
-                   FontSize="26"
-                   FontWeight="Bold"
-                   Margin="0,0,0,15"/>
+        <Grid Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="👕 Canje de Uniformes"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       Margin="0,0,0,15"/>
+
+            <!-- CONJUNTO 1 -->
+            <GroupBox Grid.Row="1"
+                      Header="Conjunto 1"
+                      FontWeight="Bold"
+                      Margin="0,0,0,15">
+
+                <StackPanel Margin="15">
+
+                    <!-- PRENDA 1 -->
+                    <GroupBox Header="Primera prenda"
+                              Margin="0,0,0,10">
+
+                        <Grid Margin="10">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Tipo:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC1P1Tipo"
+                                      Grid.Column="1"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC1P1Tipo_SelectionChanged"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="Color:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC1P1Color"
+                                      Grid.Column="3"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC1P1Color_SelectionChanged"/>
+
+                            <TextBlock Grid.Column="4"
+                                       Text="Talla:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC1P1Talla"
+                                      Grid.Column="5"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC1P1Talla_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblC1P1Existencia"
+                                       Grid.Column="6"
+                                       Text="Disponibles: 0"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Margin="15,0,0,0"/>
+                        </Grid>
+
+                    </GroupBox>
+
+                    <!-- PRENDA 2 -->
+                    <GroupBox Header="Segunda prenda">
+
+                        <Grid Margin="10">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Tipo:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC1P2Tipo"
+                                      Grid.Column="1"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC1P1Tipo_SelectionChanged"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="Color:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC1P2Color"
+                                      Grid.Column="3"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC1P2Color_SelectionChanged"/>
+
+                            <TextBlock Grid.Column="4"
+                                       Text="Talla:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC1P2Talla"
+                                      Grid.Column="5"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC1P2Talla_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblC1P2Existencia"
+                                       Grid.Column="6"
+                                       Text="Disponible: 0"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Margin="15,0,0,0"/>
+                        </Grid>
+
+                    </GroupBox>
+
+                </StackPanel>
+
+            </GroupBox>
+
+            <!-- CONJUNTO 2 -->
+            <GroupBox x:Name="grpConjunto2"
+                      Grid.Row="2"
+                      Header="Conjunto 2"
+                      FontWeight="Bold"
+                      Margin="0,0,0,15">
+
+                <StackPanel Margin="15">
+
+                    <!-- PRENDA 1 -->
+                    <GroupBox Header="Primera prenda"
+                              Margin="0,0,0,10">
+
+                        <Grid Margin="10">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Tipo:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC2P1Tipo"
+                                      Grid.Column="1"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC2P1Tipo_SelectionChanged"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="Color"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC2P1Color"
+                                      Grid.Column="3"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC2P1Color_SelectionChanged"/>
+
+                            <TextBlock Grid.Column="4"
+                                       Text="Talla:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC2P1Talla"
+                                      Grid.Column="5"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC2P1Talla_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblC2P1Existencia"
+                                       Grid.Column="6"
+                                       Text="Disponibles: 0"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Margin="15,0,0,0"/>
+
+                        </Grid>
+
+                    </GroupBox>
+
+                    <!-- PRENDA 2 -->
+                    <GroupBox Header="Segunda prenda">
+
+                        <Grid Margin="10">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Tipo:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC2P2Tipo"
+                                      Grid.Column="1"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC2P2Tipo_SelectionChanged"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="Color:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC2P2Color"
+                                      Grid.Column="3"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC2P2Color_SelectionChanged"/>
+
+                            <TextBlock Grid.Column="4"
+                                       Text="Talla:"
+                                       VerticalAlignment="Center"/>
+
+                            <ComboBox x:Name="cmbC2P2Talla"
+                                      Grid.Column="5"
+                                      Height="30"
+                                      Margin="8,0"
+                                      SelectionChanged="cmbC2P2Talla_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblC2P2Existencia"
+                                       Grid.Column="6"
+                                       Text="Disponibles: 0"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Margin="15,0,0,0"/>
+                        </Grid>
+
+                    </GroupBox>
+
+                </StackPanel>
+
+            </GroupBox>
+
+            <!-- BOTONES -->
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+
+                <Button Content="Cancelar"
+                        Width="120"
+                        Height="40"
+                        Margin="5"
+                        IsCancel="True"/>
+
+                <Button Content="Registrar canje"
+                        Width="160"
+                        Height="40"
+                        Margin="5"
+                        Click="BtnRegistrarCanje_Click"/>
+
+            </StackPanel>
+
+        </Grid>
         
-        <!-- CONJUNTO 1 -->
-        <GroupBox Grid.Row="1"
-                  Header="Conjunto 1"
-                  FontWeight="Bold"
-                  Margin="0,0,0,10">
+    </ScrollViewer>
 
-            <Grid Margin="15">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="Primera prenda:"
-                           VerticalAlignment="Center"/>
-
-                <ComboBox x:Name="cmbConjunto1Prenda1"
-                          Grid.Column="1"
-                          Height="32"
-                          Margin="10,5"
-                          DisplayMemberPath="Descripcion"/>
-
-                <TextBlock Grid.Row="1"
-                           Text="Segunda prenda:"
-                           VerticalAlignment="Center"/>
-
-                <ComboBox x:Name="cmbConjunto1Prenda2"
-                          Grid.Row="1"
-                          Grid.Column="1"
-                          Height="32"
-                          Margin="10,5"
-                          DisplayMemberPath="Descripcion"/>
-                
-            </Grid>
-            
-        </GroupBox>
-        
-        <!-- CONJUNTO 2 -->
-        <GroupBox x:Name="grpConjunto2"
-                  Grid.Row="2"
-                  Header="Conjunto 2"
-                  FontWeight="Bold"
-                  Margin="0,0,0,10">
-
-            <Grid Margin="15">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="Primera prenda:"
-                           VerticalAlignment="Center"/>
-
-                <ComboBox x:Name="cmbConjunto2Prenda1"
-                          Grid.Column="1"
-                          Height="32"
-                          Margin="10,5"
-                          DisplayMemberPath="Descripcion"/>
-
-                <TextBlock Grid.Row="1"
-                           Text="Segunda prenda:"
-                           VerticalAlignment="Center"/>
-
-                <ComboBox x:Name="cmbConjunto2Prenda2"
-                          Grid.Row="1"
-                          Grid.Column="1"
-                          Height="32"
-                          Margin="10,5"
-                          DisplayMemberPath="Descripcion"/>
-                
-            </Grid>
-            
-        </GroupBox>
-        
-        <!-- BOTONES -->
-        <StackPanel Grid.Row="3"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,15,0,0">
-
-            <Button Content="Cancelar"
-                    Width="120"
-                    Height="40"
-                    Margin="5"
-                    IsCancel="True"/>
-
-            <Button Content="Registrar canje"
-                    Width="160"
-                    Height="40"
-                    Margin="5"
-                    Click="BtnRegistrarCanje_Click"/>
-            
-        </StackPanel>
-        
-    </Grid>
-    
 </Window>
