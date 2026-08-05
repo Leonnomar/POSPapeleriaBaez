@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PapeleriaBaez.Data;
 using PapeleriaBaez.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace PapeleriaBaez.Views
 {
@@ -30,6 +31,7 @@ namespace PapeleriaBaez.Views
             CargarComboEntregaPaquetes();
             CargarPaquetes();
             CargarUniformes();
+            CargarValesPendientes();
         }
 
         private void CargarCombos()
@@ -70,6 +72,29 @@ namespace PapeleriaBaez.Views
                 .ToList();
 
             dgPaquetes.ItemsSource = paquetes;
+        }
+
+        private void CargarValesPendientes()
+        {
+            using var db = new AppDbContext();
+
+            var vales = db.DetalleCanjeUniformes
+                .Include(d => d.CanjeUniforme)
+                .Include(d => d.UniformeCanje)
+                .Where(d => d.Pendiente)
+                .OrderByDescending(d => d.CanjeUniforme.Fecha)
+                .Select(d => new ValePendienteGrid
+                {
+                    DetalleId = d.Id,
+                    Fecha = d.CanjeUniforme.Fecha,
+                    NumeroConjunto = d.NumeroConjunto,
+                    Tipo = d.UniformeCanje.Tipo,
+                    Color = d.UniformeCanje.Color,
+                    Talla = d.UniformeCanje.Talla
+                })
+                .ToList();
+
+            dgVales.ItemsSource = vales;
         }
 
         private void BtnEntradaPaquete_Click(object sender, RoutedEventArgs e)
@@ -273,7 +298,7 @@ namespace PapeleriaBaez.Views
             {
                 CargarUniformes();
                 //CargarResumenCanjes();
-                //CargarValesPendientes();
+                CargarValesPendientes();
             }
         }
 
