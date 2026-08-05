@@ -306,6 +306,25 @@
                                             Binding="{Binding Talla}"
                                             Width="90"/>
 
+                            <DataGridTemplateColumn Header="Acción"
+                                                    Width="140">
+
+                                <DataGridTemplateColumn.CellTemplate>
+
+                                    <DataTemplate>
+
+                                        <Button Content="Entregar vale"
+                                                Tag="{Binding}"
+                                                Click="BtnEntregarVale_Click"
+                                                Margin="5"
+                                                Padding="8,3"/>
+                                        
+                                    </DataTemplate>
+                                    
+                                </DataGridTemplateColumn.CellTemplate>
+                                
+                            </DataGridTemplateColumn>
+
                         </DataGrid.Columns>
 
                     </DataGrid>

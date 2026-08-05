@@ -285,6 +285,103 @@ namespace PapeleriaBaez.Views
             ValidarEntregaPaquete();
         }
 
+        private void BtnEntregarVale_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button boton ||
+                boton.Tag is not ValePendienteGrid vale)
+            {
+                return;
+            }
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var detalle = db.DetalleCanjeUniformes
+                    .Include(d => d.UniformeCanje)
+                    .FirstOrDefault(d => d.Id == vale.DetalleId);
+
+                if (detalle == null)
+                {
+                    MessageBox.Show(
+                        "No se encontró el vale pendiente.",
+                        "Vales",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                if (!detalle.Pendiente)
+                {
+                    MessageBox.Show(
+                        "EEste vale ya fue entregado.",
+                        "Vales",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    CargarValesPendientes();
+                    return;
+                }
+
+                var uniforme = detalle.UniformeCanje;
+
+                if (uniforme.Existencia <= 0)
+                {
+                    MessageBox.Show(
+                        $"Todavía no hay existencia de: \n\n" +
+                        $"{uniforme.Tipo}\n" +
+                        $"Color: {uniforme.Color}\n" +
+                        $"Talla: {uniforme.Talla}",
+                        "Sin existencia",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                var resultado = MessageBox.Show(
+                    $"¿Desea entregar este vale?\n\n" +
+                    $"{uniforme.Tipo}\n" +
+                    $"Color: {uniforme.Color}\n" +
+                    $"Talla: {uniforme.Talla}",
+                    "Entregar vale",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (resultado != MessageBoxResult.Yes)
+                    return;
+
+                uniforme.Existencia--;
+                uniforme.Entregados++;
+
+                detalle.Pendiente = false;
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                MessageBox.Show(
+                    "Vale entregado correctamente.",
+                    "Vales",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                CargarUniformes();
+                CargarValesPendientes();
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al entregar el vale",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
         private void BtnCapturarConjuntos_Click(object sender, RoutedEventArgs e)
         {
             int conjuntos = rbDosConjuntos.IsChecked == true ? 2 : 1;
