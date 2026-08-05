@@ -316,7 +316,7 @@ namespace PapeleriaBaez.Views
                 case "Jumper":
                     tallas = new[]
                     {
-                        "10", "12", "14", "16"
+                        "12", "14", "16", "18/CH"
                     };
                     break;
 
@@ -370,6 +370,7 @@ namespace PapeleriaBaez.Views
                 case "Jumper":
                     colores = new[]
                     {
+                        "Marino",
                         "Rosa",
                         "Celeste",
                         "Tinto"

@@ -36,7 +36,7 @@
                 <StackPanel Margin="15">
 
                     <!-- PRENDA 1 -->
-                    <GroupBox Header="Primera prenda"
+                    <GroupBox Header="👔 Prenda Superior"
                               Margin="0,0,0,10">
 
                         <Grid Margin="10">
@@ -54,33 +54,33 @@
                             <TextBlock Text="Tipo:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC1P1Tipo"
+                            <ComboBox x:Name="cmbC1SuperiorTipo"
                                       Grid.Column="1"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC1P1Tipo_SelectionChanged"/>
+                                      SelectionChanged="cmbC1SuperiorTipo_SelectionChanged"/>
 
                             <TextBlock Grid.Column="2"
                                        Text="Color:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC1P1Color"
+                            <ComboBox x:Name="cmbC1SuperiorColor"
                                       Grid.Column="3"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC1P1Color_SelectionChanged"/>
+                                      SelectionChanged="cmbC1SuperiorColor_SelectionChanged"/>
 
                             <TextBlock Grid.Column="4"
                                        Text="Talla:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC1P1Talla"
+                            <ComboBox x:Name="cmbC1SuperiorTalla"
                                       Grid.Column="5"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC1P1Talla_SelectionChanged"/>
+                                      SelectionChanged="cmbC1SuperiorTalla_SelectionChanged"/>
 
-                            <TextBlock x:Name="lblC1P1Existencia"
+                            <TextBlock x:Name="lblC1SuperiorExistencia"
                                        Grid.Column="6"
                                        Text="Disponibles: 0"
                                        VerticalAlignment="Center"
@@ -91,7 +91,7 @@
                     </GroupBox>
 
                     <!-- PRENDA 2 -->
-                    <GroupBox Header="Segunda prenda">
+                    <GroupBox Header="👖 Prenda Inferior">
 
                         <Grid Margin="10">
 
@@ -108,33 +108,33 @@
                             <TextBlock Text="Tipo:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC1P2Tipo"
+                            <ComboBox x:Name="cmbC1InferiorTipo"
                                       Grid.Column="1"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC1P1Tipo_SelectionChanged"/>
+                                      SelectionChanged="cmbC1InferiorTipo_SelectionChanged"/>
 
                             <TextBlock Grid.Column="2"
                                        Text="Color:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC1P2Color"
+                            <ComboBox x:Name="cmbC1InferiorColor"
                                       Grid.Column="3"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC1P2Color_SelectionChanged"/>
+                                      SelectionChanged="cmbC1InferiorColor_SelectionChanged"/>
 
                             <TextBlock Grid.Column="4"
                                        Text="Talla:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC1P2Talla"
+                            <ComboBox x:Name="cmbC1InferiorTalla"
                                       Grid.Column="5"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC1P2Talla_SelectionChanged"/>
+                                      SelectionChanged="cmbC1InferiorTalla_SelectionChanged"/>
 
-                            <TextBlock x:Name="lblC1P2Existencia"
+                            <TextBlock x:Name="lblC1InferiorExistencia"
                                        Grid.Column="6"
                                        Text="Disponible: 0"
                                        VerticalAlignment="Center"
@@ -158,7 +158,7 @@
                 <StackPanel Margin="15">
 
                     <!-- PRENDA 1 -->
-                    <GroupBox Header="Primera prenda"
+                    <GroupBox Header="👔 Prenda Superior"
                               Margin="0,0,0,10">
 
                         <Grid Margin="10">
@@ -176,33 +176,33 @@
                             <TextBlock Text="Tipo:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC2P1Tipo"
+                            <ComboBox x:Name="cmbC2SuperiorTipo"
                                       Grid.Column="1"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC2P1Tipo_SelectionChanged"/>
+                                      SelectionChanged="cmbC2SuperiorTipo_SelectionChanged"/>
 
                             <TextBlock Grid.Column="2"
                                        Text="Color"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC2P1Color"
+                            <ComboBox x:Name="cmbC2SuperiorColor"
                                       Grid.Column="3"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC2P1Color_SelectionChanged"/>
+                                      SelectionChanged="cmbC2SuperiorColor_SelectionChanged"/>
 
                             <TextBlock Grid.Column="4"
                                        Text="Talla:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC2P1Talla"
+                            <ComboBox x:Name="cmbC2SuperiorTalla"
                                       Grid.Column="5"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC2P1Talla_SelectionChanged"/>
+                                      SelectionChanged="cmbC2SuperiorTalla_SelectionChanged"/>
 
-                            <TextBlock x:Name="lblC2P1Existencia"
+                            <TextBlock x:Name="lblC2SuperiorExistencia"
                                        Grid.Column="6"
                                        Text="Disponibles: 0"
                                        VerticalAlignment="Center"
@@ -214,7 +214,7 @@
                     </GroupBox>
 
                     <!-- PRENDA 2 -->
-                    <GroupBox Header="Segunda prenda">
+                    <GroupBox Header="👖 Prenda Inferior">
 
                         <Grid Margin="10">
 
@@ -231,33 +231,33 @@
                             <TextBlock Text="Tipo:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC2P2Tipo"
+                            <ComboBox x:Name="cmbC2InferiorTipo"
                                       Grid.Column="1"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC2P2Tipo_SelectionChanged"/>
+                                      SelectionChanged="cmbC2InferiorTipo_SelectionChanged"/>
 
                             <TextBlock Grid.Column="2"
                                        Text="Color:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC2P2Color"
+                            <ComboBox x:Name="cmbC2InferiorColor"
                                       Grid.Column="3"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC2P2Color_SelectionChanged"/>
+                                      SelectionChanged="cmbC2InferiorColor_SelectionChanged"/>
 
                             <TextBlock Grid.Column="4"
                                        Text="Talla:"
                                        VerticalAlignment="Center"/>
 
-                            <ComboBox x:Name="cmbC2P2Talla"
+                            <ComboBox x:Name="cmbC2InferiorTalla"
                                       Grid.Column="5"
                                       Height="30"
                                       Margin="8,0"
-                                      SelectionChanged="cmbC2P2Talla_SelectionChanged"/>
+                                      SelectionChanged="cmbC2InferiorTalla_SelectionChanged"/>
 
-                            <TextBlock x:Name="lblC2P2Existencia"
+                            <TextBlock x:Name="lblC2InferiorExistencia"
                                        Grid.Column="6"
                                        Text="Disponibles: 0"
                                        VerticalAlignment="Center"

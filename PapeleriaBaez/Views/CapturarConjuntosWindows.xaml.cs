@@ -39,6 +39,20 @@ namespace PapeleriaBaez.Views
             CargarUniformes();
         }
 
+        private readonly string[] prendasSuperiores =
+        {
+            "Camisa Blanca",
+            "Playera Blanca"
+        };
+
+        private readonly string[] prendasInferiores =
+        {
+            "Pantalón",
+            "Falda",
+            "Jumper",
+            "Short/Falda"
+        };
+
         private void CargarUniformes()
         {
             using var db = new AppDbContext();
@@ -49,70 +63,51 @@ namespace PapeleriaBaez.Views
                 .ThenBy(u => u.Talla)
                 .ToList();
 
-            var tipos = inventarioUniformes
+            var superiores = inventarioUniformes
+                .Where(u => prendasSuperiores.Contains(u.Tipo))
                 .Select(u => u.Tipo)
                 .Distinct()
                 .OrderBy(x => x)
                 .ToList();
 
-            cmbC1P1Tipo.ItemsSource = tipos;
-            cmbC1P2Tipo.ItemsSource = tipos;
-            cmbC2P1Tipo.ItemsSource = tipos;
-            cmbC2P2Tipo.ItemsSource = tipos;
+            var inferiores = inventarioUniformes
+                .Where(u => prendasInferiores.Contains(u.Tipo))
+                .Select(u => u.Tipo)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            cmbC1SuperiorTipo.ItemsSource = superiores;
+            cmbC1InferiorTipo.ItemsSource = inferiores;
+            cmbC2SuperiorTipo.ItemsSource = superiores;
+            cmbC2InferiorTipo.ItemsSource = inferiores;
         }
 
         private bool ValidarFormulario()
         {
-            if (!ValidarPrenda(cmbC1P1Tipo, cmbC1P1Color, cmbC1P1Talla, "la primera prenda del conjunto 1"))
+            if (!ValidarPrenda(cmbC1SuperiorTipo, cmbC1SuperiorColor, cmbC1SuperiorTalla, "la prenda superior del conjunto 1"))
             {
                 return false;
             }
 
-            if (!ValidarPrenda(cmbC1P2Tipo, cmbC1P2Color, cmbC1P2Talla, "la segunda prenda del conjunto 1"))
+            if (!ValidarPrenda(cmbC1InferiorTipo, cmbC1InferiorColor, cmbC1InferiorTalla, "la prenda inferior del conjunto 1"))
             {
                 return false;
             }
 
             if (cantidadConjuntos == 2)
             {
-                if (!ValidarPrenda(cmbC2P1Tipo, cmbC2P1Color, cmbC2P1Talla, "la primera prenda del conjunto 2"))
+                if (!ValidarPrenda(cmbC2SuperiorTipo, cmbC2SuperiorColor, cmbC2SuperiorTalla, "la prenda superior del conjunto 2"))
                 {
                     return false;
                 }
 
-                if (!ValidarPrenda(cmbC2P2Tipo, cmbC2P2Color, cmbC2P2Talla, "la segunda prenda del conjunto 2"))
+                if (!ValidarPrenda(cmbC2InferiorTipo, cmbC2InferiorColor, cmbC2InferiorTalla, "la prenda inferior del conjunto 2"))
                 {
                     return false;
                 }
             }
-
-            if (SonLaMismaPrenda(
-                cmbC1P1Tipo, cmbC1P1Color, cmbC1P1Talla,
-                cmbC1P2Tipo, cmbC1P2Color, cmbC1P2Talla))
-            {
-                MessageBox.Show(
-                    "Las dos prendas del conjunto son iguales.",
-                    "Canje de uniformes",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-
-                return false;
-            }
-
-            if (cantidadConjuntos == 2 &&
-                SonLaMismaPrenda(
-                    cmbC2P1Tipo, cmbC2P1Color, cmbC2P1Talla,
-                    cmbC2P2Tipo, cmbC2P2Color, cmbC2P2Talla))
-            {
-                MessageBox.Show(
-                    "Las dos prendas del conjunto 2 son iguales.",
-                    "Canje de uniformes",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-
-                return false;
-            }
-
+            
             return true;
         }
 
@@ -157,16 +152,6 @@ namespace PapeleriaBaez.Views
             return true;
         }
 
-        private bool SonLaMismaPrenda(ComboBox tipo1, ComboBox color1, ComboBox talla1, ComboBox tipo2, ComboBox color2, ComboBox talla2)
-        {
-            return tipo1.SelectedItem?.ToString() ==
-                   tipo2.SelectedItem?.ToString()
-                && color1.SelectedItem?.ToString() ==
-                   color2.SelectedItem?.ToString()
-                && talla1.SelectedItem?.ToString() ==
-                   talla2.SelectedItem?.ToString();
-        }
-
         private void BtnRegistrarCanje_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidarFormulario())
@@ -175,24 +160,24 @@ namespace PapeleriaBaez.Views
             var prendasSeleccionadas =
                 new List<(UniformeCanje Prenda, int Conjunto)>();
 
-            var prenda = ObtenerUniforme(cmbC1P1Tipo, cmbC1P1Color, cmbC1P1Talla);
+            var prenda = ObtenerUniforme(cmbC1SuperiorTipo, cmbC1SuperiorColor, cmbC1SuperiorTalla);
 
             if (prenda != null)
                 prendasSeleccionadas.Add((prenda, 1));
 
-            prenda = ObtenerUniforme(cmbC1P2Tipo, cmbC1P2Color, cmbC1P2Talla);
+            prenda = ObtenerUniforme(cmbC1InferiorTipo, cmbC1InferiorColor, cmbC1InferiorTalla);
 
             if (prenda != null)
                 prendasSeleccionadas.Add((prenda, 1));
 
             if (cantidadConjuntos == 2)
             {
-                prenda = ObtenerUniforme(cmbC2P1Tipo, cmbC2P1Color, cmbC2P1Talla);
+                prenda = ObtenerUniforme(cmbC2SuperiorTipo, cmbC2SuperiorColor, cmbC2SuperiorTalla);
 
                 if (prenda != null)
                     prendasSeleccionadas.Add((prenda, 2));
 
-                prenda = ObtenerUniforme(cmbC2P2Tipo, cmbC2P2Color, cmbC2P2Talla);
+                prenda = ObtenerUniforme(cmbC2InferiorTipo, cmbC2InferiorColor, cmbC2InferiorTalla);
 
                 if (prenda != null)
                     prendasSeleccionadas.Add((prenda, 2));
@@ -292,38 +277,78 @@ namespace PapeleriaBaez.Views
         {
             string tipo = cmbTipo.SelectedItem?.ToString() ?? "";
 
+            cmbColor.ItemsSource = null;
+            cmbTalla.ItemsSource = null;
+            cmbTalla.SelectedIndex = -1;
+
+            lblExistencia.Text = "Disponibles: 0";
+
+            if (string.IsNullOrWhiteSpace(tipo))
+                return;
+
             var colores = inventarioUniformes
-                .Where(u => u.Tipo == tipo)
-                .Select(u => u.Color)
-                .Distinct()
-                .OrderBy(x => x)
+                .Where(u => 
+                    string.Equals(
+                        u.Tipo.Trim(),
+                        tipo,
+                        StringComparison.OrdinalIgnoreCase))
+                .Select(u => u.Color.Trim())
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(c => c)
                 .ToList();
 
             cmbColor.ItemsSource = colores;
-            cmbColor.SelectedIndex = colores.Count == 1 ? 0 : -1;
-
-            cmbTalla.ItemsSource = null;
-            lblExistencia.Text = "Disponibles: 0";
+            
+            if (colores.Count == 1)
+                cmbColor.SelectedIndex = 0;
         }
 
-        private void cmbC1P1Tipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC1SuperiorTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarColores(cmbC1P1Tipo, cmbC1P1Color, cmbC1P1Talla, lblC1P1Existencia);
+            CargarColores(cmbC1SuperiorTipo, cmbC1SuperiorColor, cmbC1SuperiorTalla, lblC1SuperiorExistencia);
         }
 
-        private void cmbC1P2Tipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC1InferiorTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarColores(cmbC1P2Tipo, cmbC1P2Color, cmbC1P2Talla, lblC1P2Existencia);
+            CargarColores(cmbC1InferiorTipo, cmbC1InferiorColor, cmbC1InferiorTalla, lblC1InferiorExistencia);
         }
 
-        private void cmbC2P1Tipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC2SuperiorTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarColores(cmbC2P1Tipo, cmbC2P1Color, cmbC2P1Talla, lblC2P1Existencia);
+            CargarColores(cmbC2SuperiorTipo, cmbC2SuperiorColor, cmbC2SuperiorTalla, lblC2SuperiorExistencia);
         }
 
-        private void cmbC2P2Tipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC2InferiorTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarColores(cmbC2P2Tipo, cmbC2P2Color, cmbC2P2Talla, lblC2P2Existencia);
+            CargarColores(cmbC2InferiorTipo, cmbC2InferiorColor, cmbC2InferiorTalla, lblC2InferiorExistencia);
+        }
+
+        private int ObtenerOrdenTalla(string talla)
+        {
+            return talla.ToUpperInvariant() switch
+            {
+                "4" => 4,
+                "6" => 6,
+                "8" => 8,
+                "10" => 10,
+                "12" => 12,
+                "14" => 14,
+                "16" => 16,
+                "18" => 18,
+                "18/CH" => 18,
+                "20" => 20,
+                "22" => 22,
+                "24" => 24,
+                "26" => 26,
+                "30" => 30,
+                "32" => 32,
+                "34" => 34,
+                "36" => 36,
+                "M" => 100,
+                "G" => 110,
+                _ => 999
+            };
         }
 
         private void CargarTallas(ComboBox cmbTipo, ComboBox cmbColor, ComboBox cmbTalla, TextBlock lblExistencia)
@@ -331,39 +356,54 @@ namespace PapeleriaBaez.Views
             string tipo = cmbTipo.SelectedItem?.ToString() ?? "";
             string color = cmbColor.SelectedItem?.ToString() ?? "";
 
+            cmbTalla.ItemsSource = null;
+            cmbTalla.SelectedIndex = -1;
+            lblExistencia.Text = "Disponibles: 0";
+
+            if (string.IsNullOrWhiteSpace(tipo) ||
+                string.IsNullOrWhiteSpace(color))
+            {
+                return;
+            }
+
             var tallas = inventarioUniformes
                 .Where(u =>
-                    u.Tipo == tipo &&
-                    u.Color == color)
-                .Select(u => u.Talla)
-                .Distinct()
-                .OrderBy(x => x)
+                    string.Equals(
+                        u.Tipo.Trim(),
+                        tipo,
+                        StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(
+                        u.Color.Trim(),
+                        color,
+                        StringComparison.OrdinalIgnoreCase))
+                .Select(u => u.Talla.Trim())
+                .Where(t => !string.IsNullOrWhiteSpace(t))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(t => ObtenerOrdenTalla(t))
+                .ThenBy(t => t)
                 .ToList();
 
             cmbTalla.ItemsSource = tallas;
-            cmbTalla.SelectedIndex = -1;
-
-            lblExistencia.Text = "Disponibles: 0";
         }
 
-        private void cmbC1P1Color_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC1SuperiorColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarTallas(cmbC1P1Tipo, cmbC1P1Color, cmbC1P1Talla, lblC1P1Existencia);
+            CargarTallas(cmbC1SuperiorTipo, cmbC1SuperiorColor, cmbC1SuperiorTalla, lblC1SuperiorExistencia);
         }
 
-        private void cmbC1P2Color_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC1InferiorColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarTallas(cmbC1P2Tipo, cmbC1P2Color, cmbC1P2Talla, lblC1P2Existencia);
+            CargarTallas(cmbC1InferiorTipo, cmbC1InferiorColor, cmbC1InferiorTalla, lblC1InferiorExistencia);
         }
 
-        private void cmbC2P1Color_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC2SuperiorColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarTallas(cmbC2P1Tipo, cmbC2P1Color, cmbC2P1Talla, lblC2P1Existencia);
+            CargarTallas(cmbC2SuperiorTipo, cmbC2SuperiorColor, cmbC2SuperiorTalla, lblC2SuperiorExistencia);
         }
 
-        private void cmbC2P2Color_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC2InferiorColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarTallas(cmbC2P2Tipo, cmbC2P2Color, cmbC2P2Talla, lblC2P2Existencia);
+            CargarTallas(cmbC2InferiorTipo, cmbC2InferiorColor, cmbC2InferiorTalla, lblC2InferiorExistencia);
         }
 
         private void MostrarExistencia(ComboBox cmbTipo, ComboBox cmbColor, ComboBox cmbTalla, TextBlock lblExistencia)
@@ -383,24 +423,24 @@ namespace PapeleriaBaez.Views
                     : $"Disponibles: {uniforme.Existencia}";
         }
 
-        private void cmbC1P1Talla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC1SuperiorTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MostrarExistencia(cmbC1P1Tipo, cmbC1P1Color, cmbC1P1Talla, lblC1P1Existencia);
+            MostrarExistencia(cmbC1SuperiorTipo, cmbC1SuperiorColor, cmbC1SuperiorTalla, lblC1SuperiorExistencia);
         }
 
-        private void cmbC1P2Talla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC1InferiorTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MostrarExistencia(cmbC1P2Tipo, cmbC1P2Color, cmbC1P2Talla, lblC1P2Existencia);
+            MostrarExistencia(cmbC1InferiorTipo, cmbC1InferiorColor, cmbC1InferiorTalla, lblC1InferiorExistencia);
         }
 
-        private void cmbC2P1Talla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC2SuperiorTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MostrarExistencia(cmbC2P1Tipo, cmbC2P1Color, cmbC2P1Talla, lblC2P1Existencia);
+            MostrarExistencia(cmbC2SuperiorTipo, cmbC2SuperiorColor, cmbC2SuperiorTalla, lblC2SuperiorExistencia);
         }
 
-        private void cmbC2P2Talla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cmbC2InferiorTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MostrarExistencia(cmbC2P2Tipo, cmbC2P2Color, cmbC2P2Talla,lblC2P2Existencia);
+            MostrarExistencia(cmbC2InferiorTipo, cmbC2InferiorColor, cmbC2InferiorTalla,lblC2InferiorExistencia);
         }
 
         private UniformeCanje? ObtenerUniforme(ComboBox cmbTipo, ComboBox cmbColor,  ComboBox cmbTalla)
