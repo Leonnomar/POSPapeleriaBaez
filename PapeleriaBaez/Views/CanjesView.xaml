@@ -334,77 +334,230 @@
 
             <!-- RESUMEN -->
             <TabItem Header="📊 Resumen">
-                <Grid Margin="15">
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="15">
 
-                    <TextBlock Text="Resumen de la temporada"
-                            FontSize="20"
-                            FontWeight="Bold"
-                            Margin="0,0,0,15"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <WrapPanel Grid.Row="1">
+                        <TextBlock Text="Resumen de la temporada"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,15"/>
 
-                        <Border BorderBrush="#CCCCCC"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Padding="20"
-                            Margin="5"
-                            Width="210">
+                        <!-- TARJETAS -->
+                        <WrapPanel Grid.Row="1"
+                                   Margin="0,0,0,20">
 
-                            <StackPanel>
-                                <TextBlock Text="Paquetes entregados"
-                                        FontWeight="Bold"/>
-                                <TextBlock x:Name="lblPaquetesEntregados"
-                                        Text="0"
-                                        FontSize="28"
-                                        FontWeight="Bold"/>
-                            </StackPanel>
+                            <Border BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="18"
+                                    Margin="5"
+                                    Width="190">
 
-                        </Border>
+                                <StackPanel>
+                                    <TextBlock Text="Paquetes entregados"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"/>
 
-                        <Border BorderBrush="#CCCCCC"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Padding="20"
-                            Margin="5"
-                            Width="210">
+                                    <TextBlock x:Name="lblPaquetesEntregados"
+                                               Text="0"
+                                               FontSize="28"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"
+                                               Margin="0,8,0,0"/>
+                                </StackPanel>
 
-                            <StackPanel>
-                                <TextBlock Text="Conjuntos entregados"
-                                        FontWeight="Bold"/>
-                                <TextBlock x:Name="lblConjuntosEntregados"
-                                        Text="0"
-                                        FontSize="28"
-                                        FontWeight="Bold"/>
-                            </StackPanel>
+                            </Border>
 
-                        </Border>
+                            <Border BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="18"
+                                    Margin="5"
+                                    Width="190">
 
-                        <Border BorderBrush="#CCCCCC"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Padding="20"
-                            Margin="5"
-                            Width="210">
+                                <StackPanel>
+                                    <TextBlock Text="Canjes de uniformes"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"/>
 
-                            <StackPanel>
-                                <TextBlock Text="Vales pendientes"
-                                        FontWeight="Bold"/>
-                                <TextBlock x:Name="lblValesPendientes"
-                                        Text="0"
-                                        FontSize="28"
-                                        FontWeight="Bold"/>
-                            </StackPanel>
+                                    <TextBlock x:Name="lblCanjesUniforme"
+                                               Text="0"
+                                               FontSize="28"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"
+                                               Margin="0,8,0,0"/>
+                                </StackPanel>
 
-                        </Border>
+                            </Border>
 
-                    </WrapPanel>
+                            <Border BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="18"
+                                    Margin="5"
+                                    Width="190">
 
-                </Grid>
+                                <StackPanel>
+                                    <TextBlock Text="Conjuntos entregados"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"/>
+
+                                    <TextBlock x:Name="lblConjuntosEntregados"
+                                               Text="0"
+                                               FontSize="28"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"
+                                               Margin="0,8,0,0"/>
+                                </StackPanel>
+
+                            </Border>
+
+                            <Border BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="18"
+                                    Margin="5"
+                                    Width="190">
+
+                                <StackPanel>
+                                    <TextBlock Text="Prendas entregadas"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"/>
+
+                                    <TextBlock x:Name="lblPrendasEntregadas"
+                                               Text="0"
+                                               FontSize="28"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"
+                                               Margin="0,8,0,0"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                            <Border BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="18"
+                                    Margin="5"
+                                    Width="190">
+
+                                <StackPanel>
+                                    <TextBlock Text="Vales Pendientes"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"/>
+
+                                    <TextBlock x:Name="lblValesPendientes"
+                                               Text="0"
+                                               FontSize="28"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"
+                                               Margin="0,8,0,0"/>
+                                </StackPanel>
+
+                            </Border>
+
+                        </WrapPanel>
+
+                        <!-- SUBTÍTULOS -->
+                        <Grid Grid.Row="2"
+                              Margin="0,0,0,8">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="🎒 Resumen de paquetes"
+                                       FontSize="18"
+                                       FontWeight="Bold"/>
+
+                            <TextBlock Grid.Column="2"
+                                       Text="👕 Resumen uniformes"
+                                       FontSize="18"
+                                       FontWeight="Bold"/>
+
+                        </Grid>
+
+                        <!-- TABLAS -->
+                        <Grid Grid.Row="3">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <DataGrid x:Name="dgResumenPaquetes"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      IsReadOnly="True">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="Paquete"
+                                                        Binding="{Binding NumeroPaquete}"
+                                                        Width="*"/>
+
+                                    <DataGridTextColumn Header="Disponibles"
+                                                        Binding="{Binding Existencia}"
+                                                        Width="*"/>
+
+                                    <DataGridTextColumn Header="Entregados"
+                                                        Binding="{Binding Entregados}"
+                                                        Width="*"/>
+
+                                    <DataGridTextColumn Header="Total recibido"
+                                                        Binding="{Binding TotalRecibido}"
+                                                        Width="*"/>
+
+                                </DataGrid.Columns>
+
+                            </DataGrid>
+
+                            <DataGrid x:Name="dgResumenUniformes"
+                                      Grid.Column="2"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      IsReadOnly="True">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="Tipo"
+                                                        Binding="{Binding Tipo}"
+                                                        Width="*"/>
+
+                                    <DataGridTextColumn Header="Disponibles"
+                                                        Binding="{Binding Existencia}"
+                                                        Width="110"/>
+
+                                    <DataGridTextColumn Header="Entregados"
+                                                        Binding="{Binding Entregados}"
+                                                        Width="110"/>
+
+                                    <DataGridTextColumn Header="Total recibido"
+                                                        Binding="{Binding TotalRecibido}"
+                                                        Width="120"/>
+
+                                </DataGrid.Columns>
+
+                            </DataGrid>
+
+                        </Grid>
+
+                    </Grid>
+                
+                </ScrollViewer>
+            
             </TabItem>
 
         </TabControl>

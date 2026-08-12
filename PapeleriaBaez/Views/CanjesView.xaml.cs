@@ -32,6 +32,7 @@ namespace PapeleriaBaez.Views
             CargarPaquetes();
             CargarUniformes();
             CargarValesPendientes();
+            CargarResumenCanjes();
         }
 
         private void CargarCombos()
@@ -139,6 +140,8 @@ namespace PapeleriaBaez.Views
             cmbPaquete.SelectedIndex = -1;
 
             CargarPaquetes();
+            CargarComboEntregaPaquetes();
+            CargarResumenCanjes();
 
             MessageBox.Show("Entrada de paquete registrada correctamente.");
         }
@@ -221,6 +224,8 @@ namespace PapeleriaBaez.Views
             txtCantidadUniforme.Clear();
 
             CargarUniformes();
+            CargarValesPendientes();
+            CargarResumenCanjes();
 
             MessageBox.Show("Entrada de uniformes registrada correctamente.");
         }
@@ -279,6 +284,7 @@ namespace PapeleriaBaez.Views
 
             CargarPaquetes();
             CargarComboEntregaPaquetes();
+            CargarResumenCanjes();
 
             lblExistenciaPaquete.Text = "Disponibles: 0";
 
@@ -316,7 +322,7 @@ namespace PapeleriaBaez.Views
                 if (!detalle.Pendiente)
                 {
                     MessageBox.Show(
-                        "EEste vale ya fue entregado.",
+                        "Este vale ya fue entregado.",
                         "Vales",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
@@ -369,6 +375,7 @@ namespace PapeleriaBaez.Views
 
                 CargarUniformes();
                 CargarValesPendientes();
+                CargarResumenCanjes();
             }
             catch (Exception ex)
             {
@@ -394,7 +401,7 @@ namespace PapeleriaBaez.Views
             if (ventana.ShowDialog() == true)
             {
                 CargarUniformes();
-                //CargarResumenCanjes();
+                CargarResumenCanjes();
                 CargarValesPendientes();
             }
         }
@@ -523,6 +530,73 @@ namespace PapeleriaBaez.Views
             cmbColorUniforme.ItemsSource = colores;
             cmbColorUniforme.SelectedIndex =
                 colores.Length == 1 ? 0 : -1;
+        }
+
+        private void CargarResumenCanjes()
+        {
+            using var db = new AppDbContext();
+
+            int paquetesEntregados = db.PaquetesCanje
+                .Sum(p => (int?)p.Entregados) ?? 0;
+
+            int canjesUniforme = db.CanjeUniformes.Count();
+
+            int conjuntosEntregados = db.CanjeUniformes
+                .Sum(c => (int?)c.CantidadConjuntos) ?? 0;
+
+            int prendasEntregadas = db.UniformesCanje
+                .Sum(u => (int?)u.Entregados) ?? 0;
+
+            int valesPendientes = db.DetalleCanjeUniformes
+                .Count(d => d.Pendiente);
+
+            lblPaquetesEntregados.Text =
+                paquetesEntregados.ToString();
+
+            lblCanjesUniforme.Text =
+                canjesUniforme.ToString();
+
+            lblConjuntosEntregados.Text =
+                conjuntosEntregados.ToString();
+
+            lblPrendasEntregadas.Text =
+                prendasEntregadas.ToString();
+
+            lblValesPendientes.Text =
+                valesPendientes.ToString();
+
+            lblValesPendientes.Foreground =
+                valesPendientes > 0
+                    ? Brushes.Red
+                    : Brushes.Green;
+            var resumenPaquete = db.PaquetesCanje
+                .OrderBy(p => p.NumeroPaquete)
+                .Select(p => new ResumenPaqueteGrid
+                {
+                    NumeroPaquete = p.NumeroPaquete,
+                    Existencia = p.Existencia,
+                    Entregados = p.Entregados
+                })
+                .ToList();
+
+            dgResumenPaquetes.ItemsSource =
+                resumenPaquete;
+
+            var resumenUniformes = db.UniformesCanje
+                .GroupBy(u => u.Tipo)
+                .Select(grupo => new ResumenUniformeGrid
+                {
+                    Tipo = grupo.Key,
+                    Existencia = grupo.Sum(u => u.Existencia),
+                    Entregados = grupo.Sum(u =>u.Entregados)
+                })
+                .OrderBy(u => u.Tipo)
+                .ToList();
+
+            dgResumenUniformes.ItemsSource =
+                resumenUniformes;
+
+
         }
 
         private void cmbEntregaPaquete_SelectionChanged(object sender, SelectionChangedEventArgs e)
