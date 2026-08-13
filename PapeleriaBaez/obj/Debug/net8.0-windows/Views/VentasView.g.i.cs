@@ -141,7 +141,7 @@ namespace PapeleriaBaez.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PapeleriaBaez;V1.0.0.0;component/views/ventasview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PapeleriaBaez;component/views/ventasview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\VentasView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

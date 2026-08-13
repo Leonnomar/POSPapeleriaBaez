@@ -45,7 +45,12 @@
                     Width="100"
                     Margin="20,0,0,0"
                     Click="BtnBuscar_Click"/>
-            
+
+            <Button Content="📄 Exportar Excel"
+                    Width="140"
+                    Margin="10,0,0,0"
+                    Click="BtnExportarExcel_Click"/>
+
         </StackPanel>
         
         <!-- CONTENIDO PRINCIPAL -->
