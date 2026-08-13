@@ -46,6 +46,21 @@
                     Margin="20,0,0,0"
                     Click="BtnBuscar_Click"/>
 
+            <Button Content="Hoy"
+                    Width="80"
+                    Margin="10,0,0,0"
+                    Click="BtnHoy_Click"/>
+
+            <Button Content="Semana"
+                    Width="90"
+                    Margin="5,0,0,0"
+                    Click="BtnSemana_Click"/>
+
+            <Button Content="Mes"
+                    Width="80"
+                    Margin="5,0,0,0"
+                    Click="BtnMes_Click"/>
+
             <Button Content="📄 Exportar Excel"
                     Width="140"
                     Margin="10,0,0,0"

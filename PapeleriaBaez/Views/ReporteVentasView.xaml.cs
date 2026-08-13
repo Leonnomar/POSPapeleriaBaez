@@ -468,5 +468,45 @@ namespace PapeleriaBaez.Views
 
             CargarDetalleVenta(venta.Id);
         }
+
+        private void AplicarFiltroFechas(DateTime desde, DateTime hasta)
+        {
+            dpDesde.SelectedDate = desde.Date;
+            dpHasta.SelectedDate = hasta.Date;
+
+            CargarVentas();
+            CargarProductosMasVendidos();
+        }
+
+        private void BtnHoy_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime hoy = DateTime.Today;
+
+            AplicarFiltroFechas(hoy, hoy);
+        }
+
+        private void BtnSemana_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime hoy = DateTime.Today;
+
+            int diferencia = (7 + (hoy.DayOfWeek - DayOfWeek.Monday)) % 7;
+
+            DateTime inicioSemana = hoy.AddDays(-diferencia);
+
+            AplicarFiltroFechas(inicioSemana, hoy);
+        }
+
+        private void BtnMes_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime hoy = DateTime.Today;
+
+            DateTime inicioMes =
+                new DateTime(
+                    hoy.Year,
+                    hoy.Month,
+                    1);
+
+            AplicarFiltroFechas(inicioMes, hoy);
+        }
     }
 }
