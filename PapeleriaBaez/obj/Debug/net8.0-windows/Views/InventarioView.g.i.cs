@@ -77,7 +77,7 @@ namespace PapeleriaBaez.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PapeleriaBaez;component/views/inventarioview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PapeleriaBaez;V1.0.0.0;component/views/inventarioview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\InventarioView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

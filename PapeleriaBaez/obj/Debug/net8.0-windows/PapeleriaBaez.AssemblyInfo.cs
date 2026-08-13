@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PapeleriaBaez")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+623c36fe0310033bb7bfa717c38ef07e39f44a4f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1488475230607206079647a94220efc80737a43")]
 [assembly: System.Reflection.AssemblyProductAttribute("PapeleriaBaez")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PapeleriaBaez")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
