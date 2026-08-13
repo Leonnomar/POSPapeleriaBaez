@@ -26,6 +26,8 @@ namespace PapeleriaBaez.Views
         private List<ReporteVentaGrid> listaVentas = new();
 
         private List<ReporteDetalleVentaGrid> listaDetalle = new();
+
+        private List<ProductoMasVendidoGrid> listaMasVendidos = new();
         public ReporteVentasView()
         {
             InitializeComponent();
@@ -34,6 +36,7 @@ namespace PapeleriaBaez.Views
             dpHasta.SelectedDate = DateTime.Today;
 
             CargarVentas();
+            CargarProductosMasVendidos();
         }
 
         private void CargarVentas()
@@ -62,6 +65,9 @@ namespace PapeleriaBaez.Views
 
             dgVentas.ItemsSource = listaVentas;
 
+            listaDetalle.Clear();
+            dgDetalle.ItemsSource = null;
+
             ActualizarResumen();
         }
 
@@ -73,10 +79,16 @@ namespace PapeleriaBaez.Views
 
             decimal total = listaVentas.Sum(x => x.Total);
 
+            decimal promedioVenta =
+                ventas > 0
+                    ? total / ventas
+                    : 0;
+
             lblResumen.Text =
                 $"Ventas: {ventas}      " +
                 $"Artículos: {productos}        " +
-                $"Ingresos: {total:C}";
+                $"Ingresos: {total:C}       " +
+                $"Promedio: {promedioVenta:C}";
 
         }
 
@@ -100,9 +112,75 @@ namespace PapeleriaBaez.Views
             dgDetalle.ItemsSource = listaDetalle;
         }
 
+        private void CargarProductosMasVendidos()
+        {
+            using var db = new AppDbContext();
+
+            DateTime desde =
+                dpDesde.SelectedDate?.Date ?? DateTime.Today;
+
+            DateTime hasta =
+                (dpHasta.SelectedDate?.Date ?? DateTime.Today)
+                .AddDays(1)
+                .AddTicks(-1);
+
+            var detalles = db.DetalleVentas
+                .Include(d => d.Venta)
+                .Include(d => d.Producto)
+                .Where(d =>
+                    d.Venta.Fecha >= desde &&
+                    d.Venta.Fecha <= hasta)
+                .ToList();
+
+            listaMasVendidos = detalles
+                .GroupBy(d => new
+                {
+                    d.ProductoId,
+                    d.Producto.Codigo,
+                    d.Producto.Nombre
+                })
+                .Select(g => new ProductoMasVendidoGrid
+                {
+                    Codigo = g.Key.Codigo,
+                    Producto = g.Key.Nombre,
+                    Cantidad = g.Sum(d => d.Cantidad),
+                    Ingresos = g.Sum(d => d.Importe)
+                })
+                .OrderByDescending(x => x.Cantidad)
+                .ThenByDescending(x => x.Ingresos)
+                .ToList();
+
+            dgMasVendidos.ItemsSource = listaMasVendidos;
+        }
+
         private void BtnBuscar_Click(object sender, RoutedEventArgs e)
         {
+            if (dpDesde.SelectedDate == null ||
+                dpHasta.SelectedDate == null)
+            {
+                MessageBox.Show(
+                    "Seleccione ambas fechas.",
+                    "Reporte de ventas",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            if (dpDesde.SelectedDate.Value.Date >
+                dpHasta.SelectedDate.Value.Date)
+            {
+                MessageBox.Show(
+                    "La fecha inicial no puede ser mayor que la fecha final.",
+                    "Reporte de ventas",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
             CargarVentas();
+            CargarProductosMasVendidos();
         }
 
         private void dgVentas_SelectionChanged(object sender, SelectionChangedEventArgs e)

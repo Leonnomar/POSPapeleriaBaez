@@ -11,8 +11,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -50,75 +48,137 @@
             
         </StackPanel>
         
-        <!-- Ventas -->
-        <DataGrid x:Name="dgVentas"
-                  Grid.Row="2"
-                  AutoGenerateColumns="False"
-                  SelectionChanged="dgVentas_SelectionChanged">
+        <!-- CONTENIDO PRINCIPAL -->
+        <Grid Grid.Row="2">
 
-            <DataGrid.Columns>
-
-                <DataGridTextColumn Header="Folio"
-                                    Binding="{Binding Id}"
-                                    Width="80"/>
-
-                <DataGridTextColumn Header="Fecha"
-                                    Binding="{Binding Fecha,
-                                    StringFormat=dd/MM/yyyy HH:mm}"
-                                    Width="180"/>
-
-                <DataGridTextColumn Header="Productos"
-                                    Binding="{Binding Productos}"
-                                    Width="100"/>
-
-                <DataGridTextColumn Header="Total"
-                                    Binding="{Binding Total,
-                                    StringFormat={}{0:C}}"
-                                    Width="120"/>
-                
-            </DataGrid.Columns>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             
-        </DataGrid>
-        
-        <!-- Título detalle -->
-        <TextBlock Grid.Row="3"
-                   Text="Detalle de la venta"
-                   FontSize="18"
-                   FontWeight="Bold"
-                   Margin="0,15,0,5"/>
-        
-        <!-- Detalle -->
-        <DataGrid x:Name="dgDetalle"
-                  Grid.Row="4"
-                  AutoGenerateColumns="False">
+            <!-- IZQUIERDA: Ventas y detalle -->
+            <Grid Grid.Column="0">
 
-            <DataGrid.Columns>
-
-                <DataGridTextColumn Header="Código"
-                                    Binding="{Binding Codigo}"/>
-
-                <DataGridTextColumn Header="Producto"
-                                    Binding="{Binding Producto}"
-                                    Width="*"/>
-
-                <DataGridTextColumn Header="Cantidad"
-                                    Binding="{Binding Cantidad}"/>
-
-                <DataGridTextColumn Header="Precio"
-                                    Binding="{Binding Precio,
-                                    StringFormat={}{0:C}}"/>
-
-                <DataGridTextColumn Header="Importe"
-                                    Binding="{Binding Importe,
-                                    StringFormat={}{0:C}}"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 
-            </DataGrid.Columns>
+                <!-- Ventas -->
+                <DataGrid x:Name="dgVentas"
+                          Grid.Row="0"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          SelectionChanged="dgVentas_SelectionChanged">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Folio"
+                                            Binding="{Binding Id}"
+                                            Width="80"/>
+
+                        <DataGridTextColumn Header="Fecha"
+                                            Binding="{Binding Fecha,
+                                            StringFormat=dd/MM/yyyy HH:mm}"
+                                            Width="180"/>
+
+                        <DataGridTextColumn Header="Productos"
+                                            Binding="{Binding Productos}"
+                                            Width="100"/>
+
+                        <DataGridTextColumn Header="Total"
+                                            Binding="{Binding Total,
+                                            StringFormat={}{0:C}}"
+                                            Width="120"/>
+                        
+                    </DataGrid.Columns>
+                    
+                </DataGrid>
+
+                <TextBlock Grid.Row="1"
+                           Text="Detalle de la venta"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,15,0,5"/>
+                
+                <!-- Detalle -->
+                <DataGrid x:Name="dgDetalle"
+                          Grid.Row="2"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Código"
+                                            Binding="{Binding Codigo}"
+                                            Width="100"/>
+
+                        <DataGridTextColumn Header="Producto"
+                                            Binding="{Binding Producto}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Cantidad"
+                                            Binding="{Binding Cantidad}"
+                                            Width="80"/>
+
+                        <DataGridTextColumn Header="Precio"
+                                            Binding="{Binding Precio,
+                                            StringFormat={}{0:C}}"
+                                            Width="100"/>
+
+                        <DataGridTextColumn Header="Importe"
+                                            Binding="{Binding Importe,
+                                            StringFormat={}{0:C}}"
+                                            Width="110"/>
+                        
+                    </DataGrid.Columns>
+                    
+                </DataGrid>
+                
+            </Grid>
             
-        </DataGrid>
+            <!-- DERECHA: Más vendidos -->
+            <GroupBox Grid.Column="2"
+                      Header="🏆 Productos más vendidos"
+                      FontSize="16"
+                      FontWeight="Bold">
+
+                <DataGrid x:Name="dgMasVendidos"
+                          Margin="10"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Producto"
+                                            Binding="{Binding Producto}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Vendidos"
+                                            Binding="{Binding Cantidad}"
+                                            Width="75"/>
+
+                        <DataGridTextColumn Header="Ingresos"
+                                            Binding="{Binding Ingresos,
+                                            StringFormat={}{0:C}}"
+                                            Width="100"/>
+                        
+                    </DataGrid.Columns>
+                    
+                </DataGrid>
+                
+            </GroupBox>
+        </Grid>
         
         <!-- Resumen -->
         <TextBlock x:Name="lblResumen"
-                   Grid.Row="5"
+                   Grid.Row="3"
                    HorizontalAlignment="Right"
                    FontSize="16"
                    FontWeight="SemiBold"
