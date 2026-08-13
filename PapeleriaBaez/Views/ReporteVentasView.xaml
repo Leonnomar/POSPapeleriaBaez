@@ -162,12 +162,12 @@
 
                         <DataGridTextColumn Header="Vendidos"
                                             Binding="{Binding Cantidad}"
-                                            Width="75"/>
+                                            Width="80"/>
 
                         <DataGridTextColumn Header="Ingresos"
                                             Binding="{Binding Ingresos,
                                             StringFormat={}{0:C}}"
-                                            Width="100"/>
+                                            Width="90"/>
                         
                     </DataGrid.Columns>
                     

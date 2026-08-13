@@ -84,11 +84,15 @@ namespace PapeleriaBaez.Views
                     ? total / ventas
                     : 0;
 
+            decimal utilidadEstimada =
+                CalcularUtilidadEstimada();
+
             lblResumen.Text =
                 $"Ventas: {ventas}      " +
                 $"Artículos: {productos}        " +
                 $"Ingresos: {total:C}       " +
-                $"Promedio: {promedioVenta:C}";
+                $"Promedio: {promedioVenta:C}       " +
+                $"Utilidad estimada: {utilidadEstimada:C}";
 
         }
 
@@ -151,6 +155,32 @@ namespace PapeleriaBaez.Views
                 .ToList();
 
             dgMasVendidos.ItemsSource = listaMasVendidos;
+        }
+
+        private decimal CalcularUtilidadEstimada()
+        {
+            using var db = new AppDbContext();
+
+            DateTime desde =
+                dpDesde.SelectedDate?.Date ?? DateTime.Today;
+
+            DateTime hasta =
+                (dpHasta.SelectedDate?.Date ?? DateTime.Today)
+                .AddDays(1)
+                .AddTicks(-1);
+
+            var detalles = db.DetalleVentas
+                .Include(d => d.Venta)
+                .Include(d => d.Producto)
+                .Where(d =>
+                    d.Venta.Fecha >= desde &&
+                    d.Venta.Fecha <= hasta)
+                .ToList();
+
+            decimal utilidad = detalles.Sum(d =>
+                (d.Precio - d.Producto.Costo) * d.Cantidad);
+
+            return utilidad;
         }
 
         private void BtnBuscar_Click(object sender, RoutedEventArgs e)
