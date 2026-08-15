@@ -27,6 +27,15 @@ namespace PapeleriaBaez.Views
         private List<AbonoDeuda> listaAbonos = new();
 
         private int? deudaSeleccionadaId;
+
+        private enum FiltroDeudas
+        {
+            Pendientes,
+            Pagadas,
+            Todas
+        }
+
+        private FiltroDeudas filtroActual = FiltroDeudas.Pendientes;
         public DeudasView()
         {
             InitializeComponent();
@@ -38,8 +47,23 @@ namespace PapeleriaBaez.Views
         {
             using var db = new AppDbContext();
 
-            listaDeudas = db.Deudas
-                .Where(d => !d.Pagada)
+            var consulta = db.Deudas.AsQueryable();
+
+            switch (filtroActual)
+            {
+                case FiltroDeudas.Pendientes:
+                    consulta = consulta.Where(d => !d.Pagada);
+                    break;
+
+                case FiltroDeudas.Pagadas:
+                    consulta = consulta.Where(d => d.Pagada);
+                    break;
+
+                case FiltroDeudas.Todas:
+                    break;
+            }
+
+            listaDeudas = consulta
                 .OrderByDescending(d => d.Fecha)
                 .ToList();
             
@@ -195,6 +219,17 @@ namespace PapeleriaBaez.Views
                 return;
             }
 
+            if (deuda.Pagada)
+            {
+                MessageBox.Show(
+                    "Esta deuda ya está pagada.",
+                    "Deudas",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
+
             if (monto > deuda.SeldoPendiente)
             {
                 MessageBox.Show(
@@ -259,6 +294,44 @@ namespace PapeleriaBaez.Views
             }
 
             CargarDeudas();
+        }
+
+        private void BtnPendientes_Click(object sender, RoutedEventArgs e)
+        {
+            filtroActual = FiltroDeudas.Pendientes;
+
+            LimpiarSeleccionDeuda();
+            CargarDeudas();
+        }
+
+        private void BtnPagadas_Click(object sender, RoutedEventArgs e)
+        {
+            filtroActual = FiltroDeudas.Pagadas;
+
+            LimpiarSeleccionDeuda();
+            CargarDeudas();
+        }
+
+        private void BtnTodas_Click(object sender, RoutedEventArgs e)
+        {
+            filtroActual = FiltroDeudas.Todas;
+
+            LimpiarSeleccionDeuda();
+            CargarDeudas();
+        }
+
+        private void LimpiarSeleccionDeuda()
+        {
+            deudaSeleccionadaId = null;
+
+            dgDeudas.SelectedItem = null;
+            dgAbonos.ItemsSource = null;
+
+            txtAbono.Clear();
+
+            lblDeudaSeleccionada.Text = "Seleccione una deuda";
+
+            lblSaldo.Text = "Saldo: $0.00";
         }
     }
 }

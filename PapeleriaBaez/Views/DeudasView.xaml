@@ -82,44 +82,78 @@
             </Grid.ColumnDefinitions>
 
             <!-- DEUDAS -->
-            <GroupBox  Header="Deudas pendientes">
+            <GroupBox Grid.Column="0"
+                      Header="Deudas">
 
-                <DataGrid x:Name="dgDeudas"
-                          Margin="10"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          SelectionChanged="dgDeudas_SelectionChanged">
+                <Grid Margin="10">
 
-                    <DataGrid.Columns>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                        <DataGridTextColumn Header="Cliente"
-                                            Binding="{Binding Cliente}"
-                                            Width="*"/>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,10">
 
-                        <DataGridTextColumn Header="Concepto"
-                                            Binding="{Binding Concepto}"
-                                            Width="*"/>
+                        <Button Content="Pendientes"
+                                Width="100"
+                                Margin="0,0,5,0"
+                                Click="BtnPendientes_Click"/>
 
-                        <DataGridTextColumn Header="Fecha"
-                                            Binding="{Binding Fecha,
-                                            StringFormat=dd/MM/yyyy}"
-                                            Width="110"/>
+                        <Button Content="Pagadas"
+                                Width="100"
+                                Margin="5,0"
+                                Click="BtnPagadas_Click"/>
 
-                        <DataGridTextColumn Header="Original"
-                                            Binding="{Binding MontoOriginal,
-                                            StringFormat={}{0:C}}"
-                                            Width="100"/>
+                        <Button Content="Todas"
+                                Width="100"
+                                Margin="5,0"
+                                Click="BtnTodas_Click"/>
 
-                        <DataGridTextColumn Header="Pendiente"
-                                            Binding="{Binding SaldoPendiente,
-                                            StringFormat={}{0:C}}"
-                                            Width="110"/>
+                    </StackPanel>
 
-                    </DataGrid.Columns>
+                    <DataGrid x:Name="dgDeudas"
+                              Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              SelectionChanged="dgDeudas_SelectionChanged">
 
-                </DataGrid>
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Cliente"
+                                                Binding="{Binding Cliente}"
+                                                Width="*"/>
+
+                            <DataGridTextColumn Header="Concepto"
+                                                Binding="{Binding Concepto}"
+                                                Width="*"/>
+
+                            <DataGridTextColumn Header="Fecha"
+                                                Binding="{Binding Fecha,
+                                                StringFormat=dd/MM/yyyy}"
+                                                Width="110"/>
+
+                            <DataGridTextColumn Header="Original"
+                                                Binding="{Binding MontoOriginal,
+                                                StringFormat={}{0:C}}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Pendiente"
+                                                Binding="{Binding SaldoPendiente,
+                                                StringFormat={}{0:C}}"
+                                                Width="110"/>
+
+                            <DataGridTextColumn Header="Estado"
+                                                Binding="{Binding Estado}"
+                                                Width="90"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </Grid>
 
             </GroupBox>
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,10 @@ namespace PapeleriaBaez.Models
         public decimal SeldoPendiente { get; set; }
 
         public bool Pagada { get; set; }
+
+        [NotMapped]
+        public string Estado =>
+            Pagada ? "Pagada" : "Pendiente";
 
         public ICollection<AbonoDeuda> Abonos { get; set; }
             = new List<AbonoDeuda>();
