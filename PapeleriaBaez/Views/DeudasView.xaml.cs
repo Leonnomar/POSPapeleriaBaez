@@ -63,6 +63,15 @@ namespace PapeleriaBaez.Views
                     break;
             }
 
+            string texto = txtBuscarDeuda?.Text.Trim() ?? "";
+
+            if (!string.IsNullOrWhiteSpace(texto))
+            {
+                consulta = consulta.Where(d =>
+                    d.Cliente.Contains(texto) ||
+                    d.Concepto.Contains(texto));
+            }
+
             listaDeudas = consulta
                 .OrderByDescending(d => d.Fecha)
                 .ToList();
@@ -332,6 +341,12 @@ namespace PapeleriaBaez.Views
             lblDeudaSeleccionada.Text = "Seleccione una deuda";
 
             lblSaldo.Text = "Saldo: $0.00";
+        }
+
+        private void txtBuscarDeuda_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LimpiarSeleccionDeuda();
+            CargarDeudas();
         }
     }
 }

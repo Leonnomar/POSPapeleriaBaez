@@ -110,6 +110,15 @@
                                 Margin="5,0"
                                 Click="BtnTodas_Click"/>
 
+                        <TextBlock Text="Buscar:"
+                                   VerticalAlignment="Center"
+                                   Margin="20,0,5,0"/>
+
+                        <TextBox x:Name="txtBuscarDeuda"
+                                 Width="220"
+                                 Height="30"
+                                 TextChanged="txtBuscarDeuda_TextChanged"/>
+
                     </StackPanel>
 
                     <DataGrid x:Name="dgDeudas"
