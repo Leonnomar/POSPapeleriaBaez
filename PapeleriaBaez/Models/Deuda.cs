@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PapeleriaBaez.Models
+{
+    public class Deuda
+    {
+        public int Id { get; set; }
+
+        public string Cliente { get; set; } = "";
+
+        public string Concepto { get; set; } = "";
+
+        public DateTime Fecha { get; set; }
+
+        public decimal MontoOriginal { get; set; }
+
+        public decimal SeldoPendiente { get; set; }
+
+        public bool Pagada { get; set; }
+
+        public ICollection<AbonoDeuda> Abonos { get; set; }
+            = new List<AbonoDeuda>();
+    }
+}
