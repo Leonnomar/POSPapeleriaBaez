@@ -137,8 +137,6 @@ C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debu
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\ref\PapeleriaBaez.dll
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\InventarioView.g.cs
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\InventarioView.baml
-C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\ReporteVentasView.g.cs
-C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\ReporteVentasView.baml
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\CanjesView.g.cs
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\CanjesView.baml
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\CapturarConjuntosWindows.g.cs
@@ -151,3 +149,5 @@ C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\bin\Debu
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\bin\Debug\net8.0-windows\RBush.dll
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\bin\Debug\net8.0-windows\SixLabors.Fonts.dll
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\bin\Debug\net8.0-windows\System.IO.Packaging.dll
+C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\ReportesView.g.cs
+C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\ReportesView.baml

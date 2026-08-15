@@ -66,7 +66,7 @@ namespace PapeleriaBaez
 
         private void BtnReportes_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Content = new ReporteVentasView();
+            MainFrame.Content = new ReportesView();
         }
 
         private void BtnConfiguracion_Click(object sender, RoutedEventArgs e)
