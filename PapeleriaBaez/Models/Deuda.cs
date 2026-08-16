@@ -19,7 +19,7 @@ namespace PapeleriaBaez.Models
 
         public decimal MontoOriginal { get; set; }
 
-        public decimal SeldoPendiente { get; set; }
+        public decimal SaldoPendiente { get; set; }
 
         public bool Pagada { get; set; }
 

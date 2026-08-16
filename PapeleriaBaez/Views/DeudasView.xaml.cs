@@ -128,7 +128,7 @@ namespace PapeleriaBaez.Views
                 Concepto = concepto,
                 Fecha = DateTime.Now,
                 MontoOriginal = monto,
-                SeldoPendiente = monto,
+                SaldoPendiente = monto,
                 Pagada = false
             };
 
@@ -169,7 +169,7 @@ namespace PapeleriaBaez.Views
 
             lblDeudaSeleccionada.Text = $"{deuda.Cliente} - {deuda.Concepto}";
 
-            lblSaldo.Text = $"{deuda.SeldoPendiente:C}";
+            lblSaldo.Text = $"{deuda.SaldoPendiente:C}";
 
             CargarAbonos(deuda.Id);
         }
@@ -239,11 +239,11 @@ namespace PapeleriaBaez.Views
                 return;
             }
 
-            if (monto > deuda.SeldoPendiente)
+            if (monto > deuda.SaldoPendiente)
             {
                 MessageBox.Show(
                     $"El abono no puede se mayor al saldo pendiente.\n\n" +
-                    $"Saldo actual: {deuda.SeldoPendiente:C}",
+                    $"Saldo actual: {deuda.SaldoPendiente:C}",
                     "Monto inválido",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
@@ -260,11 +260,11 @@ namespace PapeleriaBaez.Views
 
             db.AbonosDeudas.Add(abono);
 
-            deuda.SeldoPendiente -= monto;
+            deuda.SaldoPendiente -= monto;
 
-            if (deuda.SeldoPendiente <= 0)
+            if (deuda.SaldoPendiente <= 0)
             {
-                deuda.SeldoPendiente = 0;
+                deuda.SaldoPendiente = 0;
                 deuda.Pagada = true;
             }
 
@@ -292,12 +292,12 @@ namespace PapeleriaBaez.Views
             {
                 MessageBox.Show(
                     $"Abono registrado correctamente. \n\n" +
-                    $"Saldo pendiente: {deuda.SeldoPendiente:C}",
+                    $"Saldo pendiente: {deuda.SaldoPendiente:C}",
                     "Deudas",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-                lblSaldo.Text = $"Saldo: {deuda.SeldoPendiente:C}";
+                lblSaldo.Text = $"Saldo: {deuda.SaldoPendiente:C}";
 
                 CargarAbonos(deuda.Id);
             }

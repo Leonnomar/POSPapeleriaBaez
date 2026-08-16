@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\App.xaml
-11815486899
+121699762808
 
-60-844517575
+63-966416260
 2231947149915
-MainWindow.xaml;Views\CanjesView.xaml;Views\CapturarConjuntosWindows.xaml;Views\CategoriasView.xaml;Views\CobroWindow.xaml;Views\ComprasView.xaml;Views\DeudasView.xaml;Views\InventarioView.xaml;Views\ProductosView.xaml;Views\ReportesView.xaml;Views\VentasView.xaml;
+MainWindow.xaml;Views\CanjesView.xaml;Views\CapturarConjuntosWindows.xaml;Views\CategoriasView.xaml;Views\CobroWindow.xaml;Views\ComprasView.xaml;Views\DashboardView.xaml;Views\DeudasView.xaml;Views\InventarioView.xaml;Views\ProductosView.xaml;Views\ReportesView.xaml;Views\VentasView.xaml;
 
-False
+True
 

@@ -21,12 +21,12 @@ namespace PapeleriaBaez
         {
             InitializeComponent();
 
-            MainFrame.Content = new ProductosView();
+            MainFrame.Content = new DashboardView();
         }
 
         private void BtnDashboard_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Modulo en construcción");
+            MainFrame.Content = new DashboardView();
         }
 
         private void BtnVentas_Click(object sender, RoutedEventArgs e)
