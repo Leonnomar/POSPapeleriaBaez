@@ -136,6 +136,19 @@
                        Foreground="Blue"
                        Margin="0,0,0,20"/>
 
+            <StackPanel x:Name="panelClienteDeuda"
+                        Visibility="Collapsed"
+                        Margin="0,0,0,15">
+
+                <TextBlock Text="Cliente para la deuda:"
+                           FontWeight="SemiBold"/>
+
+                <TextBox x:Name="txtClienteDeuda"
+                         Height="32"
+                         Margin="0,5,0,0"/>
+                
+            </StackPanel>
+
             <Button x:Name="btnCobrar"
                     Content="CONFIRMAR VENTA"
                     Height="50"

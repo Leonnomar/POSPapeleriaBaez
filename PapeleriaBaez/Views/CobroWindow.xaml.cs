@@ -38,6 +38,8 @@ namespace PapeleriaBaez.Views
 
         public bool VentaConfirmada { get; private set; }
 
+        public string ClienteDeuda { get; private set; } = "";
+
         public CobroWindow(decimal totalVenta)
         {
             InitializeComponent();
@@ -58,6 +60,25 @@ namespace PapeleriaBaez.Views
 
         private void btnCobrar_Click(object sender, RoutedEventArgs e)
         {
+            if (SaldoPendiente > 0)
+            {
+                string cliente = txtClienteDeuda.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(cliente))
+                {
+                    MessageBox.Show(
+                        "Capture el nombre del cliente para registrar la deuda.",
+                        "Venta con saldo pendiente",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    txtClienteDeuda.Focus();
+                    return;
+                }
+
+                ClienteDeuda = cliente;
+            }
+
             VentaConfirmada = true;
 
             DialogResult = true;
@@ -145,6 +166,14 @@ namespace PapeleriaBaez.Views
             }
 
             btnCobrar.IsEnabled = recibido >= 0;
+
+            if (panelClienteDeuda != null)
+            {
+                panelClienteDeuda.Visibility =
+                    SaldoPendiente > 0
+                        ? Visibility.Visible
+                        : Visibility.Collapsed;
+            }
         }
     }
 }

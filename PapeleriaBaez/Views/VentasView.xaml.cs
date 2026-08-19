@@ -111,6 +111,18 @@ namespace PapeleriaBaez.Views
 
             if (existente != null)
             {
+                if (existente.Cantidad >= producto.Stock)
+                {
+                    MessageBox.Show(
+                        $"Solo hay {producto.Stock} piezas disponibles de '{producto.Nombre}'.",
+                        "Stock insuficiente",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    LimpiarBusqueda();
+                    return;
+                }
+
                 existente.Cantidad++;
 
                 RefrescarCarrito();
@@ -292,7 +304,7 @@ namespace PapeleriaBaez.Views
             ActualizarCantidad(item, cantidad);
         }
 
-        private void GuardarVenta()
+        private void GuardarVenta(CobroWindow cobro)
         {
             List<string> alertasStock = new();
 
@@ -311,7 +323,11 @@ namespace PapeleriaBaez.Views
                 var venta = new Venta
                 {
                     Fecha = DateTime.Now,
-                    Total = carrito.Sum(x => x.Importe)
+
+                    Subtotal = cobro.Subtotal,
+                    PorcentajeDescuento = cobro.PorcentajeDescuento,
+                    Descuento = cobro.Descuento,
+                    Total = cobro.TotalFinal
                 };
 
                 db.Ventas.Add(venta);
@@ -359,28 +375,67 @@ namespace PapeleriaBaez.Views
                     }
                 }
 
+                if (cobro.GenerarDeuda)
+                {
+                    var deuda = new Deuda
+                    {
+                        Cliente = cobro.ClienteDeuda,
+
+                        Concepto = $"Venta #{venta.Id}",
+
+                        Fecha = DateTime.Now,
+
+                        MontoOriginal = cobro.SaldoPendiente,
+
+                        SaldoPendiente = cobro.SaldoPendiente,
+
+                        Pagada = false,
+
+                        VentaId = venta.Id
+                    };
+
+                    db.Deudas.Add(deuda);
+                }
+
                 db.SaveChanges();
 
                 transaccion.Commit();
 
+                string mensaje = "Venta realizada correctamente.";
+
+                if (cobro.Descuento > 0)
+                {
+                    mensaje +=
+                        $"\n\nSubtotal: {cobro.Subtotal:C}" +
+                        $"\nDescuento ({cobro.PorcentajeDescuento:0.##}%): -{cobro.Descuento:C}" +
+                        $"\nTotal: {cobro.TotalFinal:C}";
+                }
+
+                if (cobro.GenerarDeuda)
+                {
+                    mensaje +=
+                        $"\n\n💳 Venta con deuda" +
+                        $"\nCliente: {cobro.ClienteDeuda}" +
+                        $"\nPagó: {cobro.Recibido:C}" +
+                        $"\nDebe: {cobro.SaldoPendiente:C}";
+                }
+
                 if (alertasStock.Any())
                 {
-                    MessageBox.Show(
-                        "Venta realizada correctamente. \n\n" +
-                        "⚠ Inventario bajo:\n\n" +
-                        string.Join("\n\n", alertasStock),
-                        "Venta realizada",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
+                    mensaje +=
+                        "\n\n⚠ Inventario bajo:\n\n" +
+                        string.Join("\n\n", alertasStock);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "Venta realizada correctamente.",
-                        "Venta",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                }
+
+                MessageBox.Show(
+                    mensaje,
+                    cobro.GenerarDeuda
+                        ? "Venta registrada con deuda"
+                        : "Venta realizada",
+                    MessageBoxButton.OK,
+                    alertasStock.Any()
+                        ? MessageBoxImage.Warning
+                        : MessageBoxImage.Information);
 
                 carrito.Clear();
 
@@ -401,7 +456,11 @@ namespace PapeleriaBaez.Views
                 if (ex.InnerException != null)
                     error += "\n\nINNER: \n" + ex.InnerException;
 
-                MessageBox.Show(error);
+                MessageBox.Show(
+                    error,
+                    "Error al guardar venta",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
@@ -447,12 +506,17 @@ namespace PapeleriaBaez.Views
 
             decimal total = carrito.Sum(x => x.Importe);
 
-            var ventana = new CobroWindow(total);
-
-            if (ventana.ShowDialog() == true)
+            var ventana = new CobroWindow(total)
             {
-                GuardarVenta();
+                Owner = Application.Current.MainWindow
+            };
+
+            if (ventana.ShowDialog() != true || !ventana.VentaConfirmada)
+            {
+                return;
             }
+
+            GuardarVenta(ventana);
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)

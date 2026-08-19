@@ -23,6 +23,10 @@ namespace PapeleriaBaez.Models
 
         public bool Pagada { get; set; }
 
+        public int? VentaId { get; set; }
+
+        public Venta? Venta { get; set; }
+
         [NotMapped]
         public string Estado =>
             Pagada ? "Pagada" : "Pendiente";

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Office2019.Drawing.Model3D;
 using Microsoft.EntityFrameworkCore;
 using PapeleriaBaez.Models;
 
@@ -82,6 +83,12 @@ namespace PapeleriaBaez.Data
                 .WithMany(d => d.Abonos)
                 .HasForeignKey(a => a.DeudaId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Deuda>()
+                .HasOne(d => d.Venta)
+                .WithMany()
+                .HasForeignKey(d => d.VentaId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
