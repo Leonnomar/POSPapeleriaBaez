@@ -13,6 +13,12 @@ namespace PapeleriaBaez.Models
 
         public DateTime Fecha { get; set; }
 
+        public decimal Subtotal { get; set; }
+
+        public decimal PorcentajeDescuento { get; set; }
+
+        public decimal Descuento { get; set; }
+
         public decimal Total { get; set; }
 
         public ICollection<DetalleVenta> Detalles { get; set; }
