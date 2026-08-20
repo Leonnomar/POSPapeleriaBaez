@@ -381,7 +381,7 @@ namespace PapeleriaBaez.Views
                     {
                         Cliente = cobro.ClienteDeuda,
 
-                        Concepto = $"Venta #{venta.Id}",
+                        Concepto = "Compra fiada",
 
                         Fecha = DateTime.Now,
 

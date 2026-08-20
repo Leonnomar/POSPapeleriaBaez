@@ -20,57 +20,64 @@
                    Margin="0,0,0,15"/>
 
         <!-- NUEVA DEUDA -->
-        <GroupBox Grid.Row="1"
-                  Header="Nueva deuda"
+        <Expander Grid.Row="1"
+                  Header="➕ Registrar deuda manual"
+                  IsExpanded="False"
                   Margin="0,0,0,15">
 
-            <Grid Margin="15">
+            <Border BorderBrush="#CCCCCC"
+                    BorderThickness="1"
+                    Padding="15">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="250"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid>
 
-                <TextBlock Text="Cliente:"
-                           VerticalAlignment="Center"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="txtCliente"
-                         Grid.Column="1"
-                         Height="30"
-                         Margin="8,0"/>
+                    <TextBlock Text="Cliente:"
+                               VerticalAlignment="Center"/>
 
-                <TextBlock Grid.Column="2"
-                           Text="Concepto:"
-                           VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtCliente"
+                             Grid.Column="1"
+                             Height="30"
+                             Margin="8,0"/>
 
-                <TextBox x:Name="txtConcepto"
-                         Grid.Column="3"
-                         Height="30"
-                         Margin="8,0"/>
+                    <TextBlock Grid.Column="2"
+                               Text="Concepto:"
+                               VerticalAlignment="Center"/>
 
-                <TextBlock Grid.Column="4"
-                           Text="Monto:"
-                           VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtConcepto"
+                             Grid.Column="3"
+                             Height="30"
+                             Margin="8,0"/>
 
-                <TextBox x:Name="txtMonto"
-                         Grid.Column="5"
-                         Height="30"
-                         Margin="8,0"/>
+                    <TextBlock Grid.Column="4"
+                               Text="Monto:"
+                               VerticalAlignment="Center"/>
 
-                <Button Grid.Column="6"
-                        Content="Registrar deuda"
-                        Width="130"
-                        Margin="10,0"
-                        Click="BtnRegistrarDeuda_Click"/>
+                    <TextBox x:Name="txtMonto"
+                            Grid.Column="5"
+                            Height="30"
+                            Margin="8,0"/>
 
-            </Grid>
-
-        </GroupBox>
+                    <Button Grid.Column="6"
+                            Content="Registrar"
+                            Width="110"
+                            Margin="10.0"
+                            Click="BtnRegistrarDeuda_Click"/>
+                    
+                </Grid>
+                
+            </Border>
+            
+        </Expander>
 
         <!-- CONTENIDO -->
         <Grid Grid.Row="2">
@@ -134,6 +141,10 @@
                             <DataGridTextColumn Header="Cliente"
                                                 Binding="{Binding Cliente}"
                                                 Width="*"/>
+
+                            <DataGridTextColumn Header="Origen"
+                                                Binding="{Binding Origen}"
+                                                Width="100"/>
 
                             <DataGridTextColumn Header="Concepto"
                                                 Binding="{Binding Concepto}"

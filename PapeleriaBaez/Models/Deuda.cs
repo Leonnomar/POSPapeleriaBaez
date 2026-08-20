@@ -31,6 +31,12 @@ namespace PapeleriaBaez.Models
         public string Estado =>
             Pagada ? "Pagada" : "Pendiente";
 
+        [NotMapped]
+        public string Origen =>
+            VentaId.HasValue
+                ? $"Venta #{VentaId.Value}"
+                : "Manual";
+
         public ICollection<AbonoDeuda> Abonos { get; set; }
             = new List<AbonoDeuda>();
     }
