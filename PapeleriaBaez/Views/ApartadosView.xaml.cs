@@ -204,7 +204,176 @@ namespace PapeleriaBaez.Views
 
         private void BtnRegistrarApartado_Click(object sender, RoutedEventArgs e)
         {
+            string cliente = txtCliente.Text.Trim();
 
+            if (string.IsNullOrWhiteSpace(cliente))
+            {
+                MessageBox.Show(
+                    "Capture el nombre del cliente.",
+                    "Apartados",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                txtCliente.Focus();
+                return;
+            }
+
+            if (carrito.Count == 0)
+            {
+                MessageBox.Show(
+                    "Agregue al menos un producto al apartado.",
+                    "Apartados",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            decimal total = carrito.Sum(x => x.Importe);
+
+            if (!decimal.TryParse(txtAnticipo.Text, out decimal anticipo) || anticipo < 0)
+            {
+                MessageBox.Show(
+                    "Capture un anticipo válido.",
+                    "Apartados",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                txtAnticipo.Focus();
+                return;
+            }
+
+            if (anticipo > total)
+            {
+                MessageBox.Show(
+                    $"El anticipo no puede ser mayor al total.\n\n" +
+                    $"Total: {total:C}",
+                    "Anticipo inválido",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                foreach (var item in carrito)
+                {
+                    var producto = db.Productos
+                        .FirstOrDefault(p =>
+                            p.Id == item.ProductoId);
+
+                    if (producto == null)
+                    {
+                        transaccion.Rollback();
+
+                        MessageBox.Show(
+                            $"No se encontró el producto '{item.Nombre}'.",
+                            "Apartados",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+
+                        return;
+                    }
+
+                    if (producto.Stock < item.Cantidad)
+                    {
+                        transaccion.Rollback();
+
+                        MessageBox.Show(
+                            $"No hay suficiente existencia de '{producto.Nombre}'.\n\n" +
+                            $"Disponible: {producto.Stock}\n" +
+                            $"Solicitado: {item.Cantidad}",
+                            "Stock insuficiente",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+
+                        return;
+                    }
+                }
+
+                var apartado = new Apartado
+                {
+                    Cliente = cliente,
+                    Fecha = DateTime.Now,
+                    FechaEntrega = null,
+                    Total = total,
+                    Pagado = anticipo,
+                    SaldoPendiente = total - anticipo,
+                    Estado = "Pendiente"
+                };
+
+                db.Apartados.Add(apartado);
+
+                db.SaveChanges();
+
+                foreach (var item in carrito)
+                {
+                    var producto = db.Productos
+                        .First(p =>
+                            p.Id == item.ProductoId);
+
+                    producto.Stock -= item.Cantidad;
+
+                    db.detalleApartados.Add(
+                        new DetalleApartado
+                        {
+                            ApartadoId = apartado.Id,
+                            ProductoId = producto.Id,
+                            Cantidad = item.Cantidad,
+                            Precio = item.Precio,
+                            Importe = item.Importe
+                        });
+                }
+
+                if (anticipo > 0)
+                {
+                    db.abonoApartados.Add(
+                        new AbonoApartado
+                        {
+                            ApartadoId = apartado.Id,
+                            Fecha = DateTime.Now,
+                            Monto = anticipo
+                        });
+                }
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                MessageBox.Show(
+                    $"Apartado registrado correctamente.\n\n" +
+                    $"Folio: #{apartado.Id}\n" +
+                    $"Cliente: {apartado.Cliente}\n" +
+                    $"Total: {apartado.Total:C}\n" +
+                    $"Anticipo: {apartado.Pagado:C}\n" +
+                    $"Saldo: {apartado.SaldoPendiente:C}",
+                    "Apartado registrado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                carrito.Clear();
+
+                txtCliente.Clear();
+                txtAnticipo.Text = "0";
+
+                RefrescarCarrito();
+                CargarProductos();
+
+                txtBuscar.Focus();
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al registrar apartado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void txtAnticipo_TextChanged(object sender, TextChangedEventArgs e)
