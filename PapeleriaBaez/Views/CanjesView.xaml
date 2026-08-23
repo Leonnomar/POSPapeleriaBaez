@@ -182,6 +182,73 @@
                             </Grid>
                         </TabItem>
 
+                        <TabItem Header="👟 Tenis">
+
+                            <Grid Margin="15">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Entrada de Tenis"
+                                           FontSize="20"
+                                           FontWeight="Bold"/>
+
+                                <StackPanel Grid.Row="1"
+                                            Orientation="Horizontal"
+                                            Margin="0,0,0,15">
+
+                                    <TextBlock Text="Talla:"
+                                               VerticalAlignment="Center"/>
+
+                                    <ComboBox Name="cmbTallaTenis"
+                                              Width="120"
+                                              Margin="10,0"/>
+
+                                    <TextBlock Text="Cantidad:"
+                                               VerticalAlignment="Center"
+                                               Margin="20,0,0,0"/>
+
+                                    <TextBox x:Name="txtCantidadTenis"
+                                             Width="100"
+                                             Height="30"
+                                             Margin="10,0"/>
+
+                                    <Button Content="Registrar entrada"
+                                            Width="140"
+                                            Click="BtnEntradaTenis_Click"/>
+                                    
+                                </StackPanel>
+
+                                <DataGrid x:Name="dgTenis"
+                                          Grid.Row="2"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True">
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn Header="Talla"
+                                                            Binding="{Binding Talla}"
+                                                            Width="*"/>
+
+                                        <DataGridTextColumn Header="Existencia"
+                                                            Binding="{Binding Existencia}"
+                                                            Width="120"/>
+
+                                        <DataGridTextColumn Header="Entregados"
+                                                            Binding="{Binding Entregados}"
+                                                            Width="120"/>
+                                    </DataGrid.Columns>
+                                    
+                                </DataGrid>
+                                
+                            </Grid>
+                            
+                        </TabItem>
+
                     </TabControl>
 
                 </Grid>

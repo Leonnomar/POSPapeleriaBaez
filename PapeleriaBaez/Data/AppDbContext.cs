@@ -43,6 +43,8 @@ namespace PapeleriaBaez.Data
 
         public DbSet<AbonoApartado> abonoApartados { get; set; }
 
+        public DbSet<TenisCanje> TenisCanjes { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string ruta = @"C:\PapeleriaBaez\PapeleriaBaez.db";

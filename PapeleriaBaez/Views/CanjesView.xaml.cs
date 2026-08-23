@@ -49,6 +49,11 @@ namespace PapeleriaBaez.Views
                 "Short/Falda"
             };
 
+            cmbTallaTenis.ItemsSource = new[]
+            {
+                "14", "15", "16", "17", "18", "19"
+            };
+
             cmbColorUniforme.ItemsSource = null;
             cmbTallaUniforme.ItemsSource = null;
         }
@@ -159,6 +164,15 @@ namespace PapeleriaBaez.Views
             dgUniformes.ItemsSource = uniformes;
         }
 
+        private void CargarTenis()
+        {
+            using var db = new AppDbContext();
+
+            dgTenis.ItemsSource = db.TenisCanjes
+                .OrderBy(t => t.Talla)
+                .ToList();
+        }
+
         private void BtnEntradaUniforme_Click(object sender, RoutedEventArgs e)
         {
             string tipo = cmbTipoUniforme.SelectedItem?.ToString() ?? "";
@@ -228,6 +242,53 @@ namespace PapeleriaBaez.Views
             CargarResumenCanjes();
 
             MessageBox.Show("Entrada de uniformes registrada correctamente.");
+        }
+
+        private void BtnEntradaTenis_Click(object sender, RoutedEventArgs e)
+        {
+            string talla = cmbTallaTenis.SelectedItem?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(talla))
+            {
+                MessageBox.Show("Seleccione la talla.");
+                return;
+            }
+
+            if (!int.TryParse(txtCantidadTenis.Text, out int cantidad) || cantidad <= 0)
+            {
+                MessageBox.Show("Capture una cantidad válida.");
+                return;
+            }
+
+            using var db = new AppDbContext();
+
+            var tenis = db.TenisCanjes
+                .FirstOrDefault(t => t.Talla == talla);
+
+            if (tenis == null)
+            {
+                tenis = new TenisCanje
+                {
+                    Talla = talla,
+                    Existencia = cantidad,
+                    Entregados = 0
+                };
+
+                db.TenisCanjes.Add(tenis);
+            }
+            else
+            {
+                tenis.Existencia += cantidad;
+            }
+
+            db.SaveChanges();
+
+            txtCantidadTenis.Clear();
+            cmbTallaTenis.SelectedIndex = -1;
+
+            CargarTenis();
+
+            MessageBox.Show("Entrada de tenis registrada correctamente.");
         }
 
         private void BtnRegistrarEntregaPaquete_Click(object sender, RoutedEventArgs e)
