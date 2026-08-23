@@ -28,11 +28,18 @@ namespace PapeleriaBaez.Views
 
         private ObservableCollection<ApartadoItem> carrito = new();
 
+        private List<Apartado> listaApartados = new();
+
+        private int? apartadosSeleccionadoId;
+
+        private string filtroApartado = "Pendiente";
+
         public ApartadosView()
         {
             InitializeComponent();
 
             CargarProductos();
+            CargarApartados();
 
             dgApartado.ItemsSource = carrito;
         }
@@ -45,6 +52,43 @@ namespace PapeleriaBaez.Views
                 .Include(p => p.Categoria)
                 .OrderBy(p => p.Nombre)
                 .ToList();
+        }
+
+        private void CargarApartados()
+        {
+            using var db = new AppDbContext();
+
+            var consulta = db.Apartados.AsQueryable();
+
+            if (filtroApartado != "Todos")
+            {
+                consulta = consulta.Where(a => a.Estado == filtroApartado);
+            }
+
+            string texto = txtBuscarApartado?.Text.Trim() ?? "";
+
+            if (!string.IsNullOrWhiteSpace(texto))
+            {
+                consulta = consulta.Where(a => a.Cliente.Contains(texto));
+            }
+
+            listaApartados = consulta
+                .OrderByDescending(a => a.Fecha)
+                .ToList();
+
+            dgApartadosRegistrados.ItemsSource = listaApartados;
+        }
+
+        private void CargarAbonosApartado(int apartadoId)
+        {
+            using var db = new AppDbContext();
+
+            var abonos = db.abonoApartados
+                .Where(a => a.ApartadoId == apartadoId)
+                .OrderByDescending(a => a.Fecha)
+                .ToList();
+
+            dgAbonosApartado.ItemsSource = abonos;
         }
 
         private void txtBuscar_TextChanged(object sender, TextChangedEventArgs e)
@@ -190,6 +234,20 @@ namespace PapeleriaBaez.Views
             lblTotal.Text = $"Total: {total:C}";
 
             lblSaldo.Text = $"Saldo: {saldo:C}";
+        }
+
+        private void LimpiarSeleccionApartado()
+        {
+            apartadosSeleccionadoId = null;
+
+            dgApartadosRegistrados.SelectedItem = null;
+            dgAbonosApartado.ItemsSource = null;
+
+            txtAbonoApartado.Clear();
+
+            lblApartadoSeleccionado.Text = "Seleccione un apartado";
+
+            lblSaldoApartado.Text = "Saldo: $0.00";
         }
 
         private void BtnCancelar_Click(object sender, RoutedEventArgs e)
@@ -376,6 +434,271 @@ namespace PapeleriaBaez.Views
             }
         }
 
+        private void BtnRegistrarAbonoApartado_Click(object sender, RoutedEventArgs e)
+        {
+            if (apartadosSeleccionadoId == null)
+            {
+                MessageBox.Show("Seleccione un apartado.");
+                return;
+            }
+
+            if (!decimal.TryParse(txtAbonoApartado.Text, out decimal monto) || monto <= 0)
+            {
+                MessageBox.Show("Capture un abono válido.");
+                return;
+            }
+
+            using var db = new AppDbContext();
+
+            var apartado = db.Apartados
+                .FirstOrDefault(a =>
+                    a.Id == apartadosSeleccionadoId.Value);
+
+            if (apartado == null)
+                return;
+
+            if (apartado.Estado != "Pendiente")
+            {
+                MessageBox.Show("Solo se pueden registrar abonos en apartados pendientes.");
+
+                return;
+            }
+
+            if (monto > apartado.SaldoPendiente)
+            {
+                MessageBox.Show(
+                    $"El abonoo no puede ser mayor al saldo.\n\n" +
+                    $"Saldo: {apartado.SaldoPendiente:C}");
+
+                return;
+            }
+
+            db.abonoApartados.Add(
+                new AbonoApartado
+                {
+                    ApartadoId = apartado.Id,
+                    Fecha = DateTime.Now,
+                    Monto = monto
+                });
+
+            apartado.Pagado += monto;
+            apartado.SaldoPendiente -= monto;
+
+            if (apartado.SaldoPendiente < 0)
+                apartado.SaldoPendiente = 0;
+
+            db.SaveChanges();
+
+            txtAbonoApartado.Text = $"Saldo: {apartado.SaldoPendiente:C}";
+
+            CargarAbonosApartado(apartado.Id);
+            CargarApartados();
+
+            MessageBox.Show(
+                $"Abono registrado. \n\n" +
+                $"Saldo pendiente: {apartado.SaldoPendiente:C}");
+        }
+
+        private void BtnCancelarApartado_Click(object sender, RoutedEventArgs e)
+        {
+            if (apartadosSeleccionadoId == null)
+            {
+                MessageBox.Show("Seleccione un apartado.");
+                return;
+            }
+
+            var resultado = MessageBox.Show(
+                "¿Desea cancelar este apartado?\n\n" +
+                "Los productos regresarán al inventario.",
+                "Cancelar apartado",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (resultado != MessageBoxResult.Yes)
+                return;
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var apartado = db.Apartados
+                    .Include(a => a.Detalles)
+                    .FirstOrDefault(a =>
+                        a.Id == apartadosSeleccionadoId.Value);
+
+                if (apartado == null)
+                    return;
+
+                if (apartado.Estado != "Pendiente")
+                {
+                    MessageBox.Show("Este apartado ya no está pendiente.");
+
+                    return;
+                }
+
+                foreach (var detalle in apartado.Detalles)
+                {
+                    var producto = db.Productos
+                        .FirstOrDefault(p =>
+                            p.Id == detalle.ProductoId);
+
+                    if (producto != null)
+                    {
+                        producto.Stock += detalle.Cantidad;
+                    }
+                }
+
+                apartado.Estado = "Cancelado";
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                LimpiarSeleccionApartado();
+                CargarApartados();
+                CargarProductos();
+
+                MessageBox.Show("Apartado cancelado. Los productos regresaron al inventario.");
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnEntregarApartado_Click(object sender, RoutedEventArgs e)
+        {
+            if (apartadosSeleccionadoId == null)
+            {
+                MessageBox.Show("Seleccione un apartado.");
+                return;
+            }
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var apartado = db.Apartados
+                    .Include(a => a.Detalles)
+                    .FirstOrDefault(a =>
+                        a.Id == apartadosSeleccionadoId.Value);
+
+                if (apartado == null)
+                    return;
+
+                if (apartado.Estado != "Pendiente")
+                {
+                    MessageBox.Show("Este apartado ya fue cerrado.");
+
+                    return;
+                }
+
+                if (apartado.SaldoPendiente > 0)
+                {
+                    MessageBox.Show(
+                        $"El apartado todavía tiene saldo pendiente.\n\n" +
+                        $"Saldo: {apartado.SaldoPendiente:C}",
+                        "Apartado pendiente",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                var confirmar = MessageBox.Show(
+                    $"¿Entregar el apartado #{apartado.Id}?",
+                    "Entregar apartado",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (confirmar != MessageBoxResult.Yes)
+                    return;
+
+                var venta = new Venta
+                {
+                    Fecha = DateTime.Now,
+                    Subtotal = apartado.Total,
+                    PorcentajeDescuento = 0,
+                    Descuento = 0,
+                    Total = apartado.Total
+                };
+
+                db.Ventas.Add(venta);
+                db.SaveChanges();
+
+                foreach (var detalle in apartado.Detalles)
+                {
+                    db.DetalleVentas.Add(
+                        new DetalleVenta
+                        {
+                            VentaId = venta.Id,
+                            ProductoId = detalle.ProductoId,
+                            Cantidad = detalle.Cantidad,
+                            Precio = detalle.Precio,
+                            Importe = detalle.Importe
+                        });
+                }
+
+                apartado.Estado = "Entregado";
+                apartado.FechaEntrega = DateTime.Now;
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                LimpiarSeleccionApartado();
+                CargarApartados();
+
+                MessageBox.Show(
+                    $"Apartado entregado correctamente.\n\n" +
+                    $"Venta generada: #{venta.Id}");
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al entregar apartado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnApartadosPendientes_Click(object sender, RoutedEventArgs e)
+        {
+            filtroApartado = "Pendiente";
+            LimpiarSeleccionApartado();
+            CargarApartados();
+        }
+
+        private void BtnApartadosEntregados_Click(object sender, RoutedEventArgs e)
+        {
+            filtroApartado = "Entregado";
+            LimpiarSeleccionApartado();
+            CargarApartados();
+        }
+
+        private void BtnApartadosCancelados_Click(object sender, RoutedEventArgs e)
+        {
+            filtroApartado = "Cancelado";
+            LimpiarSeleccionApartado();
+            CargarApartados();
+        }
+
+        private void BtnApartadosTodos_Click(object sender, RoutedEventArgs e)
+        {
+            filtroApartado = "Todos";
+            LimpiarSeleccionApartado();
+            CargarApartados();
+        }
+
         private void txtAnticipo_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (lblTotal == null)
@@ -383,5 +706,30 @@ namespace PapeleriaBaez.Views
 
             ActualizarTotales();
         }
+
+        private void txtBuscarApartado_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LimpiarSeleccionApartado();
+            CargarApartados();
+        }
+
+        private void dgApartadosRegistrados_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgApartadosRegistrados.SelectedItem is not Apartado apartado)
+            {
+                LimpiarSeleccionApartado();
+                return;
+            }
+
+            apartadosSeleccionadoId = apartado.Id;
+
+            lblApartadoSeleccionado.Text = $"#{apartado.Id} - {apartado.Cliente}";
+
+            lblSaldoApartado.Text = $"Salkdo: {apartado.SaldoPendiente:C}";
+
+            CargarAbonosApartado(apartado.Id);
+        }
+
+
     }
 }

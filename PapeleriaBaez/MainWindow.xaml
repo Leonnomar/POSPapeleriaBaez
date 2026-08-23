@@ -41,6 +41,10 @@
                     Margin="10"
                     Click="BtnCompras_Click"/>
 
+            <Button Content="📦 Apartados"
+                    Margin="10"
+                    Click="BtnApartados_Click"/>
+
             <Button Content="📋 Inventario"
                     Margin="10"
                     Click="BtnInventario_Click"/>

@@ -49,6 +49,11 @@ namespace PapeleriaBaez
             MainFrame.Content = new ComprasView();
         }
 
+        private void BtnApartados_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new ApartadosView();
+        }
+
         private void BtnInventario_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Content = new InventarioView();
