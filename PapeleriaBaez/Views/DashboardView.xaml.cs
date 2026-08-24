@@ -72,8 +72,18 @@ namespace PapeleriaBaez.Views
 
             lblConjuntosCanje.Text = conjuntosCanjes.ToString();
 
-            int ValesCanje = db.DetalleCanjeUniformes
+            int tenisCanje = db.TenisCanjes
+                .Sum(t => (int?)t.Entregados) ?? 0;
+
+            lblTenisCanje.Text = tenisCanje.ToString();
+
+            int valesUniformes = db.DetalleCanjeUniformes
                 .Count(d => d.Pendiente);
+
+            int valesTenis = db.ValesTenisCanje
+                .Count(v => v.Pendiente);
+
+            int ValesCanje = valesUniformes + valesTenis;
 
             lblValesCanje.Text = ValesCanje.ToString();
         }

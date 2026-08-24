@@ -122,9 +122,10 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel>
+                    <StackPanel Grid.Column="0">
                         <TextBlock Text="Paquetes entregados"
                                    FontWeight="Bold"/>
 
@@ -143,6 +144,15 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="2">
+                        <TextBlock Text="Tenis entregados"
+                                   FontWeight="Bold"/>
+
+                        <TextBlock x:Name="lblTenisCanje"
+                                   Text="0"
+                                   FontSize="24"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3">
                         <TextBlock Text="Vales pendientes"
                                    FontWeight="Bold"/>
 
