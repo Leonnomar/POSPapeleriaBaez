@@ -261,19 +261,21 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <GroupBox Header="🎒 Canje de útiles"
-                            Margin="0,0,10,0">
+                    <GroupBox Grid.Column="0"
+                              Header="🎒 Canje de útiles"
+                              Margin="0,0,10,0">
 
                         <StackPanel Margin="15">
 
                             <TextBlock Text="Paquete"/>
 
                             <ComboBox x:Name="cmbEntregaPaquete"
-                                    Height="30"
-                                    Margin="0,5,0,15"
-                                    SelectionChanged="cmbEntregaPaquete_SelectionChanged"/>
+                                      Height="30"
+                                      Margin="0,5,0,15"
+                                      SelectionChanged="cmbEntregaPaquete_SelectionChanged"/>
 
                             <TextBlock Text="Cantidad"/>
 
@@ -285,9 +287,9 @@
                                      PreviewTextInput="SoloEnteros_PreviewTextInput"/>
 
                             <TextBlock x:Name="lblExistenciaPaquete"
-                                    Text="Disponibles: 0"
-                                    FontWeight="Bold"
-                                    Margin="0,0,0,15"/>
+                                       Text="Disponibles: 0"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,15"/>
 
                             <Button x:Name="btnRegistrarEntregaPaquete"
                                     Content="Registrar entrega de útiles"
@@ -301,7 +303,7 @@
 
                     <GroupBox Grid.Column="1"
                             Header="👕 Canje de uniformes"
-                            Margin="10,0,0,0">
+                            Margin="10,0">
 
                         <StackPanel Margin="15">
 
@@ -321,15 +323,45 @@
 
                             </StackPanel>
 
-                            <Button Content="Captura conjuntos"
-                                Height="40"
-                                Click="BtnCapturarConjuntos_Click"/>
+                            <Button Content="Capturar conjuntos"
+                                    Height="40"
+                                    Click="BtnCapturarConjuntos_Click"/>
 
                         </StackPanel>
 
                     </GroupBox>
 
+                    <GroupBox Grid.Column="2"
+                              Header="👟 Canje de tenis"
+                              Margin="10,0,0,0">
+
+                        <StackPanel Margin="15">
+
+                            <TextBlock Text="Talla"
+                                       FontWeight="Bold"/>
+
+                            <ComboBox x:Name="cmbEntregaTenis"
+                                      Height="30"
+                                      Margin="0,5,0,15"
+                                      SelectionChanged="cmbEntregaTenis_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblExistenciaTenis"
+                                       Text="Disponibles: 0"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,15"/>
+
+                            <Button x:Name="btnRegistrarEntregaTenis"
+                                    Content="Registrar entrega de tenis"
+                                    Height="40"
+                                    IsEnabled="False"
+                                    Click="BtnRegistrarEntregaTenis_Click"/>
+                            
+                        </StackPanel>
+                        
+                    </GroupBox>
+                    
                 </Grid>
+                
             </TabItem>
 
             <!-- VALES -->

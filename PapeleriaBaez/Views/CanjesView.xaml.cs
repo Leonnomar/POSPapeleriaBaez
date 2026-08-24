@@ -31,6 +31,8 @@ namespace PapeleriaBaez.Views
             CargarComboEntregaPaquetes();
             CargarPaquetes();
             CargarUniformes();
+            CargarComboEntregaTenis();
+            CargarTenis();
             CargarValesPendientes();
             CargarResumenCanjes();
         }
@@ -78,6 +80,17 @@ namespace PapeleriaBaez.Views
                 .ToList();
 
             dgPaquetes.ItemsSource = paquetes;
+        }
+
+        private void CargarComboEntregaTenis()
+        {
+            using var db = new AppDbContext();
+
+            cmbEntregaTenis.ItemsSource = db.TenisCanjes
+                .OrderBy(t => t.Talla)
+                .ToList();
+
+            cmbEntregaTenis.DisplayMemberPath = "Talla";
         }
 
         private void CargarValesPendientes()
@@ -287,8 +300,14 @@ namespace PapeleriaBaez.Views
             cmbTallaTenis.SelectedIndex = -1;
 
             CargarTenis();
+            CargarComboEntregaTenis();
+            CargarResumenCanjes();
 
-            MessageBox.Show("Entrada de tenis registrada correctamente.");
+            MessageBox.Show(
+                "Entrada de tenis registrada correctamente.",
+                "Tenis",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         private void BtnRegistrarEntregaPaquete_Click(object sender, RoutedEventArgs e)
@@ -467,6 +486,67 @@ namespace PapeleriaBaez.Views
             }
         }
 
+        private void BtnRegistrarEntregaTenis_Click(object sender, RoutedEventArgs e)
+        {
+            if (cmbEntregaTenis.SelectedItem is not TenisCanje seleccionado)
+            {
+                MessageBox.Show(
+                    "Seleccione una talla.",
+                    "Canje de tenis",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            using var db = new AppDbContext();
+
+            var tenis = db.TenisCanjes
+                .FirstOrDefault(t => t.Id == seleccionado.Id);
+
+            if (tenis == null)
+            {
+                MessageBox.Show("No se encontró la talla seleccionada.");
+
+                return;
+            }
+
+            if (tenis.Existencia <= 0)
+            {
+                MessageBox.Show(
+                    $"No hay tenis disponibles en talla {tenis.Talla}.\n\n" +
+                    "Esta talla deberá registrarse como vale pendiente.",
+                    "Sin existencia",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
+
+            tenis.Existencia--;
+            tenis.Entregados++;
+
+            db.SaveChanges();
+
+            MessageBox.Show(
+                $"Canje de tenis registrado correctamente.\n\n" +
+                $"Talla: {tenis.Talla}",
+                "Caje de tenis",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            cmbEntregaTenis.SelectedIndex = -1;
+
+            lblExistenciaTenis.Text = "Disponibles: 0";
+
+            btnRegistrarEntregaTenis.IsEnabled = false;
+
+            CargarTenis();
+            CargarComboEntregaTenis();
+
+            CargarResumenCanjes();
+        }
+
         private void cmbTipoUniforme_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbTipoUniforme.SelectedItem is not string tipo)
@@ -478,6 +558,22 @@ namespace PapeleriaBaez.Views
 
             CargarColoresPorTipo(tipo);
             CargarTallasPorTipo(tipo);
+        }
+
+        private void cmbEntregaTenis_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbEntregaTenis.SelectedItem is TenisCanje tenis)
+            {
+                lblExistenciaTenis.Text = $"Disponibles: {tenis.Existencia}";
+
+                btnRegistrarEntregaTenis.IsEnabled = true;
+            }
+            else
+            {
+                lblExistenciaTenis.Text = "Disponibles: 0";
+
+                btnRegistrarEntregaTenis.IsEnabled = false;
+            }
         }
 
         private void CargarTallasPorTipo(string tipo)
