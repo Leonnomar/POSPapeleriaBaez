@@ -47,6 +47,10 @@ namespace PapeleriaBaez.Data
 
         public DbSet<ValeTenisCanje> ValesTenisCanje { get; set; }
 
+        public DbSet<ApartadoCanje> ApartadosCanje { get; set; }
+
+        public DbSet<DetalleApartadoCanje> DetalleApartadosCanjes { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string ruta = @"C:\PapeleriaBaez\PapeleriaBaez.db";
@@ -122,6 +126,30 @@ namespace PapeleriaBaez.Data
                 .HasOne(v => v.TenisCanje)
                 .WithMany()
                 .HasForeignKey(v => v.TenisCanjeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DetalleApartadoCanje>()
+                .HasOne(d => d.ApartadoCanje)
+                .WithMany(a => a.Detalles)
+                .HasForeignKey(d => d.ApartadoCanjeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DetalleApartadoCanje>()
+                .HasOne(d => d.PaqueteCanje)
+                .WithMany()
+                .HasForeignKey(d => d.PaqueteCanjeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DetalleApartadoCanje>()
+                .HasOne(d => d.UniformeCanje)
+                .WithMany()
+                .HasForeignKey(d => d.UniformeCanjeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DetalleApartadoCanje>()
+                .HasOne(d => d.TenisCanje)
+                .WithMany()
+                .HasForeignKey(d => d.TenisCanjeId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
