@@ -386,24 +386,29 @@
                         <DataGrid.Columns>
 
                             <DataGridTextColumn Header="Fecha"
-                                            Binding="{Binding Fecha}"
-                                            Width="160"/>
+                                                Binding="{Binding Fecha,
+                                                StringFormat=dd/MM/yyyy HH:mm}"
+                                                Width="150"/>
 
-                            <DataGridTextColumn Header="Conjunto"
-                                            Binding="{Binding NumeroCoonjunto}"
-                                            Width="90"/>
+                            <DataGridTextColumn Header="Origen"
+                                                Binding="{Binding Origen}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Referencia"
+                                                Binding="{Binding Referencia}"
+                                                Width="110"/>
 
                             <DataGridTextColumn Header="Tipo"
-                                            Binding="{Binding Tipo}"
-                                            Width="*"/>
+                                                Binding="{Binding Tipo}"
+                                                Width="*"/>
 
                             <DataGridTextColumn Header="Color"
-                                            Binding="{Binding Color}"
-                                            Width="120"/>
+                                                Binding="{Binding Color}"
+                                                Width="110"/>
 
                             <DataGridTextColumn Header="Talla"
-                                            Binding="{Binding Talla}"
-                                            Width="90"/>
+                                                Binding="{Binding Talla}"
+                                                Width="90"/>
 
                             <DataGridTemplateColumn Header="Acción"
                                                     Width="140">
@@ -416,7 +421,7 @@
                                                 Tag="{Binding}"
                                                 Click="BtnEntregarVale_Click"
                                                 Margin="5"
-                                                Padding="8,3"/>
+                                                Padding="8.3"/>
                                         
                                     </DataTemplate>
                                     

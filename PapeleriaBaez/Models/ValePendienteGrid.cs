@@ -8,11 +8,15 @@ namespace PapeleriaBaez.Models
 {
     public class ValePendienteGrid
     {
-        public int DetalleId { get; set; }
+        public int? DetalleUniformeId { get; set; }
+
+        public int? ValeTenisId { get; set; }
 
         public DateTime Fecha { get; set; }
 
-        public int NumeroConjunto { get; set; }
+        public string Origen { get; set; } = "";
+
+        public string Referencia { get; set; } = "";
 
         public string Tipo { get; set; } = "";
 

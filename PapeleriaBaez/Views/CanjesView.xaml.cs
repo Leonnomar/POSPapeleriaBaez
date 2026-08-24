@@ -97,20 +97,52 @@ namespace PapeleriaBaez.Views
         {
             using var db = new AppDbContext();
 
-            var vales = db.DetalleCanjeUniformes
+            var valesUniformes = db.DetalleCanjeUniformes
                 .Include(d => d.CanjeUniforme)
                 .Include(d => d.UniformeCanje)
                 .Where(d => d.Pendiente)
-                .OrderByDescending(d => d.CanjeUniforme.Fecha)
                 .Select(d => new ValePendienteGrid
                 {
-                    DetalleId = d.Id,
+                    DetalleUniformeId = d.Id,
+                    ValeTenisId = null,
+
                     Fecha = d.CanjeUniforme.Fecha,
-                    NumeroConjunto = d.NumeroConjunto,
+
+                    Origen = "Uniforme",
+
+                    Referencia = $"Conjunto {d.NumeroConjunto}",
+
                     Tipo = d.UniformeCanje.Tipo,
                     Color = d.UniformeCanje.Color,
                     Talla = d.UniformeCanje.Talla
                 })
+                .ToList();
+
+            var valesTenis = db.ValesTenisCanje
+                .Include(v => v.TenisCanje)
+                .Where(v => v.Pendiente)
+                .Select(v => new ValePendienteGrid
+                {
+                    DetalleUniformeId = null,
+                    ValeTenisId = v.Id,
+
+                    Fecha = v.Fecha,
+
+                    Origen = "Tenis",
+
+                    Referencia = "-",
+
+                    Tipo = "Tenis",
+
+                    Color = "-",
+
+                    Talla = v.TenisCanje.Talla
+                })
+                .ToList();
+
+            var vales = valesUniformes
+                .Concat(valesTenis)
+                .OrderByDescending(v => v.Fecha)
                 .ToList();
 
             dgVales.ItemsSource = vales;
@@ -379,6 +411,24 @@ namespace PapeleriaBaez.Views
                 return;
             }
 
+            if (vale.Origen == "Uniforme")
+            {
+                EntregarValeUniforme(vale);
+                return;
+            }
+
+            if (vale.Origen == "Tenis")
+            {
+                EntregarValeTenis(vale);
+                return;
+            }
+        }
+
+        private void EntregarValeUniforme(ValePendienteGrid vale)
+        {
+            if (vale.DetalleUniformeId == null)
+                return;
+
             using var db = new AppDbContext();
             using var transaccion = db.Database.BeginTransaction();
 
@@ -386,26 +436,14 @@ namespace PapeleriaBaez.Views
             {
                 var detalle = db.DetalleCanjeUniformes
                     .Include(d => d.UniformeCanje)
-                    .FirstOrDefault(d => d.Id == vale.DetalleId);
+                    .FirstOrDefault(d => d.Id == vale.DetalleUniformeId.Value);
 
                 if (detalle == null)
-                {
-                    MessageBox.Show(
-                        "No se encontró el vale pendiente.",
-                        "Vales",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-
                     return;
-                }
 
                 if (!detalle.Pendiente)
                 {
-                    MessageBox.Show(
-                        "Este vale ya fue entregado.",
-                        "Vales",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    MessageBox.Show("Este vale ya fue entregado.");
 
                     CargarValesPendientes();
                     return;
@@ -416,19 +454,19 @@ namespace PapeleriaBaez.Views
                 if (uniforme.Existencia <= 0)
                 {
                     MessageBox.Show(
-                        $"Todavía no hay existencia de: \n\n" +
+                        $"Todavía no hay existencia de:\n\n" +
                         $"{uniforme.Tipo}\n" +
                         $"Color: {uniforme.Color}\n" +
                         $"Talla: {uniforme.Talla}",
-                        "Sin existencia",
+                        "Sen existencia",
                         MessageBoxButton.OK,
                         MessageBoxImage.Warning);
 
                     return;
                 }
 
-                var resultado = MessageBox.Show(
-                    $"¿Desea entregar este vale?\n\n" +
+                var respuesta = MessageBox.Show(
+                    $"¿Entregar este vale?\n\n" +
                     $"{uniforme.Tipo}\n" +
                     $"Color: {uniforme.Color}\n" +
                     $"Talla: {uniforme.Talla}",
@@ -436,7 +474,7 @@ namespace PapeleriaBaez.Views
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
 
-                if (resultado != MessageBoxResult.Yes)
+                if (respuesta != MessageBoxResult.Yes)
                     return;
 
                 uniforme.Existencia--;
@@ -447,23 +485,99 @@ namespace PapeleriaBaez.Views
                 db.SaveChanges();
                 transaccion.Commit();
 
-                MessageBox.Show(
-                    "Vale entregado correctamente.",
-                    "Vales",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
                 CargarUniformes();
                 CargarValesPendientes();
                 CargarResumenCanjes();
+
+                MessageBox.Show("Vale entregado correctamente.");
+            }
+            catch (Exception ex)
+            { 
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ??
+                    ex.Message);
+            }
+        }
+
+        private void EntregarValeTenis(ValePendienteGrid vale)
+        {
+            if (vale.ValeTenisId == null)
+                return;
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var valeReal = db.ValesTenisCanje
+                    .Include(v => v.TenisCanje)
+                    .FirstOrDefault(v => v.Id == vale.ValeTenisId.Value);
+
+                if (valeReal == null)
+                    return;
+
+                if (!valeReal.Pendiente)
+                {
+                    MessageBox.Show("Este vale ya fue entregado");
+
+                    CargarValesPendientes();
+                    return;
+                }
+
+                var tenis = valeReal.TenisCanje;
+
+                if (tenis.Existencia <= 0)
+                {
+                    MessageBox.Show(
+                        $"Todavía no hay tenis disponibles.\n\n" +
+                        $"Talla: {tenis.Talla}",
+                        "Sin existencia",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                var respuesta = MessageBox.Show(
+                    $"¿Entregar este vale de tenis?\n\n" +
+                    $"Talla: {tenis.Talla}",
+                    "Entregar vale",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (respuesta != MessageBoxResult.Yes)
+                    return;
+
+                tenis.Existencia--;
+                tenis.Entregados++;
+
+                valeReal.Pendiente = false;
+                valeReal.FechaEntrega = DateTime.Now;
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                CargarTenis();
+                CargarComboEntregaTenis();
+                CargarValesPendientes();
+                CargarResumenCanjes();
+
+                MessageBox.Show(
+                    "Vale de tenis entregado correctamente",
+                    "Canjes",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 transaccion.Rollback();
 
                 MessageBox.Show(
-                    ex.InnerException?.Message ?? ex.Message,
-                    "Error al entregar el vale",
+                    ex.InnerException?.Message ??
+                    ex.Message,
+                    "Error al entregar vale",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
@@ -513,12 +627,38 @@ namespace PapeleriaBaez.Views
 
             if (tenis.Existencia <= 0)
             {
-                MessageBox.Show(
+                var respuesta = MessageBox.Show(
                     $"No hay tenis disponibles en talla {tenis.Talla}.\n\n" +
-                    "Esta talla deberá registrarse como vale pendiente.",
+                    "¿Desea generar un vale pendiente?",
                     "Sin existencia",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (respuesta != MessageBoxResult.Yes)
+                    return;
+
+                var vale = new ValeTenisCanje
+                {
+                    Fecha = DateTime.Now,
+                    TenisCanjeId = tenis.Id,
+                    Pendiente = true,
+                    FechaEntrega = null
+                };
+
+                db.ValesTenisCanje.Add(vale);
+                db.SaveChanges();
+
+                MessageBox.Show(
+                    $"Vale de tenis registrado correctamente.\n\n" +
+                    $"Talla: {tenis.Talla}",
+                    "Vale pendiente",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
+
+                CargarValesPendientes();
+                CargarResumenCanjes();
+
+                cmbEntregaTenis.SelectedIndex = -1;
 
                 return;
             }
@@ -531,7 +671,7 @@ namespace PapeleriaBaez.Views
             MessageBox.Show(
                 $"Canje de tenis registrado correctamente.\n\n" +
                 $"Talla: {tenis.Talla}",
-                "Caje de tenis",
+                "Canje de tenis",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
 
