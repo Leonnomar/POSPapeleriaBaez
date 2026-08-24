@@ -844,8 +844,16 @@ namespace PapeleriaBaez.Views
             int prendasEntregadas = db.UniformesCanje
                 .Sum(u => (int?)u.Entregados) ?? 0;
 
-            int valesPendientes = db.DetalleCanjeUniformes
+            int tenisEntregados = db.TenisCanjes
+                .Sum(t => (int?)t.Entregados) ?? 0;
+
+            int valesUniforme = db.DetalleCanjeUniformes
                 .Count(d => d.Pendiente);
+
+            int valesTenis = db.ValesTenisCanje
+                .Count(v => v.Pendiente);
+
+            int valesPendientes = valesUniforme + valesTenis;
 
             lblPaquetesEntregados.Text =
                 paquetesEntregados.ToString();
@@ -858,6 +866,9 @@ namespace PapeleriaBaez.Views
 
             lblPrendasEntregadas.Text =
                 prendasEntregadas.ToString();
+
+            lblTenisEntregados.Text =
+                tenisEntregados.ToString();
 
             lblValesPendientes.Text =
                 valesPendientes.ToString();
@@ -893,7 +904,17 @@ namespace PapeleriaBaez.Views
             dgResumenUniformes.ItemsSource =
                 resumenUniformes;
 
+            var resumenTenis = db.TenisCanjes
+                .OrderBy(t => t.Talla)
+                .Select(t => new ResumenTenisGrid
+                {
+                    Talla = t.Talla,
+                    Existencia = t.Existencia,
+                    Entregados = t.Entregados
+                })
+                .ToList();
 
+            dgResumenTenis.ItemsSource = resumenTenis;
         }
 
         private void cmbEntregaPaquete_SelectionChanged(object sender, SelectionChangedEventArgs e)

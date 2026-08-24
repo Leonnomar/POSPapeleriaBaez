@@ -555,6 +555,30 @@
                                     Width="190">
 
                                 <StackPanel>
+
+                                    <TextBlock Text="Tenis entregados"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"/>
+
+                                    <TextBlock x:Name="lblTenisEntregados"
+                                               Text="0"
+                                               FontSize="28"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"
+                                               Margin="0,8,0,0"/>
+                                    
+                                </StackPanel>
+                                
+                            </Border>
+
+                            <Border BorderBrush="#CCCCCC"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="18"
+                                    Margin="5"
+                                    Width="190">
+
+                                <StackPanel>
                                     <TextBlock Text="Vales Pendientes"
                                                FontWeight="Bold"
                                                TextAlignment="Center"/>
@@ -579,6 +603,8 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="🎒 Resumen de paquetes"
@@ -590,12 +616,19 @@
                                        FontSize="18"
                                        FontWeight="Bold"/>
 
+                            <TextBlock Grid.Column="4"
+                                       Text="👟 Resumen tenis"
+                                       FontSize="18"
+                                       FontWeight="Bold"/>
+
                         </Grid>
 
                         <!-- TABLAS -->
                         <Grid Grid.Row="3">
 
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="*"/>
@@ -654,6 +687,34 @@
 
                                 </DataGrid.Columns>
 
+                            </DataGrid>
+
+                            <DataGrid x:Name="dgResumenTenis"
+                                      Grid.Column="4"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      IsReadOnly="True">
+                                
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="Talla"
+                                                        Binding="{Binding Talla}"
+                                                        Width="*"/>
+
+                                    <DataGridTextColumn Header="Disponibles"
+                                                        Binding="{Binding Existencia}"
+                                                        Width="100"/>
+
+                                    <DataGridTextColumn Header="Entregados"
+                                                        Binding="{Binding Entregados}"
+                                                        Width="100"/>
+
+                                    <DataGridTextColumn Header="Total recibido"
+                                                        Binding="{Binding TotalRecibido}"
+                                                        Width="110"/>
+                                    
+                                </DataGrid.Columns>
+                                
                             </DataGrid>
 
                         </Grid>
