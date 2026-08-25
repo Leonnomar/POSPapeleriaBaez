@@ -23,6 +23,8 @@ namespace PapeleriaBaez.Views
     /// </summary>
     public partial class CanjesView : UserControl
     {
+        private List<ApartadoCanjeItem> apartadoCanjeItems = new();
+
         public CanjesView()
         {
             InitializeComponent();
@@ -33,6 +35,7 @@ namespace PapeleriaBaez.Views
             CargarUniformes();
             CargarComboEntregaTenis();
             CargarTenis();
+            CargarCombosApartadoCanje();
             CargarValesPendientes();
             CargarResumenCanjes();
         }
@@ -218,6 +221,41 @@ namespace PapeleriaBaez.Views
                 .ToList();
         }
 
+        private void CargarCombosApartadoCanje()
+        {
+            using var db = new AppDbContext();
+
+            cmbApartadoPaquete.ItemsSource = db.PaquetesCanje
+                .OrderBy(p => p.NumeroPaquete)
+                .ToList();
+
+            cmbApartadoPaquete.DisplayMemberPath = "NumeroPaquete";
+
+            var uniformes = db.UniformesCanje
+                .OrderBy(u => u.Tipo)
+                .ThenBy(u => u.Color)
+                .ThenBy(u => u.Talla)
+                .ToList();
+
+            cmbApartadoUniformeTipo.ItemsSource = uniformes
+                .Select(u => u.Tipo)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            cmbApartadoTenis.ItemsSource = db.TenisCanjes
+                .OrderBy(t => t.Talla)
+                .ToList();
+
+            cmbApartadoTenis.DisplayMemberPath = "Talla";
+        }
+
+        private void RefrescarNuevoApartadoCanje()
+        {
+            dgNuevoApartadoCanje.ItemsSource = null;
+            dgNuevoApartadoCanje.ItemsSource = apartadoCanjeItems;
+        }
+
         private void BtnEntradaUniforme_Click(object sender, RoutedEventArgs e)
         {
             string tipo = cmbTipoUniforme.SelectedItem?.ToString() ?? "";
@@ -340,6 +378,322 @@ namespace PapeleriaBaez.Views
                 "Tenis",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
+        }
+
+        private void BtnAgregarApartadoPaquete_Click(object sender, RoutedEventArgs e)
+        {
+            if (cmbApartadoPaquete.SelectedItem is not PaqueteCanje paquete)
+            {
+                MessageBox.Show("Seleccione un paquete.");
+                return;
+            }
+
+            if (!int.TryParse(txtApartadoPaqueteCantidad.Text, out int cantidad) || cantidad <= 0)
+            {
+                MessageBox.Show("Capture una cantidad válida.");
+                return;
+            }
+
+            int yaApartados = apartadoCanjeItems
+                .Where(x => x.PaqueteCanjeId == paquete.Id)
+                .Sum(x => x.Cantidad);
+
+            if (yaApartados + cantidad > paquete.Existencia)
+            {
+                MessageBox.Show(
+                    $"No hay suficiente existencia.\n\n" +
+                    $"Disponibles: {paquete.Existencia}\n" +
+                    $"Ya agregados al apartado: {yaApartados}");
+
+                return;
+            }
+
+            apartadoCanjeItems.Add(
+                new ApartadoCanjeItem
+                {
+                    Tipo = "Utiles",
+                    Descripcion = $"Paquete {paquete.NumeroPaquete}",
+                    Cantidad = cantidad,
+                    PaqueteCanjeId = paquete.Id
+                });
+
+            RefrescarNuevoApartadoCanje();
+        }
+
+        private void BtnAgregarApartadoTenis_Click(object sender, RoutedEventArgs e)
+        {
+            if (cmbApartadoTenis.SelectedItem is not TenisCanje tenis)
+            {
+                MessageBox.Show("Seleccione una talla.");
+                return;
+            }
+
+            int yaApartados = apartadoCanjeItems
+                .Where(x => x.TenisCanjeId == tenis.Id)
+                .Sum(x => x.Cantidad);
+
+            if (yaApartados + 1 > tenis.Existencia)
+            {
+                MessageBox.Show($"No hay existencia suficiente de tenis talla {tenis.Talla}.");
+
+                return;
+            }
+
+            apartadoCanjeItems.Add(
+                new ApartadoCanjeItem
+                {
+                    Tipo = "Tenis",
+                    Descripcion = $"Tenis talla {tenis.Talla}",
+                    Cantidad = 1,
+                    TenisCanjeId = tenis.Id
+                });
+
+            RefrescarNuevoApartadoCanje();
+        }
+
+        private void cmbApartadoUniformeTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipo = cmbApartadoUniformeTipo.SelectedItem?.ToString() ?? "";
+
+            using var db = new AppDbContext();
+
+            var colores = db.UniformesCanje
+                .Where(u => u.Tipo == tipo)
+                .Select(u => u.Color)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            cmbApartadoUniformeColor.ItemsSource = colores;
+            cmbApartadoUniformeTalla.ItemsSource = null;
+
+            lblApartadoUniformeExistencia.Text = "Disponibles: 0";
+        }
+
+        private void cmbApartadoUniformeColor_SelectionChanged(object sender, SaveChangesEventArgs e)
+        {
+            string tipo = cmbApartadoUniformeTipo.SelectedItem?.ToString() ?? "";
+
+            string color = cmbApartadoUniformeColor.SelectedItem?.ToString() ?? "";
+
+            using var db = new AppDbContext();
+
+            var tallas = db.UniformesCanje
+                .Where(u =>
+                    u.Tipo == tipo &&
+                    u.Color == color)
+                .Select(u => u.Talla)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            cmbApartadoUniformeTalla.ItemsSource = tallas;
+
+            lblApartadoUniformeExistencia.Text = "Disponibles: 0";
+        }
+
+        private void cmbApartadoUniformeTalla_SelectionChanged(object sender, SaveChangesEventArgs e)
+        {
+            string tipo = cmbApartadoUniformeTipo.SelectedItem?.ToString() ?? "";
+
+            string color = cmbApartadoUniformeColor.SelectedItem?.ToString() ?? "";
+
+            string talla = cmbApartadoUniformeTalla.SelectedItem?.ToString() ?? "";
+
+            using var db = new AppDbContext();
+
+            var uniforme = db.UniformesCanje
+                .FirstOrDefault(u =>
+                    u.Tipo == tipo &&
+                    u.Color == color &&
+                    u.Talla == talla);
+
+            lblApartadoUniformeExistencia.Text =
+                uniforme == null
+                    ? "Disponibles: 0"
+                    : $"Disponibles: {uniforme.Existencia}";
+        }
+
+        private void BtnAgregarApartadoUniforme_Click(object sender, RoutedEventArgs e)
+        {
+            string tipo = cmbApartadoUniformeTipo.SelectedItem?.ToString() ?? "";
+
+            string color = cmbApartadoUniformeColor.SelectedItem?.ToString() ?? "";
+
+            string talla = cmbApartadoUniformeTalla.SelectedItem?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(tipo) ||
+                string.IsNullOrWhiteSpace(color) ||
+                string.IsNullOrWhiteSpace(talla))
+            {
+                MessageBox.Show("Seleccione tipo, color y talla");
+
+                return;
+            }
+
+            using var db = new AppDbContext();
+
+            var uniforme = db.UniformesCanje
+                .FirstOrDefault(u =>
+                    u.Tipo == tipo &&
+                    u.Color == color &&
+                    u.Talla == talla);
+
+            if (uniforme == null)
+            {
+                MessageBox.Show("No se encontró el uniforme.");
+
+                return;
+            }
+
+            int yaApartados = apartadoCanjeItems
+                .Where(x => x.UniformeCanjeId == uniforme.Id)
+                .Sum(x => x.Cantidad);
+
+            if (yaApartados + 1 > uniforme.Existencia)
+            {
+                MessageBox.Show(
+                    $"No hay existencia suficiente.\n\n" +
+                    $"Disponibles: {uniforme.Existencia}");
+
+                return;
+            }
+
+            apartadoCanjeItems.Add(
+                new ApartadoCanjeItem
+                {
+                    Tipo = "Uniforme",
+                    Descripcion = $"{uniforme.Tipo} - {uniforme.Color} - {uniforme.Talla}",
+                    Cantidad = 1,
+                    UniformeCanjeId = uniforme.Id
+                });
+
+            RefrescarNuevoApartadoCanje();
+        }
+
+        private void BtnRegistrarApartadoCanje_Click(object sender, RoutedEventArgs e)
+        {
+            string referencia = txtReferenciaApartadoCanje.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(referencia))
+            {
+                MessageBox.Show("Capture una referencia para identificar el apartado.");
+
+                return;
+            }
+
+            if (apartadoCanjeItems.Count == 0)
+            {
+                MessageBox.Show("Agregue al menos un artículo al apartado.");
+
+                return;
+            }
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var apartado = new ApartadoCanje
+                {
+                    Fecha = DateTime.Now,
+                    FechaEntrega = null,
+                    Referencia = referencia,
+                    Estado = "Pendiente"
+                };
+
+                db.ApartadosCanje.Add(apartado);
+                db.SaveChanges();
+
+                foreach (var item in apartadoCanjeItems)
+                {
+                    if (item.Tipo == "Utiles" && item.PaqueteCanjeId.HasValue)
+                    {
+                        var paquete = db.PaquetesCanje
+                            .First(p =>
+                                p.Id == item.PaqueteCanjeId.Value);
+
+                        if (paquete.Existencia < item.Cantidad)
+                            throw new Exception(
+                                $"No hay suficiente existencia de Paquete {paquete.NumeroPaquete}.");
+
+                        paquete.Existencia -= item.Cantidad;
+                    }
+
+                    if (item.Tipo == "Uniforme" && item.UniformeCanjeId.HasValue)
+                    {
+                        var uniforme = db.UniformesCanje
+                            .First(u =>
+                                u.Id == item.UniformeCanjeId.Value);
+
+                        if (uniforme.Existencia < item.Cantidad)
+                            throw new Exception(
+                                $"No hay suficiente existencia de {uniforme.Tipo}.");
+
+                        uniforme.Existencia -= item.Cantidad;
+                    }
+
+                    if (item.Tipo == "Tenis" && item.TenisCanjeId.HasValue)
+                    {
+                        var tenis = db.TenisCanjes
+                            .First(t =>
+                                t.Id == item.TenisCanjeId.Value);
+
+                        if (tenis.Existencia < item.Cantidad)
+                            throw new Exception(
+                                $"No hay suficiente existencia de tenis talla {tenis.Talla}.");
+
+                        tenis.Existencia -= item.Cantidad;
+                    }
+
+                    db.DetalleApartadosCanjes.Add(
+                        new DetalleApartadoCanje
+                        {
+                            ApartadoCanjeId = apartado.Id,
+                            Tipo = item.Tipo,
+                            PaqueteCanjeId = item.PaqueteCanjeId,
+                            UniformeCanjeId = item.UniformeCanjeId,
+                            TenisCanjeId = item.TenisCanjeId,
+                            Cantidad = item.Cantidad
+                        });
+                }
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                MessageBox.Show(
+                    $"Apartado de canje registrado correctamente.\n\n" +
+                    $"Referencia: {apartado.Referencia}",
+                    "Apartados de canje",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                apartadoCanjeItems.Clear();
+
+                txtReferenciaApartadoCanje.Clear();
+
+                RefrescarNuevoApartadoCanje();
+
+                CargarPaquetes();
+                CargarComboEntregaPaquetes();
+
+                CargarUniformes();
+
+                CargarTenis();
+                CargarComboEntregaTenis();
+
+                CargarResumenCanjes();
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al registrar apartado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void BtnRegistrarEntregaPaquete_Click(object sender, RoutedEventArgs e)
