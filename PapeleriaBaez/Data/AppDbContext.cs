@@ -51,6 +51,10 @@ namespace PapeleriaBaez.Data
 
         public DbSet<DetalleApartadoCanje> DetalleApartadosCanjes { get; set; }
 
+        public DbSet<DevolucionClienteCanje> DevolucionesClienteCanje { get; set; }
+
+        public DbSet<DevolucionFabricaCanje> DevolucionesFabricaCanje { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string ruta = @"C:\PapeleriaBaez\PapeleriaBaez.db";
@@ -147,6 +151,42 @@ namespace PapeleriaBaez.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<DetalleApartadoCanje>()
+                .HasOne(d => d.TenisCanje)
+                .WithMany()
+                .HasForeignKey(d => d.TenisCanjeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DevolucionClienteCanje>()
+                .HasOne(d => d.UniformeDevuelto)
+                .WithMany()
+                .HasForeignKey(d => d.UniformeDevueltoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DevolucionClienteCanje>()
+                .HasOne(d => d.UniformeEntregado)
+                .WithMany()
+                .HasForeignKey(d => d.UniformeEntregadoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DevolucionClienteCanje>()
+                .HasOne(d => d.TenisDevuelto)
+                .WithMany()
+                .HasForeignKey(d => d.TenisDevueltoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DevolucionClienteCanje>()
+                .HasOne(d => d.TenisEntregado)
+                .WithMany()
+                .HasForeignKey(d => d.TenisEntregadoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DevolucionFabricaCanje>()
+                .HasOne(d => d.UniformeCanje)
+                .WithMany()
+                .HasForeignKey(d => d.UniformeCanjeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DevolucionFabricaCanje>()
                 .HasOne(d => d.TenisCanje)
                 .WithMany()
                 .HasForeignKey(d => d.TenisCanjeId)
