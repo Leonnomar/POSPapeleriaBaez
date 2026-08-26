@@ -25,6 +25,10 @@ namespace PapeleriaBaez.Views
     {
         private List<ApartadoCanjeItem> apartadoCanjeItems = new();
 
+        private List<ApartadoCanjeGrid> listaApartadosCanje = new();
+
+        private string filtroApartadoCanje = "Pendiente";
+
         public CanjesView()
         {
             InitializeComponent();
@@ -36,6 +40,7 @@ namespace PapeleriaBaez.Views
             CargarComboEntregaTenis();
             CargarTenis();
             CargarCombosApartadoCanje();
+            CargarApartadosCanje();
             CargarValesPendientes();
             CargarResumenCanjes();
         }
@@ -248,6 +253,43 @@ namespace PapeleriaBaez.Views
                 .ToList();
 
             cmbApartadoTenis.DisplayMemberPath = "Talla";
+        }
+
+        private void CargarApartadosCanje()
+        {
+            using var db = new AppDbContext();
+
+            var consulta = db.ApartadosCanje
+                .Include(a => a.Detalles)
+                .AsQueryable();
+
+            if (filtroApartadoCanje != "Todos")
+            {
+                consulta = consulta.Where(a =>
+                    a.Estado == filtroApartadoCanje);
+            }
+
+            string texto = txtBuscarApartadoCanje?.Text.Trim() ?? "";
+
+            if (!string.IsNullOrWhiteSpace(texto))
+            {
+                consulta = consulta.Where(a =>
+                    a.Referencia.Contains(texto));
+            }
+
+            listaApartadosCanje = consulta
+                .OrderByDescending(a => a.Fecha)
+                .Select(a => new ApartadoCanjeGrid
+                {
+                    Id = a.Id,
+                    Fecha = a.Fecha,
+                    Referencia = a.Referencia,
+                    Estado = a.Estado,
+                    CantidadArticulos = a.Detalles.Sum(d => d.Cantidad)
+                })
+                .ToList();
+
+            dgApartadosCanjeRegistrados.ItemsSource = listaApartadosCanje;
         }
 
         private void RefrescarNuevoApartadoCanje()
@@ -470,7 +512,7 @@ namespace PapeleriaBaez.Views
             lblApartadoUniformeExistencia.Text = "Disponibles: 0";
         }
 
-        private void cmbApartadoUniformeColor_SelectionChanged(object sender, SaveChangesEventArgs e)
+        private void cmbApartadoUniformeColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string tipo = cmbApartadoUniformeTipo.SelectedItem?.ToString() ?? "";
 
@@ -492,7 +534,7 @@ namespace PapeleriaBaez.Views
             lblApartadoUniformeExistencia.Text = "Disponibles: 0";
         }
 
-        private void cmbApartadoUniformeTalla_SelectionChanged(object sender, SaveChangesEventArgs e)
+        private void cmbApartadoUniformeTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string tipo = cmbApartadoUniformeTipo.SelectedItem?.ToString() ?? "";
 
@@ -569,6 +611,18 @@ namespace PapeleriaBaez.Views
                 });
 
             RefrescarNuevoApartadoCanje();
+        }
+
+        private void cmbApartadoTenis_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbApartadoTenis.SelectedItem is TenisCanje tenis)
+            {
+                lblApartadoTenisExistencia.Text = $"Disponibles: {tenis.Existencia}";
+            }
+            else
+            {
+                lblApartadoTenisExistencia.Text = "Disponibles: 0";
+            }
         }
 
         private void BtnRegistrarApartadoCanje_Click(object sender, RoutedEventArgs e)
@@ -682,6 +736,9 @@ namespace PapeleriaBaez.Views
                 CargarTenis();
                 CargarComboEntregaTenis();
 
+                CargarApartadosCanje();
+                CargarCombosApartadoCanje();
+
                 CargarResumenCanjes();
             }
             catch (Exception ex)
@@ -691,6 +748,254 @@ namespace PapeleriaBaez.Views
                 MessageBox.Show(
                     ex.InnerException?.Message ?? ex.Message,
                     "Error al registrar apartado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnApartadosCanjePendientes_Click(object sender, RoutedEventArgs e)
+        {
+            filtroApartadoCanje = "Pendiente";
+            CargarApartadosCanje();
+        }
+
+        private void BtnApartadosCanjeEntregados_Click(object sender, RoutedEventArgs e)
+        {
+            filtroApartadoCanje = "Entregado";
+            CargarApartadosCanje();
+        }
+
+        private void BtnApartadosCanjeCancelados_Click(object sender, RoutedEventArgs e)
+        {
+            filtroApartadoCanje = "Cancelado";
+            CargarApartadosCanje();
+        }
+
+        private void BtnApartadosCanjeTodos_Click(object sender, RoutedEventArgs e)
+        {
+            filtroApartadoCanje = "Todos";
+            CargarApartadosCanje();
+        }
+
+        private void txtBuscarApartadoCanje_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CargarApartadosCanje();
+        }
+
+        private void BtnEntregarApartadoCanje_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgApartadosCanjeRegistrados.SelectedItem is not ApartadoCanjeGrid seleccionado)
+            {
+                MessageBox.Show(
+                    "Seleccione un apartado.",
+                    "Apartados de canje",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var apartado = db.ApartadosCanje
+                    .Include(a => a.Detalles)
+                    .FirstOrDefault(a =>
+                        a.Id == seleccionado.Id);
+
+                if (apartado == null)
+                    return;
+
+                if (apartado.Estado != "Pendiente")
+                {
+                    MessageBox.Show(
+                        "Este apartado ya no está pendiente.");
+
+                    return;
+                }
+
+                var confirmar = MessageBox.Show(
+                    $"¿Entregar el apartado #{apartado.Id}?\n\n" +
+                    $"Referencia: {apartado.Referencia}",
+                    "Entregar apartado",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+
+                if (confirmar != MessageBoxResult.Yes)
+                    return;
+
+                foreach (var detalle in apartado.Detalles)
+                { 
+                    if (detalle.Tipo == "Utiles" &&
+                        detalle.PaqueteCanjeId.HasValue)
+                    {
+                        var paquete = db.PaquetesCanje
+                            .First(p =>
+                                p.Id == detalle.PaqueteCanjeId.Value);
+
+                        paquete.Entregados += detalle.Cantidad;
+                    }
+
+                    if (detalle.Tipo == "Uniforme" &&
+                        detalle.UniformeCanjeId.HasValue)
+                    {
+                        var uniforme = db.UniformesCanje
+                            .First(u =>
+                                u.Id == detalle.UniformeCanjeId.Value);
+
+                        uniforme.Entregados += detalle.Cantidad;
+                    }
+
+                    if (detalle.Tipo == "Tenis" &&
+                        detalle.TenisCanjeId.HasValue)
+                    {
+                        var tenis = db.TenisCanjes
+                            .First(t =>
+                                t.Id == detalle.TenisCanjeId.Value);
+
+                        tenis.Entregados += detalle.Cantidad;
+                    }
+                }
+
+                apartado.Estado = "Entregado";
+                apartado.FechaEntrega = DateTime.Now;
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                CargarApartadosCanje();
+                CargarPaquetes();
+                CargarUniformes();
+                CargarTenis();
+                CargarResumenCanjes();
+
+                MessageBox.Show(
+                    "Apartado entregado correctamente.",
+                    "Apartados de canje",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al entregar apartado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnCancelarApartadoCanje_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgApartadosCanjeRegistrados.SelectedItem is not ApartadoCanjeGrid seleccionado)
+            {
+                MessageBox.Show(
+                    "Seleccione un apartado.",
+                    "Apartado de canje",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            var confirmar = MessageBox.Show(
+                "¿Cancelar este apartado?\n\n" +
+                "Los artículos regresarán a existencia.",
+                "Cancelar apartado",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (confirmar != MessageBoxResult.Yes)
+                return;
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var apartado = db.ApartadosCanje
+                    .Include(a => a.Detalles)
+                    .FirstOrDefault(a => a.Id == seleccionado.Id);
+
+                if (apartado == null)
+                    return;
+
+                if (apartado.Estado != "Pendiente")
+                {
+                    MessageBox.Show("Este apartado ya no está pendiente.");
+
+                    return;
+                }
+
+                foreach (var detalle in apartado.Detalles)
+                {
+                    if (detalle.Tipo == "Utiles" &&
+                        detalle.PaqueteCanjeId.HasValue)
+                    {
+                        var paquete = db.PaquetesCanje
+                            .First(p =>
+                                p.Id == detalle.PaqueteCanjeId.Value);
+
+                        paquete.Existencia += detalle.Cantidad;
+                    }
+
+                    if (detalle.Tipo == "Uniforme" &&
+                        detalle.UniformeCanjeId.HasValue)
+                    {
+                        var uniforme = db.UniformesCanje
+                            .First(u =>
+                                u.Id == detalle.UniformeCanjeId.Value);
+
+                        uniforme.Existencia += detalle.Cantidad;
+                    }
+
+                    if (detalle.Tipo == "Tenis" &&
+                        detalle.TenisCanjeId.HasValue)
+                    {
+                        var tenis = db.TenisCanjes
+                            .First(t =>
+                                t.Id == detalle.TenisCanjeId.Value);
+
+                        tenis.Existencia += detalle.Cantidad;
+                    }
+                }
+
+                apartado.Estado = "Cancelado";
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                CargarApartadosCanje();
+
+                CargarPaquetes();
+                CargarComboEntregaPaquetes();
+
+                CargarUniformes();
+
+                CargarTenis();
+                CargarComboEntregaTenis();
+
+                CargarCombosApartadoCanje();
+                CargarResumenCanjes();
+
+                MessageBox.Show(
+                    "Apartado cancelado. Los artículos regresaron a existencia.",
+                    "Apartados de canje",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al cancelar apartado",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
