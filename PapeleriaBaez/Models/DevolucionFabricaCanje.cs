@@ -16,6 +16,8 @@ namespace PapeleriaBaez.Models
 
         public string TipoArticulo { get; set; } = "";
 
+        public int? PaqueteCanjeId { get; set; }
+
         public int? UniformeCanjeId { get; set; }
 
         public int? TenisCanjeId { get; set; }
@@ -27,6 +29,8 @@ namespace PapeleriaBaez.Models
         public DateTime? FechaReposicion { get; set; }
 
         public string Observacion { get; set; } = "";
+
+        public PaqueteCanje? PaqueteCanje { get; set; }
 
         public UniformeCanje? UniformeCanje { get; set; }
 

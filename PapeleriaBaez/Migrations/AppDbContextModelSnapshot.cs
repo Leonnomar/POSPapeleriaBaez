@@ -444,6 +444,9 @@ namespace PapeleriaBaez.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("PaqueteCanjeId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("TenisCanjeId")
                         .HasColumnType("INTEGER");
 
@@ -459,6 +462,8 @@ namespace PapeleriaBaez.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PaqueteCanjeId");
 
                     b.HasIndex("TenisCanjeId");
 
@@ -797,6 +802,11 @@ namespace PapeleriaBaez.Migrations
 
             modelBuilder.Entity("PapeleriaBaez.Models.DevolucionFabricaCanje", b =>
                 {
+                    b.HasOne("PapeleriaBaez.Models.PaqueteCanje", "PaqueteCanje")
+                        .WithMany()
+                        .HasForeignKey("PaqueteCanjeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("PapeleriaBaez.Models.TenisCanje", "TenisCanje")
                         .WithMany()
                         .HasForeignKey("TenisCanjeId")
@@ -806,6 +816,8 @@ namespace PapeleriaBaez.Migrations
                         .WithMany()
                         .HasForeignKey("UniformeCanjeId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("PaqueteCanje");
 
                     b.Navigation("TenisCanje");
 

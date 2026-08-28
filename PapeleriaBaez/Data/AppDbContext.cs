@@ -181,6 +181,12 @@ namespace PapeleriaBaez.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<DevolucionFabricaCanje>()
+                .HasOne(d => d.PaqueteCanje)
+                .WithMany()
+                .HasForeignKey(d => d.PaqueteCanjeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DevolucionFabricaCanje>()
                 .HasOne(d => d.UniformeCanje)
                 .WithMany()
                 .HasForeignKey(d => d.UniformeCanjeId)

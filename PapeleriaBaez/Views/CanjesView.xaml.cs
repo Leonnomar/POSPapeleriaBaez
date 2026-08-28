@@ -69,6 +69,7 @@ namespace PapeleriaBaez.Views
 
             cmbDevClienteTipoArticulo.ItemsSource = new[]
             {
+                "Utiles",
                 "Uniforme",
                 "Tenis"
             };
@@ -1737,6 +1738,336 @@ namespace PapeleriaBaez.Views
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
+        }
+
+        private void cmbDevFabricaTipoArticulo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevFabricaTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            cmbDevFabricaTipo.ItemsSource = null;
+            cmbDevFabricaColor.ItemsSource = null;
+            cmbDevFabricaTalla.ItemsSource = null;
+
+            using var db = new AppDbContext();
+
+            if (tipoArticulo == "Utiles")
+            {
+                cmbDevFabricaTipo.ItemsSource = db.PaquetesCanje
+                    .OrderBy(p => p.NumeroPaquete)
+                    .Select(p => $"Paquete {p.NumeroPaquete}")
+                    .ToList();
+
+                cmbDevFabricaColor.IsEnabled = false;
+                cmbDevFabricaTalla.IsEnabled = false;
+            }
+            else if (tipoArticulo == "Uniforme")
+            {
+                cmbDevFabricaColor.IsEnabled = true;
+                cmbDevFabricaTalla.IsEnabled = true;
+
+                cmbDevFabricaTipo.ItemsSource = db.UniformesCanje
+                    .Select(u => u.Tipo)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+            }
+            else if (tipoArticulo == "Tenis")
+            {
+                cmbDevFabricaColor.IsEnabled = false;
+                cmbDevFabricaTalla.IsEnabled = true;
+
+                cmbDevFabricaTipo.ItemsSource = new[] { "Tenis" };
+
+                cmbDevFabricaTipo.SelectedIndex = 0;
+            }
+        }
+
+        private void cmbDevFabricaTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevFabricaTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            cmbDevFabricaColor.ItemsSource = null;
+            cmbDevFabricaTalla.ItemsSource = null;
+
+            using var db = new AppDbContext();
+
+            if (tipoArticulo == "Uniforme")
+            {
+                string tipo = cmbDevFabricaTipo.SelectedItem?.ToString() ?? "";
+
+                cmbDevFabricaColor.ItemsSource = db.UniformesCanje
+                    .Where(u => u.Tipo == tipo)
+                    .Select(u => u.Color)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+            }
+            else if (tipoArticulo == "Tenis")
+            {
+                cmbDevFabricaColor.ItemsSource = new[] { "-" };
+
+                cmbDevFabricaColor.SelectedIndex = 0;
+
+                cmbDevFabricaTalla.ItemsSource = db.TenisCanjes
+                    .OrderBy(t => t.Talla)
+                    .Select(t => t.Talla)
+                    .ToList();
+            }
+        }
+
+        private void cmbDevFabricaColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevFabricaTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            if (tipoArticulo != "Uniforme")
+                return;
+
+            string tipo = cmbDevFabricaTipo.SelectedItem?.ToString() ?? "";
+
+            string color = cmbDevFabricaColor.SelectedItem?.ToString() ?? "";
+
+            using var db = new AppDbContext();
+
+            cmbDevFabricaTalla.ItemsSource = db.UniformesCanje
+                .Where(u =>
+                    u.Tipo == tipo &&
+                    u.Color == color)
+                .Select(u => u.Talla)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+        }
+        
+        private void BtnRegistrarDevolucionFabrica_Click(object sender, RoutedEventArgs e)
+        {
+            string tipoDevolucion = cmbDevFabricaTipoDevolucion.SelectedItem?.ToString() ?? "";
+
+            string tipoArticulo = cmbDevFabricaTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(tipoDevolucion) ||
+                string.IsNullOrWhiteSpace(tipoArticulo))
+            {
+                MessageBox.Show("Seleccione el tipo de devolución y el tipo de artículo");
+
+                return;
+            }
+
+            if (!int.TryParse(
+                    txtDevFabricaCantidad.Text,
+                    out int cantidad) ||
+                cantidad <= 0)
+            {
+                MessageBox.Show("Capture una cantidad válida.");
+
+                return;
+            }
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                if (tipoArticulo == "Utiles")
+                {
+                    string seleccionado = cmbDevFabricaTipo.SelectedItem?.ToString() ?? "";
+
+                    if (string.IsNullOrWhiteSpace(seleccionado))
+                    {
+                        MessageBox.Show("Seleccione un paquete.");
+                        return;
+                    }
+
+                    string numeroTexto = seleccionado.Replace("Paquete", "").Trim();
+
+                    if (!int.TryParse(numeroTexto, out int numeroPaquete))
+                    {
+                        MessageBox.Show("Paquete inválido.");
+                        return;
+                    }
+
+                    var paquete = db.PaquetesCanje
+                        .FirstOrDefault(p =>
+                            p.NumeroPaquete == numeroPaquete);
+
+                    if (paquete == null)
+                    {
+                        MessageBox.Show("No se encontró el paquete.");
+
+                        return;
+                    }
+
+                    if (paquete.Existencia < cantidad)
+                    {
+                        MessageBox.Show(
+                            $"No hay suficiente existencia.\n\n" +
+                            $"Disponibles: {paquete.Existencia}");
+
+                        return;
+                    }
+
+                    paquete.Existencia -= cantidad;
+
+                    db.DevolucionesFabricaCanje.Add(
+                        new DevolucionFabricaCanje
+                        {
+                            Fecha = DateTime.Now,
+
+                            TipoDevolucion = tipoDevolucion,
+
+                            TipoArticulo = "Utiles",
+
+                            PaqueteCanjeId = paquete.Id,
+
+                            Cantidad = cantidad,
+
+                            EstadoReposicion =
+                                tipoDevolucion == "Defectuosa"
+                                    ? "Pendiente"
+                                    : "",
+
+                            FechaReposicion = null,
+
+                            Observacion = txtDevFabricaObservacion.Text.Trim()
+                        });
+                }
+                else if (tipoArticulo == "Uniforme")
+                {
+                    string tipo = cmbDevFabricaTipo.SelectedItem?.ToString() ?? "";
+
+                    string color = cmbDevFabricaColor.SelectedItem?.ToString() ?? "";
+
+                    string talla = cmbDevFabricaTalla.SelectedItem?.ToString() ?? "";
+
+                    var uniforme = db.UniformesCanje
+                        .FirstOrDefault(u =>
+                            u.Tipo == tipo &&
+                            u.Color == color &&
+                            u.Talla == talla);
+
+                    if (uniforme == null)
+                    {
+                        MessageBox.Show("No se encontró el uniforme.");
+
+                        return;
+                    }
+
+                    if (uniforme.Existencia < cantidad)
+                    {
+                        MessageBox.Show(
+                            $"No hay suficiente existencia.\n\n" +
+                            $"Disponibles: {uniforme.Existencia}");
+
+                        return;
+                    }
+
+                    uniforme.Existencia -= cantidad;
+
+                    db.DevolucionesFabricaCanje.Add(
+                        new DevolucionFabricaCanje
+                        {
+                            Fecha = DateTime.Now,
+                            TipoDevolucion = tipoDevolucion,
+                            TipoArticulo = "Uniforme",
+                            UniformeCanjeId = uniforme.Id,
+                            Cantidad = cantidad,
+
+                            EstadoReposicion =
+                                tipoDevolucion == "Defectuosa"
+                                    ? "Pendiente"
+                                    : "",
+
+                            FechaReposicion = null,
+
+                            Observacion = txtDevFabricaObservacion.Text.Trim()
+                        });
+                }
+                else if (tipoArticulo == "Tenis")
+                {
+                    string talla = cmbDevFabricaTalla.SelectedItem?.ToString() ?? "";
+
+                    var tenis = db.TenisCanjes
+                        .FirstOrDefault(t =>
+                            t.Talla == talla);
+
+                    if (tenis == null)
+                    {
+                        MessageBox.Show("No se encontró la talla.");
+
+                        return;
+                    }
+
+                    if (tenis.Existencia < cantidad)
+                    {
+                        MessageBox.Show(
+                            $"No hay suficiente existencia.\n\n" +
+                            $"Disponibles: {tenis.Existencia}");
+
+                        return;
+                    }
+
+                    tenis.Existencia -= cantidad;
+
+                    db.DevolucionesFabricaCanje.Add(
+                        new DevolucionFabricaCanje
+                        {
+                            Fecha = DateTime.Now,
+                            TipoDevolucion = tipoDevolucion,
+                            TipoArticulo = "Tenis",
+                            TenisCanjeId = tenis.Id,
+                            Cantidad = cantidad,
+
+                            EstadoReposicion =
+                                tipoDevolucion == "Defectuosa"
+                                    ? "Pendiente"
+                                    : "",
+
+                            FechaReposicion = null,
+
+                            Observacion = txtDevFabricaObservacion.Text.Trim()
+                        });
+                }
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                MessageBox.Show(
+                    tipoDevolucion == "Defectuosa"
+                        ? "Devolución defectuosa registrada. Quedó pendiente de reposición."
+                        : "Devolución final registrada correctamente.",
+                    "Devolución a fábrica",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                LimpiarDevolucionFabrica();
+
+                CargarUniformes();
+                CargarTenis();
+                CargarComboEntregaTenis();
+                CargarResumenCanjes();
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al registrar devolución",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void LimpiarDevolucionFabrica()
+        {
+            cmbDevFabricaTipoDevolucion.SelectedIndex = -1;
+            cmbDevFabricaTipoArticulo.SelectedIndex = -1;
+
+            cmbDevFabricaTipo.ItemsSource = null;
+            cmbDevFabricaColor.ItemsSource = null;
+            cmbDevFabricaTalla.ItemsSource = null;
+
+            txtDevFabricaCantidad.Text = "1";
+            txtDevFabricaObservacion.Clear();
         }
 
         private void CargarTallasPorTipo(string tipo)

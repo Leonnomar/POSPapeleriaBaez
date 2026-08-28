@@ -802,7 +802,7 @@
                                             <ComboBox x:Name="cmbDevClienteTipoArticulo"
                                                       Height="30"
                                                       Margin="0,5,0,10"
-                                                      SelectionChanged="cmbDevClenteTipoArticulo_SelectionChanged"/>
+                                                      SelectionChanged="cmbDevClienteTipoArticulo_SelectionChanged"/>
 
 
                                             <TextBlock Text="Tipo / Prenda"/>
@@ -966,7 +966,7 @@
                                               Grid.Column="3"
                                               Height="30"
                                               Margin="10,0"
-                                              SelectionChanged="cmbDevFabricaColor_Selection"/>
+                                              SelectionChanged="cmbDevFabricaColor_SelectionChanged"/>
 
                                     <TextBlock Grid.Column="4"
                                                Text="Talla:"
