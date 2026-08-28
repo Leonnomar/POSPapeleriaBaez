@@ -961,17 +961,61 @@
                                     <TextBlock Grid.Column="2"
                                                Text="Color:"
                                                VerticalAlignment="Center"/>
-                                    
+
                                     <ComboBox x:Name="cmbDevFabricaColor"
                                               Grid.Column="3"
                                               Height="30"
                                               Margin="10,0"
-                                              SelectionChanged="cmbDevFabricaColor_Selection"
-                                    </Grid>
+                                              SelectionChanged="cmbDevFabricaColor_Selection"/>
+
+                                    <TextBlock Grid.Column="4"
+                                               Text="Talla:"
+                                               VerticalAlignment="Center"/>
+
+                                    <ComboBox x:Name="cmbDevFabricaTalla"
+                                              Grid.Column="5"
+                                              Height="30"
+                                              Margin="10,0"/>
+
+                                    <TextBlock Grid.Column="6"
+                                               Text="Cantidad:"
+                                               VerticalAlignment="Center"/>
+
+                                    <TextBox x:Name="txtDevFabricaCantidad"
+                                             Grid.Column="7"
+                                             Height="30"
+                                             Text="1"
+                                             Margin="10,0"/>
+
+                                </Grid>
+
+                                <StackPanel Grid.Row="3"
+                                            Margin="0,15,0,0">
+
+                                    <TextBlock Text="Observación"/>
+
+                                    <TextBox x:Name="txtDevFabricaObservacion"
+                                             Height="60"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"
+                                             Margin="0,5,0,10"/>
+
+                                    <Button Content="Registrar devolución"
+                                            Width="190"
+                                            Height="40"
+                                            HorizontalAlignment="Right"
+                                            Click="BtnRegistrarDevolucionFabrica_Click"/>
+                                    
+                                </StackPanel>
+                                
                             </Grid>
+                            
                         </TabItem>
+                        
                     </TabControl>
+                    
                 </Grid>
+                
             </TabItem>
 
             <!-- RESUMEN -->

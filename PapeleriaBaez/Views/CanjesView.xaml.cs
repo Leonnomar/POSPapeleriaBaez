@@ -66,6 +66,30 @@ namespace PapeleriaBaez.Views
 
             cmbColorUniforme.ItemsSource = null;
             cmbTallaUniforme.ItemsSource = null;
+
+            cmbDevClienteTipoArticulo.ItemsSource = new[]
+            {
+                "Uniforme",
+                "Tenis"
+            };
+
+            cmbDevClienteTipoCambio.ItemsSource = new[]
+            {
+                "CambioTalla",
+                "MismaTalla"
+            };
+
+            cmbDevFabricaTipoDevolucion.ItemsSource = new[]
+            {
+                "Defectuosa",
+                "Final"
+            };
+
+            cmbDevFabricaTipoArticulo.ItemsSource = new[]
+            {
+                "Uniforme",
+                "Tenis"
+            };
         }
 
         private void CargarComboEntregaPaquetes()
@@ -1372,6 +1396,346 @@ namespace PapeleriaBaez.Views
                 lblExistenciaTenis.Text = "Disponibles: 0";
 
                 btnRegistrarEntregaTenis.IsEnabled = false;
+            }
+        }
+
+        private void cmbDevClienteTipoArticulo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevClienteTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            cmbDevClienteDevueltoTipo.ItemsSource = null;
+            cmbDevClienteDevueltoColor.ItemsSource = null;
+            cmbDevClienteDevueltoTalla.ItemsSource = null;
+
+            cmbDevClienteEntregadoTipo.ItemsSource = null;
+            cmbDevClienteEntregadoColor.ItemsSource = null;
+            cmbDevClienteEntregadoTalla.ItemsSource = null;
+
+            lblDevClienteExistenciaNueva.Text = "Disponibles: 0";
+
+            using var db = new AppDbContext();
+
+            if (tipoArticulo == "Uniforme")
+            {
+                var tipos = db.UniformesCanje
+                    .Select(u => u.Tipo)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+
+                cmbDevClienteDevueltoTipo.ItemsSource = tipos;
+                cmbDevClienteEntregadoTipo.ItemsSource = tipos;
+            }
+            else if (tipoArticulo == "Tenis")
+            {
+                cmbDevClienteDevueltoTipo.ItemsSource = new[] { "Tenis" };
+
+                cmbDevClienteEntregadoTipo.ItemsSource = new[] { "Tenis" };
+
+                cmbDevClienteDevueltoTipo.SelectedIndex = 0;
+                cmbDevClienteEntregadoTipo.SelectedIndex = 0;
+            }
+        }
+
+        private void cmbDevClienteDevueltoTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevClienteTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            cmbDevClienteDevueltoColor.ItemsSource = null;
+            cmbDevClienteDevueltoTalla.ItemsSource = null;
+
+            using var db = new AppDbContext();
+
+            if (tipoArticulo == "Uniforme")
+            {
+                string tipo = cmbDevClienteDevueltoTipo.SelectedItem?.ToString() ?? "";
+
+                var colores = db.UniformesCanje
+                    .Where(u => u.Tipo == tipo)
+                    .Select(u => u.Color)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+
+                cmbDevClienteDevueltoColor.ItemsSource = colores;
+            }
+            else if (tipoArticulo == "Tenis")
+            {
+                cmbDevClienteDevueltoColor.ItemsSource = new[] { "-" };
+
+                cmbDevClienteDevueltoColor.SelectedIndex = 0;
+
+                var tallas = db.TenisCanjes
+                    .OrderBy(t => t.Talla)
+                    .Select(t => t.Talla)
+                    .ToList();
+
+                cmbDevClienteDevueltoTalla.ItemsSource= tallas;
+            }    
+        }
+
+        private void cmbDevClienteDevueltoColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevClienteTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            if (tipoArticulo != "Uniforme")
+                return;
+
+            string tipo = cmbDevClienteDevueltoTipo.SelectedItem?.ToString() ?? "";
+
+            string color = cmbDevClienteDevueltoColor.SelectedItem?.ToString() ?? "";
+
+            using var db = new AppDbContext();
+
+            cmbDevClienteDevueltoTalla.ItemsSource =
+                db.UniformesCanje
+                    .Where(u =>
+                        u.Tipo == tipo &&
+                        u.Color == color)
+                    .Select(u => u.Talla)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+        }
+
+        private void cmbDevClienteEntregadoTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevClienteTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            cmbDevClienteEntregadoColor.ItemsSource = null;
+            cmbDevClienteEntregadoTalla.ItemsSource = null;
+
+            using var db = new AppDbContext();
+
+            if (tipoArticulo == "Uniforme")
+            {
+                string tipo = cmbDevClienteEntregadoTipo.SelectedItem?.ToString() ?? "";
+
+                cmbDevClienteEntregadoColor.ItemsSource =
+                    db.UniformesCanje
+                        .Where(u => u.Tipo == tipo)
+                        .Select(u => u.Color)
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToList();
+            }
+            else if (tipoArticulo == "Tenis")
+            {
+                cmbDevClienteEntregadoColor.ItemsSource = new[] { "-" };
+
+                cmbDevClienteEntregadoColor.SelectedIndex = 0;
+
+                cmbDevClienteEntregadoTalla.ItemsSource =
+                    db.TenisCanjes
+                        .OrderBy(t => t.Talla)
+                        .Select(t => t.Talla)
+                        .ToList();
+            }
+        }
+
+        private void cmbDevClienteEntregadoColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevClienteTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            if (tipoArticulo != "Uniforme")
+                return;
+
+            string tipo = cmbDevClienteEntregadoTipo.SelectedItem?.ToString() ?? "";
+
+            string color = cmbDevClienteEntregadoColor.SelectedItem?.ToString() ?? "";
+
+            using var db = new AppDbContext();
+
+            cmbDevClienteEntregadoTalla.ItemsSource =
+                db.UniformesCanje
+                    .Where(u =>
+                        u.Tipo == tipo &&
+                        u.Color == color)
+                    .Select(u => u.Talla)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+        }
+
+        private void cmbDevClienteEntregadoTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tipoArticulo = cmbDevClienteTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            using var db = new AppDbContext();
+
+            if (tipoArticulo == "Uniforme")
+            {
+                string tipo = cmbDevClienteEntregadoTipo.SelectedItem?.ToString() ?? "";
+
+                string color = cmbDevClienteEntregadoColor.SelectedItem?.ToString() ?? "";
+
+                string talla = cmbDevClienteEntregadoTalla.SelectedItem?.ToString() ?? "";
+
+                var uniforme = db.UniformesCanje
+                    .FirstOrDefault(u =>
+                        u.Tipo == tipo &&
+                        u.Color == color &&
+                        u.Talla == talla);
+
+                lblDevClienteExistenciaNueva.Text = $"Disponibles: {uniforme?.Existencia ?? 0}";
+            }
+            else if (tipoArticulo == "Tenis")
+            {
+                string talla = cmbDevClienteEntregadoTalla.SelectedItem?.ToString() ?? "";
+
+                var tenis = db.TenisCanjes
+                    .FirstOrDefault(t => t.Talla == talla);
+
+                lblDevClienteExistenciaNueva.Text = $"Disponibles: {tenis?.Existencia ?? 0}";
+            }
+        }
+
+        private void BtnRegistrarDevolucionCliente_Click(object sender, RoutedEventArgs e)
+        {
+            string tipoArticulo = cmbDevClienteTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            string tipoCambio = cmbDevClienteTipoCambio.SelectedItem?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(tipoArticulo) ||
+                string.IsNullOrWhiteSpace(tipoCambio))
+            {
+                MessageBox.Show("Seleccione el tipo de artículo y el tipo de cambio.");
+
+                return;
+            }
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                if (tipoArticulo == "Uniforme")
+                {
+                    string devTipo = cmbDevClienteDevueltoTipo.SelectedItem?.ToString() ?? "";
+
+                    string devColor = cmbDevClienteDevueltoColor.SelectedItem?.ToString() ?? "";
+
+                    string devTalla = cmbDevClienteDevueltoTalla.SelectedItem?.ToString() ?? "";
+
+                    string entTipo = cmbDevClienteEntregadoTipo.SelectedItem?.ToString() ?? "";
+
+                    string entColor = cmbDevClienteEntregadoColor.SelectedItem?.ToString() ?? "";
+
+                    string entTalla = cmbDevClienteEntregadoTalla.SelectedItem?.ToString() ?? "";
+
+                    var devuelto = db.UniformesCanje
+                        .FirstOrDefault(u =>
+                            u.Tipo == devTipo &&
+                            u.Color == devColor &&
+                            u.Talla == devTalla);
+
+                    var entregado = db.UniformesCanje
+                        .FirstOrDefault(u =>
+                            u.Tipo == entTipo &&
+                            u.Color == entColor &&
+                            u.Talla == entTalla);
+
+                    if (devuelto == null || entregado == null)
+                    {
+                        MessageBox.Show("No se encontró alguno de los uniformes.");
+
+                        return;
+                    }
+
+                    if (entregado.Existencia <= 0)
+                    {
+                        MessageBox.Show("No hay existencia disponible del uniforme que se quiere entregar.");
+
+                        return;
+                    }
+
+                    devuelto.Existencia++;
+
+                    entregado.Existencia--;
+
+                    db.DevolucionesClienteCanje.Add(
+                        new DevolucionClienteCanje
+                        {
+                            Fecha = DateTime.Now,
+                            TipoCambio = tipoCambio,
+                            TipoArticulo = "Uniforme",
+
+                            UniformeDevueltoId = devuelto.Id,
+
+                            UniformeEntregadoId = entregado.Id,
+
+                            Observacion = txtDevClienteObservacion.Text.Trim()
+                        });
+                }
+                else if (tipoArticulo == "Tenis")
+                {
+                    string devTalla = cmbDevClienteDevueltoTalla.SelectedItem?.ToString() ?? "";
+
+                    string entTalla = cmbDevClienteEntregadoTalla.SelectedItem?.ToString() ?? "";
+
+                    var devuelto = db.TenisCanjes
+                        .FirstOrDefault(t =>
+                            t.Talla == devTalla);
+
+                    var entregado = db.TenisCanjes
+                        .FirstOrDefault(t =>
+                            t.Talla == entTalla);
+
+                    if (devuelto == null || entregado == null)
+                    {
+                        MessageBox.Show("No se encontró alguno de los tenis.");
+
+                        return;
+                    }
+
+                    if (entregado.Existencia <= 0)
+                    {
+                        MessageBox.Show("No hay existencia disponible de la talla que se quiere entregar.");
+
+                        return;
+                    }
+
+                    devuelto.Existencia++;
+                    entregado.Existencia--;
+
+                    db.DevolucionesClienteCanje.Add(
+                        new DevolucionClienteCanje
+                        {
+                            Fecha = DateTime.Now,
+                            TipoCambio = tipoCambio,
+                            TipoArticulo = "Tenis",
+
+                            TenisDevueltoId = devuelto.Id,
+
+                            TenisEntregadoId = entregado.Id,
+
+                            Observacion = txtDevClienteObservacion.Text.Trim()
+                        });
+                }
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                MessageBox.Show(
+                    "Cambio registrado correctamente.",
+                    "Devolución cliente",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                CargarUniformes();
+                CargarTenis();
+                CargarComboEntregaTenis();
+                CargarResumenCanjes();
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al registrar cambio",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
