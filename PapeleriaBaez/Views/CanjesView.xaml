@@ -775,241 +775,227 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Text="Devolución / Intercambio con cliente"
                                            FontSize="20"
                                            FontWeight="Bold"
-                                           Margin="0,0,0,15"/>
+                                           Margin="0,0,0,20"/>
 
-                                <Grid Grid.Row="1">
+                                <GroupBox Grid.Row="1"
+                                          Header="Cantidad de artículos a cambiar">
+                                                                                
+                                    <StackPanel Margin="15">
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    
-                                    <!-- ARTÍCULO DEVUELTO -->
-                                    <GroupBox Header="Artículo que devuelve"
-                                              Grid.Column="0">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0,0,0,15">
 
-                                        <StackPanel Margin="15">
+                                            <RadioButton x:Name="rbUnCambioCliente"
+                                                         Content="1 artículo"
+                                                         IsChecked="True"
+                                                         Margin="0,0,25,0"/>
 
-                                            <TextBlock Text="Tipo de artículo"/>
-
-                                            <ComboBox x:Name="cmbDevClienteTipoArticulo"
-                                                      Height="30"
-                                                      Margin="0,5,0,10"
-                                                      SelectionChanged="cmbDevClienteTipoArticulo_SelectionChanged"/>
-
-
-                                            <TextBlock Text="Tipo / Prenda"/>
-
-                                            <ComboBox x:Name="cmbDevClienteDevueltoTipo"
-                                                      Height="30"
-                                                      Margin="0,5,0,10"
-                                                      SelectionChanged="cmbDevClienteDevueltoTipo_SelectionChanged"/>
-
-                                            <TextBlock Text="Color"/>
-
-                                            <ComboBox x:Name="cmbDevClienteDevueltoColor"
-                                                      Height="30"
-                                                      Margin="0,5,0,10"
-                                                      SelectionChanged="cmbDevClienteDevueltoColor_SelectionChanged"/>
-
-                                            <TextBlock Text="Talla"/>
-
-                                            <ComboBox x:Name="cmbDevClienteDevueltoTalla"
-                                                      Height="30"
-                                                      Margin="0,5,0,10"/>
+                                            <RadioButton x:Name="rbDosCambiosCliente"
+                                                         Content="2 artículos"/>
                                             
                                         </StackPanel>
-                                        
-                                    </GroupBox>
-                                    
-                                    <!-- ARTÍCULO NUEVO -->
-                                    <GroupBox Header="Artículo que se entrega"
-                                              Grid.Column="2">
 
-                                        <StackPanel Margin="15">
+                                        <TextBlock Text="Puede ser cambio de talla o cambio por otra pieza de la misma talla."
+                                                   Foreground="Gray"
+                                                   TextWrapping="Wrap"/>
 
-                                            <TextBlock Text="Tipo de cambio"/>
+                                    </StackPanel>
 
-                                            <ComboBox x:Name="cmbDevClienteTipoCambio"
-                                                      Height="30"
-                                                      Margin="0,5,0,10"/>
+                                </GroupBox>
 
-                                            <TextBlock Text="Tipo / Prenda"/>
-
-                                            <ComboBox x:Name="cmbDevClienteEntregadoTipo"
-                                                      Height="30"
-                                                      Margin="0,5,0,10"
-                                                      SelectionChanged="cmbDevClienteEntregadoTipo_SelectionChanged"/>
-
-                                            <TextBlock Text="Color"/>
-
-                                            <ComboBox x:Name="cmbDevClienteEntregadoColor"
-                                                      Height="30"
-                                                      Margin="0,5,0,10"
-                                                      SelectionChanged="cmbDevClienteEntregadoColor_SelectionChanged"/>
-
-                                            <TextBlock Text="Talla"/>
-
-                                            <ComboBox x:Name="cmbDevClienteEntregadoTalla"
-                                                      Height="30"
-                                                      Margin="0,5,0,10"
-                                                      SelectionChanged="cmbDevClienteEntregadoTalla_SelectionChanged"/>
-
-                                            <TextBlock x:Name="lblDevClienteExistenciaNueva"
-                                                       Text="Disponibles: 0"
-                                                       FontWeight="Bold"
-                                                       Margin="0,5,0,0"/>
-                                            
-                                        </StackPanel>
-                                        
-                                    </GroupBox>
-                                    
-                                </Grid>
-
-                                <StackPanel Grid.Row="2"
-                                            Margin="0,15,0,0">
-
-                                    <TextBlock Text="Observación"/>
-
-                                    <TextBox x:Name="txtDevClienteObservacion"
-                                             Height="60"
-                                             AcceptsReturn="True"
-                                             TextWrapping="Wrap"
-                                             Margin="0,5,0,10"/>
-
-                                    <Button Content="Registrar cambio"
-                                            Width="180"
-                                            Height="40"
-                                            HorizontalAlignment="Right"
-                                            Click="BtnRegistrarDevolucionCliente_Click"/>
-                                    
-                                </StackPanel>
+                                <Button Grid.Row="2"
+                                        Content="🔄 Capturar cambios"
+                                        Width="180"
+                                        Height="45"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,20,0,0"
+                                        Click="BtnCapturarCambiosCliente_Click"/>
                                 
                             </Grid>
-                            
+
                         </TabItem>
                         
                         <!-- DEVOLUCIÓN FÁBRICA -->
                         <TabItem Header="🏭 Fábrica">
 
-                            <Grid Margin="15">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
+                                <Grid Margin="15">
 
-                                <TextBlock Text="Devolución a fábrica"
-                                           FontSize="20"
-                                           FontWeight="Bold"
-                                           Margin="0,0,0,15"/>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                <WrapPanel Grid.Row="1"
-                                           Margin="0,0,0,15">
+                                    <TextBlock Text="Devolución a fábrica"
+                                               FontSize="20"
+                                               FontWeight="Bold"
+                                               Margin="0,0,0,15"/>
 
-                                    <TextBlock Text="Tipo devolución"
-                                               VerticalAlignment="Center"/>
+                                    <WrapPanel Grid.Row="1"
+                                               Margin="0,0,0,15">
 
-                                    <ComboBox x:Name="cmbDevFabricaTipoDevolucion"
-                                              Width="180"
-                                              Height="30"
-                                              Margin="10,0"/>
+                                        <TextBlock Text="Tipo devolución"
+                                                   VerticalAlignment="Center"/>
 
-                                    <TextBlock Text="Artículo:"
-                                               VerticalAlignment="Center"
-                                               Margin="20,0,0,0"/>
+                                        <ComboBox x:Name="cmbDevFabricaTipoDevolucion"
+                                                  Width="180"
+                                                  Height="30"
+                                                  Margin="10,0"/>
 
-                                    <ComboBox x:Name="cmbDevFabricaTipoArticulo"
-                                              Width="140"
-                                              Height="30"
-                                              Margin="10,0"
-                                              SelectionChanged="cmbDevFabricaTipoArticulo_SelectionChanged"/>
-                                    
-                                </WrapPanel>
+                                        <TextBlock Text="Artículo:"
+                                                   VerticalAlignment="Center"
+                                                   Margin="20,0,0,0"/>
 
-                                <Grid Grid.Row="2">
+                                        <ComboBox x:Name="cmbDevFabricaTipoArticulo"
+                                                  Width="140"
+                                                  Height="30"
+                                                  Margin="10,0"
+                                                  SelectionChanged="cmbDevFabricaTipoArticulo_SelectionChanged"/>
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="180"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="140"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="120"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="100"/>
-                                    </Grid.ColumnDefinitions>
+                                    </WrapPanel>
 
-                                    <TextBlock Text="Tipo / Prenda:"
-                                               VerticalAlignment="Center"/>
+                                    <Grid Grid.Row="2">
 
-                                    <ComboBox x:Name="cmbDevFabricaTipo"
-                                              Grid.Column="1"
-                                              Height="30"
-                                              Margin="10,0"
-                                              SelectionChanged="cmbDevFabricaTipo_SelectionChanged"/>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="180"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="100"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Column="2"
-                                               Text="Color:"
-                                               VerticalAlignment="Center"/>
+                                        <TextBlock Text="Tipo / Prenda:"
+                                                   VerticalAlignment="Center"/>
 
-                                    <ComboBox x:Name="cmbDevFabricaColor"
-                                              Grid.Column="3"
-                                              Height="30"
-                                              Margin="10,0"
-                                              SelectionChanged="cmbDevFabricaColor_SelectionChanged"/>
+                                        <ComboBox x:Name="cmbDevFabricaTipo"
+                                                  Grid.Column="1"
+                                                  Height="30"
+                                                  Margin="10,0"
+                                                  SelectionChanged="cmbDevFabricaTipo_SelectionChanged"/>
 
-                                    <TextBlock Grid.Column="4"
-                                               Text="Talla:"
-                                               VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2"
+                                                   Text="Color:"
+                                                   VerticalAlignment="Center"/>
 
-                                    <ComboBox x:Name="cmbDevFabricaTalla"
-                                              Grid.Column="5"
-                                              Height="30"
-                                              Margin="10,0"/>
+                                        <ComboBox x:Name="cmbDevFabricaColor"
+                                                  Grid.Column="3"
+                                                  Height="30"
+                                                  Margin="10,0"
+                                                  SelectionChanged="cmbDevFabricaColor_SelectionChanged"/>
 
-                                    <TextBlock Grid.Column="6"
-                                               Text="Cantidad:"
-                                               VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="4"
+                                                   Text="Talla:"
+                                                   VerticalAlignment="Center"/>
 
-                                    <TextBox x:Name="txtDevFabricaCantidad"
-                                             Grid.Column="7"
-                                             Height="30"
-                                             Text="1"
-                                             Margin="10,0"/>
+                                        <ComboBox x:Name="cmbDevFabricaTalla"
+                                                  Grid.Column="5"
+                                                  Height="30"
+                                                  Margin="10,0"/>
+
+                                        <TextBlock Grid.Column="6"
+                                                   Text="Cantidad:"
+                                                   VerticalAlignment="Center"/>
+
+                                        <TextBox x:Name="txtDevFabricaCantidad"
+                                                 Grid.Column="7"
+                                                 Height="30"
+                                                 Text="1"
+                                                 Margin="10,0"/>
+
+                                    </Grid>
+
+                                    <StackPanel Grid.Row="3"
+                                                Margin="0,15,0,0">
+
+                                        <TextBlock Text="Observación"/>
+
+                                        <TextBox x:Name="txtDevFabricaObservacion"
+                                                 Height="60"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 Margin="0,5,0,10"/>
+
+                                        <Button Content="Registrar devolución"
+                                                Width="190"
+                                                Height="40"
+                                                HorizontalAlignment="Right"
+                                                Click="BtnRegistrarDevolucionFabrica_Click"/>
+
+                                    </StackPanel>
+
+                                    <GroupBox Grid.Row="4"
+                                              Header="📦 Reposiciones pendientes"
+                                              Margin="0,20,0,0">
+
+                                        <Grid Margin="10">
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <DataGrid x:Name="dgReposicionesPendientes"
+                                                      AutoGenerateColumns="False"
+                                                      CanUserAddRows="False"
+                                                      IsReadOnly="True"
+                                                      SelectionMode="Single">
+
+                                                <DataGrid.Columns>
+
+                                                    <DataGridTextColumn Header="Folio"
+                                                                        Binding="{Binding Id}"
+                                                                        Width="70"/>
+
+                                                    <DataGridTextColumn Header="Fecha"
+                                                                        Binding="{Binding Fecha,
+                                                                        StringFormat=dd/MM/yyyy}"
+                                                                        Width="110"/>
+
+                                                    <DataGridTextColumn Header="Artículo"
+                                                                        Binding="{Binding Descripcion}"
+                                                                        Width="*"/>
+
+                                                    <DataGridTextColumn Header="Cantidad"
+                                                                        Binding="{Binding Cantidad}"
+                                                                        Width="90"/>
+
+                                                    <DataGridTextColumn Header="Estado"
+                                                                        Binding="{Binding EstadoReposicion}"
+                                                                        Width="100"/>
+
+                                                </DataGrid.Columns>
+
+                                            </DataGrid>
+
+                                            <Button Grid.Row="1"
+                                                    Content="✅ Registrar reposición recibida"
+                                                    Width="220"
+                                                    Height="40"
+                                                    HorizontalAlignment="Right"
+                                                    Margin="0,10,0,0"
+                                                    Click="BtnRegistrarReposicion_Click"/>
+
+                                        </Grid>
+
+                                    </GroupBox>
 
                                 </Grid>
 
-                                <StackPanel Grid.Row="3"
-                                            Margin="0,15,0,0">
+                            </ScrollViewer>
 
-                                    <TextBlock Text="Observación"/>
-
-                                    <TextBox x:Name="txtDevFabricaObservacion"
-                                             Height="60"
-                                             AcceptsReturn="True"
-                                             TextWrapping="Wrap"
-                                             Margin="0,5,0,10"/>
-
-                                    <Button Content="Registrar devolución"
-                                            Width="190"
-                                            Height="40"
-                                            HorizontalAlignment="Right"
-                                            Click="BtnRegistrarDevolucionFabrica_Click"/>
-                                    
-                                </StackPanel>
-                                
-                            </Grid>
-                            
                         </TabItem>
                         
                     </TabControl>

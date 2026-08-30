@@ -1,0 +1,258 @@
+﻿<Window x:Class="PapeleriaBaez.Views.CapturarCambiosCanjeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PapeleriaBaez.Views"
+        mc:Ignorable="d"
+        Title="Cambios de Canje" 
+        Height="720" 
+        Width="950"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+        <Grid Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="🔄 Devolución / Intercambio"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       Margin="0,0,0,20"/>
+
+            <!-- CAMBIO 1 -->
+            <GroupBox Grid.Row="1"
+                      Header="Cambio 1"
+                      Margin="0,0,0,15">
+
+                <Grid Margin="15">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- DEVUELVE -->
+                    <GroupBox Header="Artículo que devuelve"
+                              Grid.Column="0">
+
+                        <StackPanel Margin="12">
+
+                            <TextBlock Text="Artículo"/>
+
+                            <ComboBox x:Name="cmbC1DevArticulo"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC1DevArticulo_SelectionChanged"/>
+
+                            <TextBlock Text="Tipo / Prenda"/>
+
+                            <ComboBox x:Name="cmbC1DevTipo"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC1DevTipo_SelectionChanged"/>
+
+                            <TextBlock Text="Color"/>
+
+                            <ComboBox x:Name="cmbC1DevColor"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC1DevColor_SelectionChanged"/>
+
+                            <TextBlock Text="Talla"/>
+
+                            <ComboBox x:Name="cmbC1DevTalla"
+                                      Height="30"
+                                      Margin="0,5,0,0"/>
+
+                        </StackPanel>
+
+                    </GroupBox>
+
+                    <!-- ENTREGA -->
+                    <GroupBox Header="Artículo que se entrega"
+                              Grid.Column="2">
+
+                        <StackPanel Margin="12">
+
+                            <TextBlock Text="Tipo de cambio"/>
+
+                            <ComboBox x:Name="cmbC1TipoCambio"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC1TipoCambio_SelectionChanged"/>
+
+                            <TextBlock Text="Tipo / Prenda"/>
+
+                            <ComboBox x:Name="cmbC1EntTipo"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC1EntTipo_SelectionChanged"/>
+
+                            <TextBlock Text="Color"/>
+
+                            <ComboBox x:Name="cmbC1EntColor"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC1EntColor_SelectionChanged"/>
+
+                            <TextBlock Text="Talla"/>
+
+                            <ComboBox x:Name="cmbC1EntTalla"
+                                      Height="30"
+                                      Margin="0,5,0,5"
+                                      SelectionChanged="cmbC1EntTalla_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblC1Disponibles"
+                                       Text="Disponibles: 0"
+                                       FontWeight="Bold"/>
+
+                        </StackPanel>
+
+                    </GroupBox>
+
+                </Grid>
+
+            </GroupBox>
+
+            <!-- CAMBIO 2-->
+            <GroupBox x:Name="grpCambio2"
+                      Grid.Row="2"
+                      Header="Cambio 2"
+                      Margin="0,0,0,15">
+
+                <Grid Margin="15">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- DEVUELVE -->
+                    <GroupBox Header="Artículo que devuelve"
+                              Grid.Column="0">
+
+                        <StackPanel Margin="12">
+
+                            <TextBlock Text="Artículo"/>
+
+                            <ComboBox x:Name="cmbC2DevArticulo"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC2DevArticulo_SelectionChanged"/>
+
+                            <TextBlock Text="Tipo / Prenda"/>
+
+                            <ComboBox x:Name="cmbC2DevTipo"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC2DevTipo_SelectionChanged"/>
+
+                            <TextBlock Text="Color"/>
+
+                            <ComboBox x:Name="cmbC2DevColor"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC2DevColor_SelectionChanged"/>
+
+                            <TextBlock Text="Talla"/>
+
+                            <ComboBox x:Name="cmbC2DevTalla"
+                                      Height="30"
+                                      Margin="0,5,0,0"/>
+
+                        </StackPanel>
+
+                    </GroupBox>
+
+                    <!-- ENTREGA -->
+                    <GroupBox Header="Artículo que se entrega"
+                              Grid.Column="2">
+
+                        <StackPanel Margin="12">
+
+                            <TextBlock Text="Tipo de cambio"/>
+
+                            <ComboBox x:Name="cmbC2TipoCambio"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC2TipoCambio_SelectionChanged"/>
+
+                            <TextBlock Text="Tipo / Prenda"/>
+
+                            <ComboBox x:Name="cmbC2EntTipo"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC2EntTipo_SelectionChanged"/>
+
+                            <TextBlock Text="Color"/>
+
+                            <ComboBox x:Name="cmbC2EntColor"
+                                      Height="30"
+                                      Margin="0,5,0,10"
+                                      SelectionChanged="cmbC2EntColor_SelectionChanged"/>
+
+                            <TextBlock Text="Talla"/>
+
+                            <ComboBox x:Name="cmbC2EntTalla"
+                                      Height="30"
+                                      Margin="0,5,0,5"
+                                      SelectionChanged="cmbC2EntTalla_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblC2Disponibles"
+                                       Text="Disponibles: 0"
+                                       FontWeight="Bold"/>
+
+                        </StackPanel>
+
+                    </GroupBox>
+
+                </Grid>
+
+            </GroupBox>
+
+            <!-- BOTONES -->
+            <StackPanel Grid.Row="3">
+
+                <TextBlock Text="Observación"
+                           Margin="0,0,0,5"/>
+
+                <TextBox x:Name="txtObservacion"
+                         Height="55"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"/>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,15,0,0">
+
+                    <Button Content="Cancelar"
+                            Width="120"
+                            Height="40"
+                            Margin="5"
+                            IsCancel="True"/>
+
+                    <Button Content="Registrar cambios"
+                            Width="170"
+                            Height="40"
+                            Margin="5"
+                            Click="BtnRegistrarCambios_Click"/>
+
+                </StackPanel>
+
+            </StackPanel>
+
+        </Grid>
+
+    </ScrollViewer>
+
+</Window>

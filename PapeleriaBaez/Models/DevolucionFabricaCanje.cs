@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PapeleriaBaez.Models
 {
@@ -24,6 +25,14 @@ namespace PapeleriaBaez.Models
 
         public int Cantidad { get; set; } = 1;
 
+        public int CantidadRespuesta { get; set; }
+
+        public int CantidadFinal { get; set; }
+
+        [NotMapped]
+        public int CantidadPendiente =>
+            Cantidad - CantidadRespuesta - CantidadFinal;
+        
         public string EstadoReposicion { get; set; } = "";
 
         public DateTime? FechaReposicion { get; set; }
@@ -35,5 +44,7 @@ namespace PapeleriaBaez.Models
         public UniformeCanje? UniformeCanje { get; set; }
 
         public TenisCanje? TenisCanje { get; set; }
+        
+        
     }
 }

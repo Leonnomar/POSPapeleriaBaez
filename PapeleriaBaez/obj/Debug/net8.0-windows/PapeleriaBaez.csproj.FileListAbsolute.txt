@@ -157,3 +157,4 @@ C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debu
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\PapeleriaBaez.pdb
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\PapeleriaBaez.genruntimeconfig.cache
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\ref\PapeleriaBaez.dll
+C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\CapturarCambiosCanjeWindow.g.cs

@@ -8,6 +8,9 @@
     <Compile Update="Views\CanjesView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\CapturarCambiosCanjeWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\CapturarConjuntosWindows.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

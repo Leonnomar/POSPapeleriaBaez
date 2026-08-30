@@ -53,6 +53,8 @@ namespace PapeleriaBaez.Data
 
         public DbSet<DevolucionClienteCanje> DevolucionesClienteCanje { get; set; }
 
+        public DbSet<DetalleDevolucionClienteCanje> DetalleDevolucionesClienteCanje { get; set; }
+
         public DbSet<DevolucionFabricaCanje> DevolucionesFabricaCanje { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -156,25 +158,31 @@ namespace PapeleriaBaez.Data
                 .HasForeignKey(d => d.TenisCanjeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DevolucionClienteCanje>()
+            modelBuilder.Entity<DetalleDevolucionClienteCanje>()
+                .HasOne(d => d.DevolucionClienteCanje)
+                .WithMany(c => c.Detalles)
+                .HasForeignKey(d => d.DevolucionClienteCanjeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DetalleDevolucionClienteCanje>()
                 .HasOne(d => d.UniformeDevuelto)
                 .WithMany()
                 .HasForeignKey(d => d.UniformeDevueltoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DevolucionClienteCanje>()
+            modelBuilder.Entity<DetalleDevolucionClienteCanje>()
                 .HasOne(d => d.UniformeEntregado)
                 .WithMany()
                 .HasForeignKey(d => d.UniformeEntregadoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DevolucionClienteCanje>()
+            modelBuilder.Entity<DetalleDevolucionClienteCanje>()
                 .HasOne(d => d.TenisDevuelto)
                 .WithMany()
                 .HasForeignKey(d => d.TenisDevueltoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DevolucionClienteCanje>()
+            modelBuilder.Entity<DetalleDevolucionClienteCanje>()
                 .HasOne(d => d.TenisEntregado)
                 .WithMany()
                 .HasForeignKey(d => d.TenisEntregadoId)

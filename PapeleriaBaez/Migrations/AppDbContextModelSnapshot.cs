@@ -309,6 +309,50 @@ namespace PapeleriaBaez.Migrations
                     b.ToTable("DetalleCompras");
                 });
 
+            modelBuilder.Entity("PapeleriaBaez.Models.DetalleDevolucionClienteCanje", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DevolucionClienteCanjeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("TenisDevueltoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("TenisEntregadoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TipoArticulo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TipoCambio")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("UniformeDevueltoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("UniformeEntregadoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DevolucionClienteCanjeId");
+
+                    b.HasIndex("TenisDevueltoId");
+
+                    b.HasIndex("TenisEntregadoId");
+
+                    b.HasIndex("UniformeDevueltoId");
+
+                    b.HasIndex("UniformeEntregadoId");
+
+                    b.ToTable("DetalleDevolucionesClienteCanje");
+                });
+
             modelBuilder.Entity("PapeleriaBaez.Models.DetalleVenta", b =>
                 {
                     b.Property<int>("Id")
@@ -388,35 +432,7 @@ namespace PapeleriaBaez.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TenisDevueltoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("TenisEntregadoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("TipoArticulo")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TipoCambio")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("UniformeDevueltoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("UniformeEntregadoId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TenisDevueltoId");
-
-                    b.HasIndex("TenisEntregadoId");
-
-                    b.HasIndex("UniformeDevueltoId");
-
-                    b.HasIndex("UniformeEntregadoId");
 
                     b.ToTable("DevolucionesClienteCanje");
                 });
@@ -428,6 +444,12 @@ namespace PapeleriaBaez.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CantidadFinal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CantidadRespuesta")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("EstadoReposicion")
@@ -740,6 +762,45 @@ namespace PapeleriaBaez.Migrations
                     b.Navigation("Producto");
                 });
 
+            modelBuilder.Entity("PapeleriaBaez.Models.DetalleDevolucionClienteCanje", b =>
+                {
+                    b.HasOne("PapeleriaBaez.Models.DevolucionClienteCanje", "DevolucionClienteCanje")
+                        .WithMany("Detalles")
+                        .HasForeignKey("DevolucionClienteCanjeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PapeleriaBaez.Models.TenisCanje", "TenisDevuelto")
+                        .WithMany()
+                        .HasForeignKey("TenisDevueltoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PapeleriaBaez.Models.TenisCanje", "TenisEntregado")
+                        .WithMany()
+                        .HasForeignKey("TenisEntregadoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PapeleriaBaez.Models.UniformeCanje", "UniformeDevuelto")
+                        .WithMany()
+                        .HasForeignKey("UniformeDevueltoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PapeleriaBaez.Models.UniformeCanje", "UniformeEntregado")
+                        .WithMany()
+                        .HasForeignKey("UniformeEntregadoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("DevolucionClienteCanje");
+
+                    b.Navigation("TenisDevuelto");
+
+                    b.Navigation("TenisEntregado");
+
+                    b.Navigation("UniformeDevuelto");
+
+                    b.Navigation("UniformeEntregado");
+                });
+
             modelBuilder.Entity("PapeleriaBaez.Models.DetalleVenta", b =>
                 {
                     b.HasOne("PapeleriaBaez.Models.Producto", "Producto")
@@ -767,37 +828,6 @@ namespace PapeleriaBaez.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Venta");
-                });
-
-            modelBuilder.Entity("PapeleriaBaez.Models.DevolucionClienteCanje", b =>
-                {
-                    b.HasOne("PapeleriaBaez.Models.TenisCanje", "TenisDevuelto")
-                        .WithMany()
-                        .HasForeignKey("TenisDevueltoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PapeleriaBaez.Models.TenisCanje", "TenisEntregado")
-                        .WithMany()
-                        .HasForeignKey("TenisEntregadoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PapeleriaBaez.Models.UniformeCanje", "UniformeDevuelto")
-                        .WithMany()
-                        .HasForeignKey("UniformeDevueltoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PapeleriaBaez.Models.UniformeCanje", "UniformeEntregado")
-                        .WithMany()
-                        .HasForeignKey("UniformeEntregadoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("TenisDevuelto");
-
-                    b.Navigation("TenisEntregado");
-
-                    b.Navigation("UniformeDevuelto");
-
-                    b.Navigation("UniformeEntregado");
                 });
 
             modelBuilder.Entity("PapeleriaBaez.Models.DevolucionFabricaCanje", b =>
@@ -876,6 +906,11 @@ namespace PapeleriaBaez.Migrations
             modelBuilder.Entity("PapeleriaBaez.Models.Deuda", b =>
                 {
                     b.Navigation("Abonos");
+                });
+
+            modelBuilder.Entity("PapeleriaBaez.Models.DevolucionClienteCanje", b =>
+                {
+                    b.Navigation("Detalles");
                 });
 
             modelBuilder.Entity("PapeleriaBaez.Models.Venta", b =>
