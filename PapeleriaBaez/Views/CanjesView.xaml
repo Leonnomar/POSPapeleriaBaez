@@ -968,8 +968,16 @@
                                                                         Binding="{Binding Descripcion}"
                                                                         Width="*"/>
 
-                                                    <DataGridTextColumn Header="Cantidad"
+                                                    <DataGridTextColumn Header="Devueltas"
                                                                         Binding="{Binding Cantidad}"
+                                                                        Width="90"/>
+
+                                                    <DataGridTextColumn Header="Repuestas"
+                                                                        Binding="{Binding CantidadRespuestas}"
+                                                                        Width="90"/>
+
+                                                    <DataGridTextColumn Header="Pendientes"
+                                                                        Binding="{Binding CantidadPendiente}"
                                                                         Width="90"/>
 
                                                     <DataGridTextColumn Header="Estado"
@@ -980,13 +988,42 @@
 
                                             </DataGrid>
 
-                                            <Button Grid.Row="1"
-                                                    Content="✅ Registrar reposición recibida"
-                                                    Width="220"
-                                                    Height="40"
-                                                    HorizontalAlignment="Right"
-                                                    Margin="0,10,0,0"
-                                                    Click="BtnRegistrarReposicion_Click"/>
+                                            <Grid Grid.Row="1"
+                                                  Margin="0,10,0,0">
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="100"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="Cantidad recibida:"
+                                                           VerticalAlignment="Center"/>
+
+                                                <TextBox x:Name="txtCantidadReposicion"
+                                                         Grid.Column="1"
+                                                         Height="32"
+                                                         Margin="10,0"
+                                                         Text="1"
+                                                         VerticalContentAlignment="Center"/>
+
+                                                <Button Grid.Column="3"
+                                                        Content="✅ Registrar reposición"
+                                                        Width="180"
+                                                        Height="40"
+                                                        Margin="5,0"
+                                                        Click="BtnRegistrarReposicion_Click"/>
+
+                                                <Button Grid.Column="4"
+                                                        Content= "📦Pasar a devolución final"
+                                                        Width="200"
+                                                        Height="40"
+                                                        Margin="5,0"
+                                                        Click="BtnCerrarReposicionComoFinal_Click"/>
+                                                
+                                            </Grid>
 
                                         </Grid>
 

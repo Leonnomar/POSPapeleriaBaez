@@ -76,6 +76,7 @@ namespace PapeleriaBaez.Views
 
             cmbDevFabricaTipoArticulo.ItemsSource = new[]
             {
+                "Utiles",
                 "Uniforme",
                 "Tenis"
             };
@@ -1417,6 +1418,9 @@ namespace PapeleriaBaez.Views
             cmbDevFabricaColor.ItemsSource = null;
             cmbDevFabricaTalla.ItemsSource = null;
 
+            cmbDevFabricaColor.IsEnabled = true;
+            cmbDevFabricaTalla.IsEnabled = true;
+
             using var db = new AppDbContext();
 
             if (tipoArticulo == "Utiles")
@@ -1589,6 +1593,9 @@ namespace PapeleriaBaez.Views
 
                             Cantidad = cantidad,
 
+                            CantidadRespuesta = 0,
+                            CantidadFinal = 0,
+
                             EstadoReposicion =
                                 tipoDevolucion == "Defectuosa"
                                     ? "Pendiente"
@@ -1640,6 +1647,9 @@ namespace PapeleriaBaez.Views
                             UniformeCanjeId = uniforme.Id,
                             Cantidad = cantidad,
 
+                            CantidadRespuesta = 0,
+                            CantidadFinal = 0,
+
                             EstadoReposicion =
                                 tipoDevolucion == "Defectuosa"
                                     ? "Pendiente"
@@ -1684,6 +1694,9 @@ namespace PapeleriaBaez.Views
                             TipoArticulo = "Tenis",
                             TenisCanjeId = tenis.Id,
                             Cantidad = cantidad,
+
+                            CantidadRespuesta = 0,
+                            CantidadFinal = 0,
 
                             EstadoReposicion =
                                 tipoDevolucion == "Defectuosa"
@@ -1750,7 +1763,7 @@ namespace PapeleriaBaez.Views
                 .Include(d => d.TenisCanje)
                 .Where(d =>
                     d.TipoDevolucion == "Defectuosa" &&
-                    d.EstadoReposicion == "Pendiente")
+                    d.Cantidad - d.CantidadRespuesta - d.CantidadFinal > 0)
                 .OrderByDescending(d => d.Fecha)
                 .ToList();
 
@@ -1760,6 +1773,8 @@ namespace PapeleriaBaez.Views
                     Id = d.Id,
                     Fecha = d.Fecha,
                     Cantidad = d.Cantidad,
+                    CantidadRepuesta = d.CantidadRespuesta,
+                    CantidadPendiente = d.Cantidad - d.CantidadRespuesta - d.CantidadFinal,
                     EstadoReposicion = d.EstadoReposicion,
 
                     Descripcion =
@@ -1791,6 +1806,18 @@ namespace PapeleriaBaez.Views
                 return;
             }
 
+            if (!int.TryParse(txtCantidadReposicion.Text, out int cantidadRecibida) || cantidadRecibida <= 0)
+            {
+                MessageBox.Show(
+                    "Capture una cantidad válida.",
+                    "Reposición",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                txtCantidadReposicion.Focus();
+                return;
+            }
+
             using var db = new AppDbContext();
             using var transaccion = db.Database.BeginTransaction();
 
@@ -1810,17 +1837,34 @@ namespace PapeleriaBaez.Views
                     return;
                 }
 
-                if (devolucion.EstadoReposicion != "Pendiente")
+                int cantidadPendiente = devolucion.Cantidad - devolucion.CantidadRespuesta - devolucion.CantidadFinal;
+
+                if (cantidadPendiente <= 0)
                 {
-                    MessageBox.Show("Esta devolución ya no está pendiente.");
+                    MessageBox.Show("Esta devolución ya no tiene artículos pendientes.");
+
+                    CargarReposicionesPendientes();
+                    return;
+                }
+
+                if (cantidadRecibida > cantidadPendiente)
+                {
+                    MessageBox.Show(
+                        $"La cantidad recibida no puede ser mayor a la pendiente.\n\n" +
+                        $"Pendientes: {cantidadPendiente}\n" +
+                        $"Capturados: {cantidadRecibida}",
+                        "Cantidad inválida",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
 
                     return;
                 }
 
                 var confirmar = MessageBox.Show(
-                    $"¿Registrar la reposición recibida?\n\n" +
+                    $"¿Registrar esta reposición?\n\n" +
                     $"{seleccionado.Descripcion}\n" +
-                    $"Cantidad: {devolucion.Cantidad}",
+                    $"Cantidad recibida: {cantidadRecibida}\n " +
+                    $"Pendientes antes: {cantidadPendiente}",
                     "Registrar reposición",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
@@ -1830,15 +1874,15 @@ namespace PapeleriaBaez.Views
 
                 if (devolucion.TipoArticulo == "Utiles" && devolucion.PaqueteCanje != null)
                 {
-                    devolucion.PaqueteCanje.Existencia += devolucion.Cantidad;
+                    devolucion.PaqueteCanje.Existencia += cantidadRecibida;
                 }
                 else if (devolucion.TipoArticulo == "Uniforme" && devolucion.UniformeCanje != null)
                 {
-                    devolucion.UniformeCanje.Existencia += devolucion.Cantidad;
+                    devolucion.UniformeCanje.Existencia += cantidadRecibida;
                 }
                 else if (devolucion.TipoArticulo == "Tenis" && devolucion.TenisCanje != null)
                 {
-                    devolucion.TenisCanje.Existencia += devolucion.Cantidad;
+                    devolucion.TenisCanje.Existencia += cantidadRecibida;
                 }
                 else
                 {
@@ -1847,8 +1891,120 @@ namespace PapeleriaBaez.Views
                     return;
                 }
 
-                devolucion.EstadoReposicion = "Repuesta";
-                devolucion.FechaReposicion = DateTime.Now;
+                devolucion.CantidadRespuesta += cantidadRecibida;
+
+                int pendienteDespues = devolucion.Cantidad - devolucion.CantidadRespuesta - devolucion.CantidadFinal;
+
+                if (pendienteDespues == 0)
+                {
+                    devolucion.EstadoReposicion =
+                        devolucion.CantidadFinal > 0
+                            ? "Finalizada"
+                            : "Repuesta";
+
+                    devolucion.FechaReposicion = DateTime.Now;
+                }
+                else
+                {
+                    devolucion.EstadoReposicion = "Parcial";
+                }
+
+                db.SaveChanges();
+                transaccion.Commit();
+
+                txtCantidadReposicion.Text = "1";
+
+                CargarReposicionesPendientes();
+
+                CargarPaquetes();
+                CargarComboEntregaPaquetes();
+
+                CargarUniformes();
+
+                CargarTenis();
+                CargarComboEntregaTenis();
+
+                CargarCombosApartadoCanje();
+                CargarResumenCanjes();
+
+                MessageBox.Show(
+                    pendienteDespues == 0
+                        ? "Reposición completada correctamente."
+                        : $"Reposición parcial registrada.\n\n" +
+                          $"Todavía quedan {pendienteDespues} pendientes.",
+                    "Reposición recibida",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Error al registrar reposición",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnCerrarReposicionComoFinal_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgReposicionesPendientes.SelectedItem is not DevolucionFabricaGrid seleccionado)
+            {
+                MessageBox.Show(
+                    "Seleccione una devolución pendiente.",
+                    "Devolución final",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            using var db = new AppDbContext();
+            using var transaccion = db.Database.BeginTransaction();
+
+            try
+            {
+                var devolucion = db.DevolucionesFabricaCanje
+                    .Include(d => d.PaqueteCanje)
+                    .Include(d => d.UniformeCanje)
+                    .Include(d => d.TenisCanje)
+                    .FirstOrDefault(d =>
+                        d.Id == seleccionado.Id);
+
+                if (devolucion == null)
+                {
+                    MessageBox.Show("No se encontró la devolución.");
+
+                    return;
+                }
+
+                int cantidadPendiente = devolucion.Cantidad - devolucion.CantidadRespuesta - devolucion.CantidadFinal;
+
+                if (cantidadPendiente <= 0)
+                {
+                    MessageBox.Show("Esta devolución ya no tiene artículos pendientes.");
+
+                    CargarReposicionesPendientes();
+                    return;
+                }
+
+                var confirmar = MessageBox.Show(
+                    $"Quedan {cantidadPendiente} artículo(s) pendientes.\n\n" +
+                    $"{seleccionado.Descripcion}\n\n" +
+                    "¿Desea cerrarlos como devolución final?\n\n" +
+                    "Estas piezas ya no quedarán pendientes de reposición.",
+                    "Pasar a devolución final",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (confirmar != MessageBoxResult.Yes)
+                    return;
+
+                devolucion.CantidadFinal += cantidadPendiente;
+
+                devolucion.EstadoReposicion = "Finalizada";
 
                 db.SaveChanges();
                 transaccion.Commit();
@@ -1867,8 +2023,9 @@ namespace PapeleriaBaez.Views
                 CargarResumenCanjes();
 
                 MessageBox.Show(
-                    "Reposición registrada correctamente.",
-                    "Reposición recibida",
+                    $"{cantidadPendiente} artículo(s) se cerraron " +
+                    "como devolución final.",
+                    "Devolución final",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
@@ -1878,7 +2035,7 @@ namespace PapeleriaBaez.Views
 
                 MessageBox.Show(
                     ex.InnerException?.Message ?? ex.Message,
-                    "Error al registrar reposición",
+                    "Error al cerrar devolución",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }

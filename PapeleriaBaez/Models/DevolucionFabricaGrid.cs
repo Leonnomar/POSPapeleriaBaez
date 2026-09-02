@@ -16,6 +16,10 @@ namespace PapeleriaBaez.Models
 
         public int Cantidad { get; set; }
 
+        public int CantidadRepuesta { get; set; }
+
+        public int CantidadPendiente { get; set; }
+
         public string EstadoReposicion { get; set; } = "";
     }
 }
