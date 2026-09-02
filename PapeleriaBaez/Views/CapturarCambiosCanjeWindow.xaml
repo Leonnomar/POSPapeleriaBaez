@@ -71,7 +71,13 @@
 
                             <ComboBox x:Name="cmbC1DevTalla"
                                       Height="30"
-                                      Margin="0,5,0,0"/>
+                                      Margin="0,5,0,0"
+                                      SelectionChanged="cmbC1DevTalla_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblC1DevExistencia"
+                                       Text="Existencia Actual: 0"
+                                       FontWeight="Bold"
+                                       Margin="0,8,0,0"/>
 
                         </StackPanel>
 
@@ -168,7 +174,13 @@
 
                             <ComboBox x:Name="cmbC2DevTalla"
                                       Height="30"
-                                      Margin="0,5,0,0"/>
+                                      Margin="0,5,0,0"
+                                      SelectionChanged="cmbC2DevTalla_SelectionChanged"/>
+
+                            <TextBlock x:Name="lblC2DevExistencia"
+                                       Text="Existencia actual: 0"
+                                       FontWeight="Bold"
+                                       Margin="0,8,0,0"/>
 
                         </StackPanel>
 

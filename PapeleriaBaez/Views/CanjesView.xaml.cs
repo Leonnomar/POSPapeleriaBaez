@@ -1486,6 +1486,10 @@ namespace PapeleriaBaez.Views
                     .Select(t => t.Talla)
                     .ToList();
             }
+            else if (tipoArticulo == "Utiles")
+            {
+                ActualizarExistenciaDevolucionFabrica();
+            }
         }
 
         private void cmbDevFabricaColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1509,8 +1513,82 @@ namespace PapeleriaBaez.Views
                 .Distinct()
                 .OrderBy(x => x)
                 .ToList();
+
+            ActualizarExistenciaDevolucionFabrica();
+        }
+
+        private void cmbDevFabricaTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ActualizarExistenciaDevolucionFabrica();
+        }
+
+        private void txtDevFabricaCantidad_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ActualizarExistenciaDevolucionFabrica();
         }
         
+        private void ActualizarExistenciaDevolucionFabrica()
+        {
+            if (lblDevFabricaExistencia == null || lblDevFabricaDespues == null)
+                return;
+
+            string articulo = cmbDevFabricaTipoArticulo.SelectedItem?.ToString() ?? "";
+
+            int cantidad = 0;
+
+            int.TryParse(txtDevFabricaCantidad?.Text, out cantidad);
+
+            using var db = new AppDbContext();
+
+            int existencia = 0;
+
+            if (articulo == "Utiles")
+            {
+                string seleccionado = cmbDevFabricaTipo.SelectedItem?.ToString() ?? "";
+
+                string numeroTexto = seleccionado.Replace("Paquete", "").Trim();
+
+                if (int.TryParse(numeroTexto, out int numeroPaquete))
+                {
+                    existencia = db.PaquetesCanje
+                        .Where(p => p.NumeroPaquete == numeroPaquete)
+                        .Select(p => p.Existencia)
+                        .FirstOrDefault();
+                }
+            }
+            else if (articulo == "Uniforme")
+            {
+                string tipo = cmbDevFabricaTipo.SelectedItem?.ToString() ?? "";
+
+                string color = cmbDevFabricaColor.SelectedItem?.ToString() ?? "";
+
+                string talla = cmbDevFabricaTalla.SelectedItem?.ToString() ?? "";
+
+                existencia = db.UniformesCanje
+                    .Where(u =>
+                        u.Tipo == tipo &&
+                        u.Color == color &&
+                        u.Talla == talla)
+                    .Select(u => u.Existencia)
+                    .FirstOrDefault();
+            }
+            else if (articulo == "Tenis")
+            {
+                string talla = cmbDevFabricaTalla.SelectedItem?.ToString() ?? "";
+
+                existencia = db.TenisCanjes
+                    .Where(t => t.Talla == talla)
+                    .Select(t => t.Existencia)
+                    .FirstOrDefault();
+            }
+
+            lblDevFabricaExistencia.Text = $"Existencia actual: {existencia}";
+
+            int despues = Math.Max(existencia - cantidad, 0);
+
+            lblDevFabricaDespues.Text = $"Después de devolución: {despues}";
+        }
+
         private void BtnRegistrarDevolucionFabrica_Click(object sender, RoutedEventArgs e)
         {
             string tipoDevolucion = cmbDevFabricaTipoDevolucion.SelectedItem?.ToString() ?? "";

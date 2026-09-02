@@ -76,6 +76,11 @@ namespace PapeleriaBaez.Views
             CargarTallasDevuelto(cmbC1DevArticulo, cmbC1DevTipo, cmbC1DevColor, cmbC1DevTalla);
         }
 
+        private void cmbC1DevTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MostrarExistenciaDevuelto(cmbC1DevArticulo, cmbC1DevTipo, cmbC1DevColor, cmbC1DevTalla, lblC1DevExistencia);
+        }
+
         private void cmbC1EntTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CargarColoresEntregado(cmbC1DevArticulo, cmbC1EntTipo, cmbC1EntColor, cmbC1EntTalla, lblC1Disponibles);
@@ -104,6 +109,11 @@ namespace PapeleriaBaez.Views
         private void cmbC2DevColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CargarTallasDevuelto(cmbC2DevArticulo, cmbC2DevTipo, cmbC2DevColor, cmbC2DevTalla);
+        }
+
+        private void cmbC2DevTalla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MostrarExistenciaDevuelto(cmbC2DevArticulo, cmbC2DevTipo, cmbC2DevColor, cmbC2DevTalla, lblC2DevExistencia);
         }
 
         private void cmbC2EntTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -222,6 +232,42 @@ namespace PapeleriaBaez.Views
                 .Distinct()
                 .OrderBy(x => x)
                 .ToList();
+        }
+
+        private void MostrarExistenciaDevuelto(ComboBox cmbArticulo, ComboBox cmbTipo, ComboBox cmbColor, ComboBox cmbTalla, TextBlock lblExistencia)
+        {
+            string articulo = cmbArticulo.SelectedItem?.ToString() ?? "";
+
+            lblExistencia.Text = "Existencia actual: 0";
+
+            using var db = new AppDbContext();
+
+            if (articulo == "Uniforme")
+            {
+                string tipo = cmbTipo.SelectedItem?.ToString() ?? "";
+
+                string color = cmbColor.SelectedItem?.ToString() ?? "";
+
+                string talla = cmbTalla.SelectedItem?.ToString() ?? "";
+
+                var uniforme = db.UniformesCanje
+                    .FirstOrDefault(u =>
+                        u.Tipo == tipo &&
+                        u.Color == color &&
+                        u.Talla == talla);
+
+                lblExistencia.Text = $"Existencia actual: {uniforme?.Existencia ?? 0}";
+            }
+            else if (articulo == "Tenis")
+            {
+                string talla = cmbTalla.SelectedItem?.ToString() ?? "";
+
+                var tenis = db.TenisCanjes
+                    .FirstOrDefault(t =>
+                        t.Talla == talla);
+
+                lblExistencia.Text = $"Existencia actual: {tenis?.Existencia ?? 0}";
+            }
         }
 
         private void CargarColoresEntregado(ComboBox cmbArticulo, ComboBox cmbTipo, ComboBox cmbColor, ComboBox cmbTalla, TextBlock lblDisponibles)
