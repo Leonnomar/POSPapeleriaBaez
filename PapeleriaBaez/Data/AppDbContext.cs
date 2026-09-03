@@ -57,6 +57,10 @@ namespace PapeleriaBaez.Data
 
         public DbSet<DevolucionFabricaCanje> DevolucionesFabricaCanje { get; set; }
 
+        public DbSet<SalidaHelados> SalidasHelados { get; set; }
+
+        public DbSet<DetalleSalidaHelados> DetalleSalidasHelados { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string ruta = @"C:\PapeleriaBaez\PapeleriaBaez.db";
@@ -204,6 +208,18 @@ namespace PapeleriaBaez.Data
                 .HasOne(d => d.TenisCanje)
                 .WithMany()
                 .HasForeignKey(d => d.TenisCanjeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DetalleSalidaHelados>()
+                .HasOne(d => d.SalidaHelados)
+                .WithMany(s => s.Detalles)
+                .HasForeignKey(d => d.SalidaHeladosId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DetalleSalidaHelados>()
+                .HasOne(d => d.Producto)
+                .WithMany()
+                .HasForeignKey(d => d.ProductoId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
