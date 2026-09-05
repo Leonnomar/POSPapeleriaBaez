@@ -44,7 +44,7 @@ namespace PapeleriaBaez.Views
         {
             var articulos = new[]
             {
-                "Uniformes",
+                "Uniforme",
                 "Tenis"
             };
 

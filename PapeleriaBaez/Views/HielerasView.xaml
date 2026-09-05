@@ -1,0 +1,671 @@
+﻿<UserControl x:Class="PapeleriaBaez.Views.HielerasView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PapeleriaBaez.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="600"
+             d:DesignWidth="1000"
+             Background="#F5F6FA">
+    
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- TÍTULO -->
+        <StackPanel Grid.Row="0"
+                    Margin="0,0,0,15">
+
+            <TextBlock Text="🍦 Hieleras"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#1F2937"/>
+
+            <TextBlock Text="Control de salidas, devoluciones y deuda de helados"
+                       FontSize="14"
+                       Foreground="#6B7280"
+                       Margin="0,5,0,0"/>
+            
+        </StackPanel>
+        
+        
+        <!-- CONTENIDO -->
+        <TabControl Grid.Row="1"
+                    FontSize="14">
+
+            <!-- ================================================= -->
+            <!-- NUEVA SALIDA -->
+            <!-- ================================================= -->
+
+            <TabItem Header="➕ Nueva salida">
+
+                <Grid Margin="15">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    
+                    <!-- INFORMACIÓN -->
+                    <Border Grid.Row="0"
+                            Background="White"
+                            CornerRadius="8"
+                            Padding="15"
+                            Margin="0,0,0,10">
+
+                        <StackPanel>
+
+                            <TextBlock Text="Nueva Hielera"
+                                       FontSize="20"
+                                       FontWeight="SemiBold"
+                                       Foreground="#1F2937"/>
+
+                            <TextBlock Text="Selecciona los helados y cantidades que saldrán hoy."
+                                       Foreground="#6B7280"
+                                       Margin="0,5,0,0"/>
+                            
+                        </StackPanel>
+                        
+                    </Border>
+                    
+                    <!-- BUSCADOR -->
+                    <Border Grid.Row="1"
+                            Background="White"
+                            CornerRadius="8"
+                            Padding="15"
+                            Margin="0,0,0,10">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="txtBuscarHelado"
+                                     Height="35"
+                                     FontSize="14"
+                                     Padding="10"
+                                     VerticalContentAlignment="Center"
+                                     TextChanged="TxtBuscarHelado_TextChanged"/>
+
+                            <Button Grid.Column="1"
+                                    Content="Limpiar"
+                                    Width="90"
+                                    Height="35"
+                                    Margin="10,0,0,0"
+                                    Click="BtnLimpiarBusqueda_Click"/>
+                            
+                        </Grid>
+                        
+                    </Border>
+                    
+                    
+                    <!-- PRODUCTOS -->
+                    <Grid Grid.Row="2">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.1*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        
+                        <!-- RESULTADOS -->
+                        <Border Grid.Column="0"
+                                Background="White"
+                                CornerRadius="8"
+                                Padding="15"
+                                Margin="0,0,10,0">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Helados disponibles"
+                                           FontSize="17"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,10"/>
+
+                                <ListBox x:Name="lstResultadosHelados"
+                                         Grid.Row="1"
+                                         MouseDoubleClick="LstResultadosHelados_MouseDoubleClick">
+
+                                    <ListBox.ItemTemplate>
+
+                                        <DataTemplate>
+
+                                            <Border Padding="10"
+                                                    Margin="0,0,0,5"
+                                                    BorderBrush="#E5E7EB"
+                                                    BorderThickness="1"
+                                                    CornerRadius="5">
+
+                                                <Grid>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel>
+
+                                                        <TextBlock Text="{Binding Nombre}"
+                                                                   FontWeight="SemiBold"/>
+
+                                                        <TextBlock Text="{Binding Codigo}"
+                                                                   FontSize="12"
+                                                                   Foreground="#6B7280"/>
+                                                        
+                                                    </StackPanel>
+
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding StockDisponible,
+                                                               StringFormat=Stock: {0}}"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="#6B7280"/>
+                                                    
+                                                </Grid>
+                                                
+                                            </Border>
+                                            
+                                        </DataTemplate>
+                                        
+                                    </ListBox.ItemTemplate>
+                                    
+                                </ListBox>
+                                
+                            </Grid>
+                            
+                        </Border>
+                        
+                        
+                        <!-- DETALLE DE HIELERA -->
+                        <Border Grid.Column="1"
+                                Background="White"
+                                CornerRadius="8"
+                                Padding="15">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+
+                                <TextBlock Text="Contenido de la hielera"
+                                           FontSize="17"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,10"/>
+
+
+                                <DataGrid x:Name="dgNuevaHielera"
+                                          Grid.Row="1"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="False"
+                                          HeadersVisibility="Column"
+                                          SelectionMode="Single">
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn Header="Código"
+                                                            Binding="{Binding Codigo}"
+                                                            IsReadOnly="True"
+                                                            Width="100"/>
+
+                                        <DataGridTextColumn Header="Helado"
+                                                            Binding="{Binding Nombre}"
+                                                            IsReadOnly="True"
+                                                            Width="*"/>
+
+                                        <DataGridTextColumn Header="Cantidad"
+                                                            Binding="{Binding Cantidad}"
+                                                            Width="90"/>
+
+                                        <DataGridTextColumn Header="Stock"
+                                                            Binding="{Binding StockDisponible}"
+                                                            IsReadOnly="True"
+                                                            Width="80"/>
+
+                                        <DataGridTemplateColumn Header="Acciones"
+                                                                Width="100">
+
+                                            <DataGridTemplateColumn.CellTemplate>
+
+                                                <DataTemplate>
+
+                                                    <Button Content="✕"
+                                                            Width="30"
+                                                            Height="25"
+                                                            Click="BtnEliminarHelado_Click"/>
+                                                    
+                                                </DataTemplate>
+                                                
+                                            </DataGridTemplateColumn.CellTemplate>
+                                            
+                                        </DataGridTemplateColumn>
+                                        
+                                    </DataGrid.Columns>
+                                        
+                                </DataGrid>
+
+
+                                <StackPanel Grid.Row="2"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            Margin="0,10,0,0">
+
+                                    <Button Content="🗑 Limpiar"
+                                            Width="100"
+                                            Height="35"
+                                            Margin="0,0,10,0"
+                                            Click="BtnLimpiarSalida_Click"/>
+
+                                    <Button Content="Registrar salida"
+                                            Width="150"
+                                            Height="35"
+                                            Background="#2563EB"
+                                            Foreground="White"
+                                            FontWeight="SemiBold"
+                                            Click="BtnRegistrarSalida_Click"/>
+                                    
+                                </StackPanel>
+                                
+                            </Grid>
+                            
+                        </Border>
+                        
+                    </Grid>
+                    
+                    
+                    <!-- PIE -->
+                    <TextBlock Grid.Row="3"
+                               Text="La mercancía se descuenta del inventario al registrar la salida."
+                               Foreground="#6B7280"
+                               FontSize="12"
+                               Margin="5,10,0,0"/>
+                    
+                </Grid>
+                
+            </TabItem>
+
+
+            <!-- ================================================= -->
+            <!-- HIELERAS PENDIENTES -->
+            <!-- ================================================= -->
+
+            <TabItem Header="📋 Hieleras pendientes">
+
+                <Grid Margin="15">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+
+                    <Border Grid.Row="0"
+                            Background="White"
+                            CornerRadius="8"
+                            Padding="15"
+                            Margin="0,0,0,10">
+
+                        <StackPanel>
+
+                            <TextBlock Text="Hieleras pendientes de cierre"
+                                       FontSize="20"
+                                       FontWeight="SemiBold"/>
+
+                            <TextBlock Text="Selecciona un hielera cuando regrese para registrar lo vendido y lo que regresó."
+                                       Foreground="#6B7280"
+                                       Margin="0,5,0,0"/>
+                            
+                        </StackPanel>
+                        
+                    </Border>
+
+
+                    <Border Grid.Row="1"
+                            Background="White"
+                            CornerRadius="8"
+                            Padding="15">
+
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            
+                            <!-- BÚSQUEDA -->
+                            <TextBox x:Name="txtBuscarSalida"
+                                     Height="35"
+                                     Padding="10"
+                                     Margin="0,0,0,10"
+                                     VerticalContentAlignment="Center"
+                                     TextChanged="TxtBuscarSalida_TextChanged"/>
+                            
+                            
+                            <!-- GRID -->
+                            <DataGrid x:Name="dgSalidasPendientes"
+                                      Grid.Row="1"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      IsReadOnly="True"
+                                      SelectionMode="Single">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="Folio"
+                                                        Binding="{Binding Id}"
+                                                        Width="70"/>
+
+                                    <DataGridTextColumn Header="Fecha"
+                                                        Binding="{Binding FechaSalida,
+                                                        StringFormat=dd/MM/yyyy}"
+                                                        Width="120"/>
+
+                                    <DataGridTextColumn Header="Productos"
+                                                        Binding="{Binding Productos}"
+                                                        Width="90"/>
+
+                                    <DataGridTextColumn Header="Piezas"
+                                                        Binding="{Binding Piezas}"
+                                                        Width="80"/>
+
+                                    <DataGridTextColumn Header="Estado"
+                                                        Binding="{Binding Estado}"
+                                                        Width="100"/>
+
+                                    <DataGridTemplateColumn Header="Acción"
+                                                            Width="150">
+
+                                        <DataGridTemplateColumn.CellTemplate>
+
+                                            <DataTemplate>
+
+                                                <Button Content="Capturar cierre"
+                                                        Height="30"
+                                                        Click="BtnCapturarCierre_Click"/>
+                                                
+                                            </DataTemplate>
+                                            
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        
+                                    </DataGridTemplateColumn>
+                                    
+                                </DataGrid.Columns>
+                                
+                            </DataGrid>
+                            
+                        </Grid>
+                        
+                    </Border>
+                    
+                </Grid>
+                
+            </TabItem>
+
+
+            <!-- ================================================= -->
+            <!-- DEUDA GLOBAL -->
+            <!-- ================================================= -->
+
+            <TabItem Header="💰 Deudas de helados">
+
+                <Grid Margin="15">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    
+                    <!-- RESUMEN -->
+                    <Grid Grid.Row="0"
+                          Margin="0,0,0,15">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- DEUDA GENERRADA -->
+                        <Border Grid.Column="0"
+                                Background="White"
+                                CornerRadius="8"
+                                Padding="20"
+                                Margin="0,0,10,0">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Deuda Generada"
+                                           Foreground="#6B7280"
+                                           FontSize="14"/>
+
+                                <TextBlock x:Name="lblDeudaGenerada"
+                                           Text="$0.00"
+                                           FontSize="25"
+                                           FontWeight="Bold"
+                                           Margin="0,5,0,0"/>
+                                
+                            </StackPanel>
+                            
+                        </Border>
+                        
+                        
+                        <!-- ABONOS -->
+                        <Border Grid.Column="1"
+                                Background="White"
+                                CornerRadius="8"
+                                Padding="20"
+                                Margin="5,0">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Abonos"
+                                           Foreground="#6B7280"
+                                           FontSize="14"/>
+
+                                <TextBlock x:Name="lblAbonosHelados"
+                                           Text="$0.00"
+                                           FontSize="25"
+                                           FontWeight="Bold"
+                                           Margin="0,5,0,0"/>
+                                
+                            </StackPanel>
+                            
+                        </Border>
+                        
+                        
+                        <!-- SALDO -->
+                        <Border Grid.Column="2"
+                                Background="White"
+                                CornerRadius="8"
+                                Padding="20"
+                                Margin="10,0,0,0">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Deuda actual"
+                                           Foreground="#6B7280"
+                                           FontSize="14"/>
+
+                                <TextBlock x:Name="lblDeudaActual"
+                                           Text="$0.00"
+                                           FontSize="25"
+                                           FontWeight="Bold"
+                                           Margin="0,5,0,0"/>
+                                
+                            </StackPanel>
+                            
+                        </Border>
+                        
+                    </Grid>
+                    
+                    
+                    <!-- CONTENIDO -->
+                    <Grid Grid.Row="1">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.4*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        
+                        <!-- HISTORIAL DE HIELERAS -->
+                        <Border Grid.Column="0"
+                                Background="White"
+                                CornerRadius="8"
+                                Padding="15"
+                                Margin="0,0,10,0">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Deuda generada por hielera"
+                                           FontSize="17"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,10"/>
+
+
+                                <DataGrid x:Name="dgHistoralHieleras"
+                                          Grid.Row="1"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True">
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn Header="Folio"
+                                                            Binding="{Binding Id}"
+                                                            Width="70"/>
+
+                                        <DataGridTextColumn Header="Fecha"
+                                                            Binding="{Binding FechaSalida,
+                                                            StringFormat=dd/MM/yyyy}"
+                                                            Width="110"/>
+
+                                        <DataGridTextColumn Header="Deuda"
+                                                            Binding="{Binding Deuda,
+                                                            StringFormat=C}"
+                                                            Width="100"/>
+
+                                        <DataGridTextColumn Header="Estado"
+                                                            Binding="{Binding Estado}"
+                                                            Width="100"/>
+                                        
+                                    </DataGrid.Columns>
+                                    
+                                </DataGrid>
+                                
+                            </Grid>
+                            
+                        </Border>
+                        
+                        
+                        <!-- ABONOS -->
+                        <Border Grid.Column="1"
+                                Background="White"
+                                CornerRadius="8"
+                                Padding="15">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+
+                                <TextBlock Text="Registrar abono"
+                                           FontSize="17"
+                                           FontWeight="SemiBold"/>
+
+
+                                <StackPanel Grid.Row="1"
+                                            Margin="0,15,0,15">
+
+                                    <TextBlock Text="Cantidad"/>
+
+                                    <TextBox x:Name="txtAbonoHelados"
+                                             Height="35"
+                                             Padding="10"
+                                             Margin="0,5,0,15"/>
+
+                                    <TextBlock Text="Observación"/>
+
+                                    <TextBox x:Name="txtObservacionAbono"
+                                             Height="60"
+                                             Padding="10"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="True"
+                                             Margin="0,5,0,10"/>
+
+                                    <Button Content="Registrar abono"
+                                            Height="35"
+                                            Click="BtnRegistrarAbono_Click"/>
+                                    
+                                </StackPanel>
+
+
+                                <DataGrid x:Name="dgAbonosHelados"
+                                          Grid.Row="2"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True">
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn Header="Fecha"
+                                                            Binding="{Binding Fecha,
+                                                            StringFormat=dd/MM/yyyy}"
+                                                            Width="100"/>
+
+                                        <DataGridTextColumn Header="Cantidad"
+                                                            Binding="{Binding Cantidad,
+                                                            StringFormat=C}"
+                                                            Width="100"/>
+
+                                        <DataGridTextColumn Header="Observación"
+                                                            Binding="{Binding Observacion}"
+                                                            Width="*"/>
+                                        
+                                    </DataGrid.Columns>
+                                    
+                                </DataGrid>
+                                
+                            </Grid>
+                            
+                        </Border>
+                        
+                    </Grid>
+                    
+                </Grid>
+                
+            </TabItem>
+            
+        </TabControl>
+            
+    </Grid>
+    
+</UserControl>

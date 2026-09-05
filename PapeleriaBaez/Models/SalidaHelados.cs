@@ -14,11 +14,18 @@ namespace PapeleriaBaez.Models
 
         public DateTime? FechaCierre { get; set; }
 
-        public string Responsable { get; set; } = "";
-
         public string Estado { get; set; } = "Pendiente";
+
+        public decimal TotalVendido { get; set; }
+
+        public decimal DineroRecibido { get; set; }
+
+        public decimal SaldoPendiente { get; set; }
 
         public ICollection<DetalleSalidaHelados> Detalles { get; set; }
             = new List<DetalleSalidaHelados>();
+
+        public ICollection<AbonoHielera> Abonos { get; set; }
+            = new List<AbonoHielera>();
     }
 }
