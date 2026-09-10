@@ -24,8 +24,5 @@ namespace PapeleriaBaez.Models
 
         public ICollection<DetalleSalidaHelados> Detalles { get; set; }
             = new List<DetalleSalidaHelados>();
-
-        public ICollection<AbonoHielera> Abonos { get; set; }
-            = new List<AbonoHielera>();
     }
 }

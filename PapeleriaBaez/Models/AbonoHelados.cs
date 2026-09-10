@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace PapeleriaBaez.Models
 {
-    public class AbonoHielera
+    public class AbonoHelados
     {
         public int Id { get; set; }
-
-        public int SalidaHeladosId { get; set; }
 
         public DateTime Fecha { get; set; }
 
         public decimal Cantidad { get; set; }
 
-        public SalidaHelados SalidaHelados { get; set; } = null!;
+        public string Observacion { get; set; } = "";
     }
 }

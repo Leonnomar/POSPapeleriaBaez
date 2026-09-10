@@ -57,6 +57,10 @@
                     Margin="10"
                     Click="BtnDeudas_Click"/>
 
+            <Button Content="🧊 Hieleras"
+                    Margin="10"
+                    Click="BtnHieleras_Click"/>
+
             <Button Content="📊 Reportes"
                     Margin="10"
                     Click="BtnReportes_Click"/>

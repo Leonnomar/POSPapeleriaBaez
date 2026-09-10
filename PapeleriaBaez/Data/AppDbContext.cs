@@ -61,7 +61,7 @@ namespace PapeleriaBaez.Data
 
         public DbSet<DetalleSalidaHelados> DetalleSalidasHelados { get; set; }
 
-        public DbSet<AbonoHielera> AbonosHielera { get; set; }
+        public DbSet<AbonoHelados> AbonosHelados { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -223,12 +223,6 @@ namespace PapeleriaBaez.Data
                 .WithMany()
                 .HasForeignKey(d => d.ProductoId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<AbonoHielera>()
-                .HasOne(a => a.SalidaHelados)
-                .WithMany(s => s.Abonos)
-                .HasForeignKey(a => a.SalidaHeladosId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

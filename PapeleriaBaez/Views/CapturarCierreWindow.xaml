@@ -1,0 +1,149 @@
+﻿<Window x:Class="PapeleriaBaez.Views.CapturarCierreWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PapeleriaBaez.Views"
+        mc:Ignorable="d"
+        Title="Capturar cierre de la hielera"
+        Height="600"
+        Width="900"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- ENCABEZADO -->
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="🧊 Capturar cierre de hielera"
+                       FontSize="26"
+                       FontWeight="Bold"/>
+
+            <TextBlock x:Name="lblInformacionHielera"
+                       Margin="0,5,0,15"
+                       FontSize="14"
+                       Foreground="Gray"/>
+        </StackPanel>
+        
+        <!-- PRODUCTOS -->
+        <DataGrid x:Name="dgCierreHielera"
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  IsReadOnly="False"
+                  Margin="0,0,0,15">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Código"
+                                    Binding="{Binding Codigo}"
+                                    IsReadOnly="True"
+                                    Width="120"/>
+
+                <DataGridTextColumn Header="Producto"
+                                    Binding="{Binding Nombre}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Salida"
+                                    Binding="{Binding CantidadSalida}"
+                                    IsReadOnly="True"
+                                    Width="80"/>
+
+                <DataGridTextColumn Header="Regresaron"
+                                    Binding="{Binding CantidadRegresada,
+                                    UpdateSourceTrigger=PropertyChanged}"
+                                    Width="100"/>
+
+                <DataGridTextColumn Header="Vendidos"
+                                    Binding="{Binding CantidadVendida}"
+                                    IsReadOnly="True"
+                                    Width="90"/>
+
+                <DataGridTextColumn Header="Precio"
+                                    Binding="{Binding Precio,
+                                    StringFormat=C}"
+                                    IsReadOnly="True"
+                                    Width="100"/>
+
+                <DataGridTextColumn Header="Importe"
+                                    Binding="{Binding Importe,
+                                    StringFormat=C}"
+                                    IsReadOnly="True"
+                                    Width="110"/>
+                
+            </DataGrid.Columns>
+            
+        </DataGrid>
+        
+        <!-- PARTE INFERIOR -->
+        <Grid Grid.Row="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+
+                <TextBlock Text="Dinero recibido:"
+                           FontSize="15"/>
+
+                <TextBox x:Name="txtDineroRecibido"
+                         Width="180"
+                         HorizontalAlignment="Left"
+                         Margin="0,5,0,10"
+                         FontSize="16"
+                         TextChanged="TxtDineroRecibido_TextChanged"/>
+
+                <TextBlock Text="Observación:"
+                           FontSize="15"/>
+
+                <TextBox x:Name="txtObservacion"
+                         Width="300"
+                         Height="50"
+                         HorizontalAlignment="Left"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"/>
+                
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+
+                <TextBlock Text="Total vendido"
+                           FontSize="14"/>
+
+                <TextBlock x:Name="lblTotalVendido"
+                           Text="$0.00"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Margin="0,2,0,10"/>
+
+                <TextBlock Text="Deuda generada"
+                           FontSize="14"/>
+
+                <TextBlock x:Name="lblDeudaGenerada"
+                           Text="$0.00"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Margin="0,2,0,15"/>
+
+                <Button Content="✓ Cerrar hielera"
+                        Height="40"
+                        FontSize="16"
+                        Click="BtnCerrarHielera_Click"/>
+                
+            </StackPanel>
+            
+        </Grid>
+        
+    </Grid>
+    
+</Window>

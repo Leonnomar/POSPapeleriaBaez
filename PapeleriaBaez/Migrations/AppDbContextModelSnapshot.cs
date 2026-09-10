@@ -61,7 +61,7 @@ namespace PapeleriaBaez.Migrations
                     b.ToTable("AbonosDeudas");
                 });
 
-            modelBuilder.Entity("PapeleriaBaez.Models.AbonoHielera", b =>
+            modelBuilder.Entity("PapeleriaBaez.Models.AbonoHelados", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,14 +73,13 @@ namespace PapeleriaBaez.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SalidaHeladosId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Observacion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SalidaHeladosId");
-
-                    b.ToTable("AbonosHielera");
+                    b.ToTable("AbonosHelados");
                 });
 
             modelBuilder.Entity("PapeleriaBaez.Models.Apartado", b =>
@@ -755,17 +754,6 @@ namespace PapeleriaBaez.Migrations
                     b.Navigation("Deuda");
                 });
 
-            modelBuilder.Entity("PapeleriaBaez.Models.AbonoHielera", b =>
-                {
-                    b.HasOne("PapeleriaBaez.Models.SalidaHelados", "SalidaHelados")
-                        .WithMany("Abonos")
-                        .HasForeignKey("SalidaHeladosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SalidaHelados");
-                });
-
             modelBuilder.Entity("PapeleriaBaez.Models.DetalleApartado", b =>
                 {
                     b.HasOne("PapeleriaBaez.Models.Apartado", "Apartado")
@@ -1027,8 +1015,6 @@ namespace PapeleriaBaez.Migrations
 
             modelBuilder.Entity("PapeleriaBaez.Models.SalidaHelados", b =>
                 {
-                    b.Navigation("Abonos");
-
                     b.Navigation("Detalles");
                 });
 

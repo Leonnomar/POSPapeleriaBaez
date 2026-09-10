@@ -69,6 +69,22 @@ namespace PapeleriaBaez
             MainFrame.Content = new DeudasView();
         }
 
+        private void BtnHieleras_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MainFrame.Content = new HielerasView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.ToString(),
+                    "Error al abrir Hieleras",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
         private void BtnReportes_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Content = new ReportesView();
