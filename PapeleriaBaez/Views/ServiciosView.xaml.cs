@@ -63,11 +63,14 @@ namespace PapeleriaBaez.Views
 
         private void BtnNuevoServicio_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
-                "Aquí agregaremos la ventana para crear un nuevo servicio.",
-                "Nuevo servicio",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            var ventana = new NuevoServicioWindow();
+
+            bool? resultado = ventana.ShowDialog();
+
+            if (resultado == true)
+            {
+                CargarServicios();
+            }
         }
 
         private void BtnModificarServicio_Click(object sender, RoutedEventArgs e)
