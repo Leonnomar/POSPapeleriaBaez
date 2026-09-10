@@ -63,6 +63,10 @@ namespace PapeleriaBaez.Data
 
         public DbSet<AbonoHelados> AbonosHelados { get; set; }
 
+        public DbSet<Servicio> Servicios { get; set; }
+
+        public DbSet<DetalleServicio> DetallesServicios { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string ruta = @"C:\PapeleriaBaez\PapeleriaBaez.db";
@@ -219,6 +223,18 @@ namespace PapeleriaBaez.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<DetalleSalidaHelados>()
+                .HasOne(d => d.Producto)
+                .WithMany()
+                .HasForeignKey(d => d.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DetalleServicio>()
+                .HasOne(d => d.Servicio)
+                .WithMany(s => s.Detalles)
+                .HasForeignKey(d => d.ServicioId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DetalleServicio>()
                 .HasOne(d => d.Producto)
                 .WithMany()
                 .HasForeignKey(d => d.ProductoId)
