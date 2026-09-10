@@ -61,6 +61,10 @@
                     Margin="10"
                     Click="BtnHieleras_Click"/>
 
+            <Button Content="🛠️ Servicios"
+                    Margin="10"
+                    Click="BtnServicios_Click"/>
+
             <Button Content="📊 Reportes"
                     Margin="10"
                     Click="BtnReportes_Click"/>

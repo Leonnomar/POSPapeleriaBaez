@@ -6,7 +6,121 @@
              xmlns:local="clr-namespace:PapeleriaBaez.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- TÍTULO -->
+        <StackPanel Grid.Row="0"
+                    Margin="0,0,0,20">
+
+            <TextBlock Text="🛠️ Servicios Generales"
+                       FontSize="28"
+                       FontWeight="Bold"/>
+
+            <TextBlock Text="Administra los servicios que ofrece Papelería Báez"
+                       FontSize="14"
+                       Foreground="Gray"
+                       Margin="0,5,0,0"/>
+            
+        </StackPanel>
+        
+        
+        <!-- BÚSQUEDA Y BOTONES -->
+        <Grid Grid.Row="1"
+              Margin="0,0,0,15">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:Name="txtBuscarServicio"
+                     Grid.Column="0"
+                     Height="35"
+                     FontSize="15"
+                     VerticalContentAlignment="Center"
+                     Margin="0,0,10,0"
+                     TextChanged="TxtBuscarServicio_TextChanged"/>
+
+            <Button x:Name="btnNuevoServicio"
+                    Grid.Column="1"
+                    Content="➕ Nuevo"
+                    Width="110"
+                    Height="35"
+                    Margin="0,0,10,0"
+                    Click="BtnNuevoServicio_Click"/>
+
+            <Button x:Name="btnModificarServicio"
+                    Grid.Column="2"
+                    Content="✏️ Modificar"
+                    Width="120"
+                    Height="35"
+                    Margin="0,0,10,0"
+                    Click="BtnModificarServicio_Click"/>
+
+            <Button x:Name="btnDesactivarServicio"
+                    Grid.Column="3"
+                    Content="🗑️ Desactivar"
+                    Width="120"
+                    Height="35"
+                    Click="BtnDesactivarServicio_Click"/>
+            
+        </Grid>
+        
+        
+        <!-- LISTA -->
+        <DataGrid x:Name="dgServicios"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  HeadersVisibility="Column">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="ID"
+                                    Binding="{Binding Id}"
+                                    Width="60"/>
+
+                <DataGridTextColumn Header="Servicio"
+                                    Binding="{Binding Nombre}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Categoría"
+                                    Binding="{Binding Categoria}"
+                                    Width="180"/>
+
+                <DataGridTextColumn Header="Descripción"
+                                    Binding="{Binding Descripcion}"
+                                    Width="250"/>
+
+                <DataGridTextColumn Header="Precio base"
+                                    Binding="{Binding PrecioBase,
+                                    StringFormat=C2}"
+                                    Width="120"/>
+
+                <DataGridCheckBoxColumn Header="Precio manual"
+                                        Binding="{Binding PermitePrecioManual}"
+                                        Width="110"/>
+
+                <DataGridCheckBoxColumn Header="Activo"
+                                        Binding="{Binding Activo}"
+                                        Width="80"/>
+
+            </DataGrid.Columns>
+            
+        </DataGrid>
             
     </Grid>
+    
 </UserControl>

@@ -163,3 +163,5 @@ C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debu
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\HielerasView.baml
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\CapturarCierreWindow.g.cs
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\CapturarCierreWindow.baml
+C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\ServiciosView.g.cs
+C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\obj\Debug\net8.0-windows\Views\ServiciosView.baml

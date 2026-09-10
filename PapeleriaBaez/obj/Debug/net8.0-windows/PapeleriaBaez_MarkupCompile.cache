@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP1_0_OR_GREATER;NETCOREAPP1_1_OR_GREATER;NETCOREAPP2_0_OR_GREATER;NETCOREAPP2_1_OR_GREATER;NETCOREAPP2_2_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\ramon\Documents\APPS\papeleriabaez\PapeleriaBaez\PapeleriaBaez\App.xaml
-161010299871
+17-972520237
 
-115-1762825577
+116813420639
 223918041590
-MainWindow.xaml;Views\ApartadosView.xaml;Views\CanjesView.xaml;Views\CapturarCambiosCanjeWindow.xaml;Views\CapturarCierreWindow.xaml;Views\CapturarConjuntosWindows.xaml;Views\CategoriasView.xaml;Views\CobroWindow.xaml;Views\ComprasView.xaml;Views\DashboardView.xaml;Views\DeudasView.xaml;Views\HielerasView.xaml;Views\InventarioView.xaml;Views\ProductosView.xaml;Views\ReportesView.xaml;Views\VentasView.xaml;
+MainWindow.xaml;Views\ApartadosView.xaml;Views\CanjesView.xaml;Views\CapturarCambiosCanjeWindow.xaml;Views\CapturarCierreWindow.xaml;Views\CapturarConjuntosWindows.xaml;Views\CategoriasView.xaml;Views\CobroWindow.xaml;Views\ComprasView.xaml;Views\DashboardView.xaml;Views\DeudasView.xaml;Views\HielerasView.xaml;Views\InventarioView.xaml;Views\ProductosView.xaml;Views\ReportesView.xaml;Views\ServiciosView.xaml;Views\VentasView.xaml;
 
 False
 

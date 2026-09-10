@@ -85,6 +85,11 @@ namespace PapeleriaBaez
             }
         }
 
+        private void BtnServicios_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new ServiciosView();
+        }
+
         private void BtnReportes_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Content = new ReportesView();
